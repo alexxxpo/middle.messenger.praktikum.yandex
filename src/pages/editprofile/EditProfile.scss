@@ -5,11 +5,11 @@
 
     &__backButton {
         position: absolute;
+        top: 0;
+        left: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        left: 0;
-        top: 0;
         width: 64px;
         height: 100%;
         background: #fbfbfb;
@@ -26,11 +26,11 @@
         }
 
         span {
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0;
-            margin: 0;
             width: 28px;
             height: 28px;
             color: #fff;
@@ -40,8 +40,8 @@
     }
 
     &__userInfo {
-        width: 100%;
         margin-bottom: 60px;
+        width: 100%;
         text-align: center;
     }
 
@@ -67,8 +67,9 @@
     }
 
     &__buttonField {
+        margin: 0 auto;
+        padding: 0;
         display: flex;
         width: 280px;
-        padding: 0;
     }
 }

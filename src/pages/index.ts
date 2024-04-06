@@ -4,4 +4,5 @@ export { ErrorPage } from './errorpage';
 export { Profile } from './profile';
 export { EditProfile } from './editprofile';
 export { EditPassword } from './editpassword';
-export { ChatListPage } from './chatlistpage'
+export { ChatListPage } from './chatlistpage';
+export { NavPage } from './navpage';

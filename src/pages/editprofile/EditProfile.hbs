@@ -1,8 +1,8 @@
 <div class="page editProfilePage">
-    <div class="profilePage__userInfo">
+    <div class="editProfilePage__userInfo">
         {{> BackButton }}
 
-        {{> PImage class="profilePage__PImage" }}
+        {{> PImage class="editProfilePage__PImage" }}
         <h2>Иван</h2>
         {{> PField label="Почта" type="text" value="pochta@yandex.ru" name="email" }}
         {{> PField label="Логин" type="text" value="ivanivanov" name="login" }}
@@ -12,8 +12,9 @@
         {{> PField label="Телефон" type="text" value="+7(909)9673030" name="phone" }}
     </div>
     <div class="editProfilePage__buttons">
-        <div class="pField editProfilePage__buttonField">
+        <div class="editProfilePage__buttonField">
             {{> Button type="primary" label="Сохранить" }}
         </div>
     </div>
 </div>
+{{#if popup}}{{> Popup }}{{/if}}

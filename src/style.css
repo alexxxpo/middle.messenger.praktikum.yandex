@@ -7,6 +7,10 @@
   color: #1e1e1e;
 }
 
+#app {
+  position: relative;
+}
+
 .page {
   display: flex;
   width: 100%;

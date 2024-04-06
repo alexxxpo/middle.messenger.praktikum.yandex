@@ -1,0 +1,16 @@
+.navPage {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 60px;
+    align-items: start;
+    
+    a {
+        color: #3369F3;
+        margin-bottom: 10px;
+        font-size: 18px;
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}
