@@ -1,0 +1,49 @@
+.input {
+    position: relative;
+    margin-bottom: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 13px;
+
+    &__label {
+        width: 100%;
+    }
+
+    &__label &__placeholder {
+        position: absolute;
+        top: 17px;
+        left: 5px;
+        color: #999999;
+        cursor: text;
+        transition: linear .2s;
+    }
+
+    &__text {
+        display: block;
+        width: 100%;
+        padding: 17px 7px 7px;
+        background: transparent;
+        line-height: 1;
+        color: #1e1e1e;
+        border: none;
+        border-bottom: 1px solid #3369F3;
+        outline: none;
+    }
+
+    &__text:focus~&__placeholder {
+        top: 0;
+        font-size: 9px;
+    }
+
+    &__error {
+        font-size: 0;
+        transition: linear .2s;
+    }
+
+    &__text[data-error]~&__error {
+        font-size: 8px;
+        color: #FF2F2F;
+    }
+}

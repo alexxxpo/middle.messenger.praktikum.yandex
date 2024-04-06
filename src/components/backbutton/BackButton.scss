@@ -1,0 +1,22 @@
+.backButton {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    top: 0;
+    width: 64px;
+    height: 100%;
+    background: #fbfbfb;
+    border-right: #eaeaea 1px solid;
+
+    &:hover {
+        cursor: pointer;
+        background: #eeeeee;
+        z-index: 10;
+
+        a {
+            background: #3310ff;
+        }
+    }
+}

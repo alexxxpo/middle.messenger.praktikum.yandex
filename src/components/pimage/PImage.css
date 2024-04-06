@@ -1,0 +1,36 @@
+.pImage {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #efefef url('../../assets/images/Union.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0 auto;
+}
+
+.pImage_hovered {
+    display: none;
+}
+
+.pImage:hover .pImage_hovered {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 130px;
+    height: 130px;
+    background: rgba(0, 0, 0, .5);
+    border-radius: 50%;
+    text-align: center;
+    color: #fff;
+    font-size: 13px;
+    line-height: 14px;
+    font-weight: 500;
+    cursor: pointer;
+}

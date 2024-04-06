@@ -1,0 +1,36 @@
+.chatListPage {
+
+    &__sideBar {
+        padding: 10px 0;
+        max-width: 310px;
+        width: 100%;
+        height: 100vh;
+        flex: 0 0 auto;
+        background: #fbfbfb;
+        border-right: 1px solid #eaeaea;    
+    }
+
+    &__profileButton{
+        padding-right: 10px;
+        .profileButton {
+            color: #999;
+            text-align: right;
+            max-width: none;
+        }
+    }
+
+    &__search {
+        
+        max-width: 310px;
+    }
+    &__messageArea {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        .infoMessage {
+            margin: auto;
+            color: #999;
+            font-size: 12px;
+        }
+    }
+}

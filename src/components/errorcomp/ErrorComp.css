@@ -1,0 +1,21 @@
+.errorComp {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    background: transparent;    
+}
+
+.errorComp__errNo {
+    margin-bottom: 20px;
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 40px;
+}
+
+.errorComp__message {
+    margin-bottom: 69px;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 20px;
+}
