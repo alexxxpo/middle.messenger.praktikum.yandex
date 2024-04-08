@@ -7,4 +7,4 @@ export { Popup } from './popup';
 export { PField } from './pfield';
 export { PImage } from './pimage';
 export { BackButton } from './backbutton';
-export { Search } from './search'
+export { Search } from './search';
