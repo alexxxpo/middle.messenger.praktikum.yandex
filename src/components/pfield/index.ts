@@ -1,2 +1,3 @@
-import './PField.css'
-export { default as PField } from './PField.hbs?raw'
+import './PField.css';
+
+export { default as PField } from './PField.hbs?raw';

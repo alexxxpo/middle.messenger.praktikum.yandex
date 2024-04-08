@@ -1,3 +1,3 @@
-import './Registration.css'
+import './Registration.css';
 
-export {default as Registration } from './Registration.hbs?raw'
+export {default as Registration } from './Registration.hbs?raw';
