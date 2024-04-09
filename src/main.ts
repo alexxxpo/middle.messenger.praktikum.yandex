@@ -2,7 +2,7 @@ import './style.css'
 import Handlebars from "handlebars";
 import * as Components from './components';
 import * as Pages from './pages';
-import chatList from './utils/chatListData'
+import chatList from './utils/chatlistdata'
 
 const pages = {
     'login': [Pages.Login],
