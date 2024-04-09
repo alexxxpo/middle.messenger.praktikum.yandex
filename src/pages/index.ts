@@ -1,8 +1,8 @@
-export { Login } from './login';
-export { Registration } from './registration';
-export { ErrorPage } from './errorpage';
-export { Profile } from './profile';
-export { EditProfile } from './editprofile';
-export { EditPassword } from './editpassword';
-export { ChatListPage } from './chatlistpage';
-export { NavPage } from './navpage';
+export { Login } from './Login';
+export { Registration } from './Registration';
+export { ErrorPage } from './ErrorPage';
+export { Profile } from './Profile';
+export { EditProfile } from './EditProfile';
+export { EditPassword } from './EditPassword';
+export { ChatListPage } from './ChatListPage';
+export { NavPage } from './NavPage';
