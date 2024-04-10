@@ -1,0 +1,22 @@
+.navPage {
+    display: flex;
+    flex-flow: column nowrap;
+    padding: 60px;
+    align-items: start;
+    
+    a {
+        color: #3369F3;
+        font-size: 18px;
+        &:hover {
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+}
+
+.navList {
+    &__item {
+        margin-bottom: 10px;
+        list-style: none;
+    }
+}

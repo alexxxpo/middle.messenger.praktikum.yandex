@@ -1,0 +1,20 @@
+.chatList {
+    padding: 0;
+    width: 100%;
+    max-width: 310px;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+}
+
+.chatList::-webkit-scrollbar {
+    display: none;
+}
+
+.chatList::-webkit-scrollbar-track {
+    display: none;
+}
+
+.chatList::-webkit-scrollbar-thumb {
+    display: none;
+}

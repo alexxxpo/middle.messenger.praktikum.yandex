@@ -1,0 +1,25 @@
+<main class="page profilePage">
+    <div class="profilePage__userInfo">
+        {{> BackButton }}
+
+        {{> PImage class="profilePage__PImage" }}
+        <h2>Иван</h2>
+        {{> PField label="Почта" type="text" value="pochta@yandex.ru" disabled=true name="email" }}
+        {{> PField label="Логин" type="text" value="ivanivanov" disabled=true name="login" }}
+        {{> PField label="Имя" type="text" value="Иван" disabled=true name="first_name" }}
+        {{> PField label="Фамилия" type="text" value="Иванов" disabled=true name="second_name" }}
+        {{> PField label="Имя в чате" type="text" value="Иван" disabled=true name="display_name" }}
+        {{> PField label="Телефон" type="text" value="+7(909)9673030" disabled=true name="phone" }}
+    </div>
+    <div class="profilePage__buttons">
+        <div class="pField profilePage__buttonField">
+            {{> Button type="link" class="profilePage__Button" label="Изменить данные" }}
+        </div>
+        <div class="pField profilePage__buttonField">
+            {{> Button type="link" class="profilePage__Button" label="Изменить пароль" }}
+        </div>
+        <div class="pField profilePage__buttonField">
+            {{> Button type="link" class="profilePage__Button profilePage__exitButton" label="Выйти" }}
+        </div>
+    </div>
+</main>

@@ -1,0 +1,36 @@
+.button {
+    display: block;
+    width: 100%;
+    font-size: 13px;
+    line-height: 37px;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &[data-type="primary"] {
+        background: #3369F3;
+        color: #fff;
+        border-radius: 8px;
+    }
+    
+    &[data-type="link"] {
+        width: 100%;
+        max-width: 280px;
+        background: transparent;
+        color: #3369F3;
+        line-height: 37px;
+    }
+    &[data-type="round"] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 28px;
+        height: 28px;
+        color: #fff;    
+        background: #3369F3;
+        border-radius: 50%;
+    }
+}

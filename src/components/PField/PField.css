@@ -1,0 +1,28 @@
+.pField {
+    display: flex;
+    justify-content: space-between;
+    max-width: 510px;
+    margin: 0 auto;
+    padding: 10px 0;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 13px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.pField:last-child {
+    border: none;
+}
+
+.pField__label {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.pField__input {
+    color: #999;
+    border: none;
+    outline: none;
+    text-align: right;
+}
