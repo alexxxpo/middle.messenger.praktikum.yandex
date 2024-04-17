@@ -1,3 +1,3 @@
-import './ErrorComp.css';
+import './ErrorComp.css'
 
-export { default as ErrorComp } from './ErrorComp.hbs?raw';
+export { default as ErrorComp } from './ErrorComp.hbs?raw'

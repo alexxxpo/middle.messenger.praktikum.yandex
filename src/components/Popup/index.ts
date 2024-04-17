@@ -1,3 +1,3 @@
-import './Popup.css';
+import './Popup.css'
 
-export { default as Popup } from './Popup.hbs?raw';
+export { default as Popup } from './Popup.hbs?raw'
