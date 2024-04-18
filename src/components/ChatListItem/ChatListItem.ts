@@ -1,0 +1,38 @@
+import Block from "../../core/Block";
+
+
+
+export default class ChatListItem extends Block {
+
+    constructor(props) {
+        super({
+            ...props
+        })        
+    }
+    render(): string {
+        return `
+        <div class="chatListItem" ${this.props.active? "active" : ""}>
+            <div class="chatListItem__wrapper">
+                <div class="chatListItem__img"></div>
+                <div class="chatListItem__body">
+                    <div class="chatListItem__info">
+                        <div class="chatName">
+                            <h4>{{name}}</h4>
+                        </div>
+                        <div class="chatListItem__messageTime">{{time}}</div>
+                    </div>
+                    <div class="chatListItem__meta">
+                        <div class="lastMessage">
+                            <p>
+                                <span class="{{selfMessage}}">Вы:</span>
+                                {{message}}
+                            </p>
+                        </div>
+                        <div class="chatListItem__messageCount" {{#if messageCount}}show{{/if}}>{{messageCount}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        `
+    }
+}

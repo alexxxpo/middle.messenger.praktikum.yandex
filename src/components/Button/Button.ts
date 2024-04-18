@@ -1,13 +1,15 @@
 import Block from '../../core/Block';
-import {default as ButtonTemplate} from './Button.hbs?raw';
 import { type EventsPropsType } from '../../types'
 
 interface ButtonPropsType {
-  events?: EventsPropsType
+  events?: EventsPropsType;
+  label?: string;
+  type?: string;
+  class?: string;
 }
 
 export default class Button extends Block {
-  constructor (props: ButtonPropsType) {
+  constructor(props: ButtonPropsType) {
     super({
       ...props,
       events: {
@@ -17,6 +19,13 @@ export default class Button extends Block {
   }
 
   render(): string {
-      return ButtonTemplate;
+    return `
+          <a 
+              class="button {{class}}" 
+              data-type={{type}}
+          >
+              {{label}}
+          </a>
+      `;
   }
 }

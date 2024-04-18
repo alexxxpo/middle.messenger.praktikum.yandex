@@ -1,3 +1,3 @@
 import './Search.scss'
 
-export { default as Search } from './Search.hbs?raw'
+export { default as Search } from './Search.ts'
