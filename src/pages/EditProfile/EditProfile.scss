@@ -2,6 +2,8 @@
     position: relative;
     flex-flow: column nowrap;
     padding: 60px 30px;
+    width: 100%;
+    height: 100vh;
 
     &__backButton {
         position: absolute;
@@ -43,6 +45,11 @@
         margin-bottom: 60px;
         width: 100%;
         text-align: center;
+    }
+
+    &__inputs {
+        margin: 0 auto;
+        max-width: 280px;
     }
 
     &__PImage {
