@@ -1,3 +1,3 @@
-import './EditProfile.scss';
+import './EditProfile.scss'
 
-export { default as EditProfile } from './EditProfile.hbs?raw';
+export { default as EditProfile } from './EditProfile.hbs?raw'
