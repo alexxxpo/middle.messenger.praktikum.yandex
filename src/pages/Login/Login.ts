@@ -1,44 +1,39 @@
-import { Button, Input } from "../../components"
-import Block from "../../core/Block"
+import { Button, Input } from '../../components'
+import Block from '../../core/Block'
+
+const setError = (e) => {
+  console.log(e);  
+}
 
 export default class LoginPage extends Block {
-    constructor(props) {
-        // const inputComponents = props.inputs.reduce((acc, data) => {
-        //     const component = new Input({label: data});
-        //     acc[component._id] = component;
-        //     return acc;
-        // }, {});
+  constructor (props) {
 
+    super({
+      ...props,
+      inputLogin: new Input({
+        label: 'Введите логин',
+        name: 'login',
+        events: {
+          change: setError,
+        }
+      }),
+      inputPass: new Input({
+        label: 'Введите пароль',
+        name: 'password'
+      }),
+      buttonLogin: new Button({
+        type: 'primary',
+        label: 'Авторизоваться'
+      }),
+      buttonReg: new Button({
+        type: 'link',
+        label: 'Нет аккаунта?'
+      })
+    })
+  }
 
-        super({
-            ...props,
-            // FormLogin: new FormWrapper({
-                //     title: 'Вход',
-                //     formBody: new FormLogin({})
-                // }),
-                // inputComponentKeys: Object.keys(inputComponents),
-                // ...inputComponents
-                inputLogin: new Input({
-                    label: "Введите логин",
-                    name: "login"
-                }),
-                inputPass: new Input({
-                    label: "Введите пароль",
-                    name: "password"
-                }),
-                buttonLogin: new Button({
-                    type:"primary",
-                    label: "Авторизоваться"
-                }),
-                buttonReg: new Button({
-                    type:"link",
-                    label: "Нет аккаунта?"
-                })
-        })
-    }
-
-    render() {
-        return `
+  render () {
+    return `
             <div class="page login_page">
                 <div class="form__container">
             
@@ -58,5 +53,5 @@ export default class LoginPage extends Block {
                 </div>
             </div>
         `
-    }
+  }
 }

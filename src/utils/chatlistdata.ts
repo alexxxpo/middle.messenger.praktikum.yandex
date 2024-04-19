@@ -1,10 +1,11 @@
-const chatList = {
-  chatItem: [
+export const chatList = {
+  chatItems: [
     {
       name: 'Иван',
       message: 'Привет, как дела?',
-      messageCount: 6,
-      time: '10:25'
+      messageCount: 14,
+      time: '10:25',
+      my: true,
     },
     {
       name: 'Иван',
@@ -26,4 +27,41 @@ const chatList = {
   ]
 }
 
-export default chatList
+export const fields = [
+  {
+    label: 'Почта',
+    type: 'text',
+    value: 'pochta@yandex.ru',
+    name: 'email'
+  },
+  {
+    label: 'Логин',
+    type: 'text',
+    value: 'ivanivanov',
+    name: 'login'
+  },
+  {
+    label: 'Имя',
+    type: 'text',
+    value: 'Иван',
+    name: 'first_name'
+  },
+  {
+    label: 'Фамилия',
+    type: 'text',
+    value: 'Иванов',
+    name: 'second_name'
+  },
+  {
+    label: 'Имя в чате',
+    type: 'text',
+    value: 'Иван',
+    name: 'display_name'
+  },
+  {
+    label: 'Телефон',
+    type: 'text',
+    value: '+7(909)9673030',
+    name: 'phone'
+  }
+]

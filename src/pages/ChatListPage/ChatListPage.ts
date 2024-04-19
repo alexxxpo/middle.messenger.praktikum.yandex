@@ -1,25 +1,22 @@
-import { Button, ChatList, Search } from "../../components";
-import Block from "../../core/Block";
+import { Button, ChatList, Search } from '../../components'
+import { ChatListProps } from '../../components/ChatList/ChatList';
+import Block from '../../core/Block'
 
+export default class ChatListPage extends Block {
+  constructor (props: ChatListProps) {
+    super({
+      chatList: new ChatList(props),
+      profileButton: new Button({
+        type: 'link',
+        className: 'profileButton',
+        label: 'Профиль'
+      }),
+      search: new Search({})
+    })
+  }
 
-
-export default class ChatListPage extends Block{
-    constructor(props) {
-        
-        super({
-            ...props,
-            chatList: new ChatList(props),
-            profileButton: new Button({
-                type: "link",
-                class: "profileButton",
-                label: "Профиль"
-            }),
-            search: new Search({})
-        })
-    }
-
-    render(): string {
-        return `
+  render (): string {
+    return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
                 <div class="chatListPage__profileButton">
@@ -37,5 +34,5 @@ export default class ChatListPage extends Block{
             </div>
         </main>
         `
-    }
+  }
 }

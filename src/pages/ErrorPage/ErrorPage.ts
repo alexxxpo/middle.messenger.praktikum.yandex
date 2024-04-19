@@ -1,22 +1,25 @@
-import { ErrorComp } from "../../components";
-import Block from "../../core/Block";
+import { ErrorComp } from '../../components'
+import { ErrorPropsType } from '../../components/ErrorComp/ErrorComp';
+import Block from '../../core/Block'
 
+type ErrorPageType = {
+  errorComp: ErrorComp;
+}
 
+export default class ErrorPage extends Block<ErrorPageType> {
+  constructor (props: ErrorPropsType) {
+    super({
+      errorComp: new ErrorComp(props)
+    })
+  }
 
-export default class ErrorPage extends Block {
-    constructor(props) {
-        super({
-            ...props,
-            errorComp: new ErrorComp(props)
-        })
-    }
-    render(): string {
-        return `
+  render (): string {
+    return `
         <div class="page errorPage">
             <div class="errorPage__errorComp">
                 {{{ errorComp }}}
             </div>
         </div>   
         `
-    }
+  }
 }

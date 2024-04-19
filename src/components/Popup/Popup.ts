@@ -18,9 +18,9 @@ export default class Popup extends Block {
         return `
         <div class="popup">
             <form class="popup__form">
-                <h3 class="popup__form_title">Загрузите файл{{title}}</h3>
+                <h3 class="popup__form_title">Загрузите файл {{title}}</h3>
                 <div class="popup__form_inner">
-                    <label><input type="file" name="" id=""></label>
+                    <label><input type="file" name={{name}} id=""></label>
                 </div>
                 <div class="popup__form_button">
                     {{{ buttonChange }}}

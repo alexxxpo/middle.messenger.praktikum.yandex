@@ -1,31 +1,28 @@
-import Block from '../../core/Block';
+import Block from '../../core/Block'
 import { type EventsPropsType } from '../../types'
 
 interface ButtonPropsType {
   events?: EventsPropsType;
   label?: string;
   type?: string;
-  class?: string;
+  className?: string;
 }
 
-export default class Button extends Block {
-  constructor(props: ButtonPropsType) {
+export default class Button extends Block<ButtonPropsType> {
+  constructor (props: ButtonPropsType) {
     super({
-      ...props,
-      events: {
-        click: props.events?.onClick
-      }
+      ...props
     })
   }
 
-  render(): string {
+  render (): string {
     return `
           <a 
-              class="button {{class}}" 
+              class="button {{className}}" 
               data-type={{type}}
           >
               {{label}}
           </a>
-      `;
+      `
   }
 }
