@@ -1,7 +1,13 @@
 import Block from '../../core/Block'
 
-export default class Search extends Block {
-  constructor (props) {
+interface SearchProps {
+  events?: {
+    [key: string]: () => void;
+  }
+}
+
+export default class Search extends Block<SearchProps> {
+  constructor (props: SearchProps) {
     super({
       ...props
     })

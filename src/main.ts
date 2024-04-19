@@ -2,7 +2,7 @@ import './style.css'
 import Handlebars from 'handlebars'
 import * as Components from './components'
 import * as Pages from './pages'
-import {chatList, fields} from './utils/chatlistdata'
+import {chatList, fields, profileFields} from './utils/chatlistdata'
 
 
 
@@ -12,8 +12,8 @@ const pages = {
   chatlist: [Pages.ChatListPage, chatList],
   editpassword: [Pages.EditPassword],
   edit: [Pages.EditProfile, {fields}],
-  edit_popup: [Pages.EditProfile, { popup: true }],
-  profile: [Pages.Profile],
+  edit_popup: [Pages.EditProfile, { fields, popup: true }],
+  profile: [Pages.Profile, {fields: profileFields}],
   404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
   500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
   nav: [Pages.NavPage]
