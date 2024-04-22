@@ -1,21 +1,15 @@
 import { Button, Input } from '../../components'
 import Block from '../../core/Block'
 
-const setError = (e) => {
-  console.log(e);  
-}
+type LoginType = Record<string, Input | Button>
 
-export default class LoginPage extends Block {
-  constructor (props) {
-
+export default class LoginPage extends Block<LoginType> {
+  constructor (props = {}) {
     super({
       ...props,
       inputLogin: new Input({
         label: 'Введите логин',
-        name: 'login',
-        events: {
-          change: setError,
-        }
+        name: 'login'
       }),
       inputPass: new Input({
         label: 'Введите пароль',
@@ -32,7 +26,7 @@ export default class LoginPage extends Block {
     })
   }
 
-  render () {
+  render (): string {
     return `
             <div class="page login_page">
                 <div class="form__container">

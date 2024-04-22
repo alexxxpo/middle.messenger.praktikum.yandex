@@ -2,25 +2,25 @@ import Block from '../../core/Block'
 import { Button } from '../Button'
 
 export interface ErrorPropsType {
-  errNo?: string;
-  message?: string;
+  errNo?: string
+  message?: string
 }
 
 interface ErrorCompType extends ErrorPropsType {
-  button: Button;
+  button: Button
 }
 
 export default class ErrorComp extends Block<ErrorCompType> {
   constructor (props: ErrorPropsType) {
     super({
-      ...props,  
+      ...props,
       button: new Button({
         type: 'link',
         label: 'Назад к чатам'
       })
     })
   }
-  
+
   render (): string {
     return `
         <div class="errorComp">

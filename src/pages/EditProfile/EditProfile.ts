@@ -1,29 +1,21 @@
 import { BackButton, Button, PField, PImage, Popup } from '../../components'
+import { type PFieldProps } from '../../components/PField/PField'
+import { type PopupProps } from '../../components/Popup/Popup'
 import Block from '../../core/Block'
+import { type ProfileProps } from '../Profile/Profile'
 
-
-type EditProfileType = {
-  fields: []
+interface EditProfilesType {
+  [key: string]: boolean | string | string[] | PField | Popup | PopupProps | PFieldProps | PFieldProps[] | PopupProps | Button
+  pFieldsKeys: string[]
 }
 
-function clickButton(data = []) {
-  console.log(data.reduce((acc, el) => {      
-      acc[el.name] = el.value;
-      return acc;      
-  }, {}))
-}
-
-export default class EditProfile extends Block<EditProfileType> {
-  
-  constructor (props: EditProfileType) {
-    
-    const pFields = props.fields.reduce((acc, data) => {
+export default class EditProfile extends Block<EditProfilesType> {
+  constructor (props: ProfileProps) {
+    const pFields = props.fieldsProps?.reduce((acc: Record<string, PFieldProps>, data) => {
       const pField = new PField(data)
       acc[pField._id] = pField
       return acc
-    }, {})
-
-    
+    }, {}) ?? {}
 
     super({
       ...props,
@@ -31,27 +23,23 @@ export default class EditProfile extends Block<EditProfileType> {
       pFieldsKeys: Object.keys(pFields),
       ...pFields,
 
-      displayName: props.fields.filter(f => f.name === "display_name")[0].value,
+      displayName: props.fieldsProps?.filter(f => f.name === 'display_name')[0].value ?? '',
 
       pImage: new PImage({
-        className: "editProfilePage__PImage",
+        className: 'editProfilePage__PImage'
       }),
 
       buttonSave: new Button({
         type: 'primary',
-        label: 'Сохранить',
-        events: {          
-            click: () => clickButton(this.props.fields), 
-        }      
+        label: 'Сохранить'
       }),
 
       buttonBack: new BackButton({}),
 
-      popupWindow: new Popup({}),
+      popupWindow: new Popup({ ...props.popupProps })
 
     })
   }
-
 
   render (): string {
     return `
@@ -70,7 +58,7 @@ export default class EditProfile extends Block<EditProfileType> {
                     {{{ buttonSave }}}
                 </div>
             </div>
-            ${this.props.popup ? '{{{ popupWindow }}}' : ''}
+            ${this.props.popup === true ? '{{{ popupWindow }}}' : ''}
         </main>
         `
   }

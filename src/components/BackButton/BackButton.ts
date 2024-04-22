@@ -2,11 +2,11 @@ import Block from '../../core/Block'
 import { Button } from '../../components'
 
 interface BackButtonProps {
-  className?: string;
+  className?: string
 }
 
 interface BackButtonType extends BackButtonProps {
-  button: Button;
+  button: Button
 }
 
 export default class BackButton extends Block<BackButtonType> {

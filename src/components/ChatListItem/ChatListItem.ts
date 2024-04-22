@@ -1,12 +1,12 @@
 import Block from '../../core/Block'
 
 export interface ChatListItemProps {
-    active?: boolean;
-    name?: string;
-    time?: string;
-    my?: boolean;
-    message?: string;
-    messageCount?: number;
+  active?: boolean
+  name?: string
+  time?: string
+  my?: boolean
+  message?: string
+  messageCount?: number
 }
 
 export default class ChatListItem extends Block<ChatListItemProps> {
@@ -18,7 +18,7 @@ export default class ChatListItem extends Block<ChatListItemProps> {
 
   render (): string {
     return `
-        <div class="chatListItem" ${this.props.active ? 'active' : ''}>
+        <div class="chatListItem" ${this.props.active ?? false ? 'active' : ''}>
             <div class="chatListItem__wrapper">
                 <div class="chatListItem__img"></div>
                 <div class="chatListItem__body">
@@ -31,11 +31,11 @@ export default class ChatListItem extends Block<ChatListItemProps> {
                     <div class="chatListItem__meta">
                         <div class="lastMessage">
                             <p>
-                                ${this.props.my ? "<span>Вы:</span>" : ""}
+                                ${this.props.my ?? false ? '<span>Вы:</span>' : ''}
                                 {{message}}
                             </p>
                         </div>
-                        <div class="chatListItem__messageCount" ${ this.props.messageCount ? "show" : ""}>{{messageCount}}</div>
+                        <div class="chatListItem__messageCount" ${this.props.messageCount !== 0 || this.props.messageCount !== undefined ? 'show' : ''}>{{messageCount}}</div>
                     </div>
                 </div>
             </div>

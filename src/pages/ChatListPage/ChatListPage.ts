@@ -1,5 +1,5 @@
 import { Button, ChatList, Search } from '../../components'
-import { ChatListProps } from '../../components/ChatList/ChatList';
+import { type ChatListProps } from '../../components/ChatList/ChatList'
 import Block from '../../core/Block'
 
 export default class ChatListPage extends Block {

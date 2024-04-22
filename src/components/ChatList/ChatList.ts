@@ -1,18 +1,18 @@
 import Block from '../../core/Block'
 import { ChatListItem } from '../ChatListItem'
-import { ChatListItemProps } from '../ChatListItem/ChatListItem'
+import { type ChatListItemProps } from '../ChatListItem/ChatListItem'
 
 export interface ChatListProps extends ChatListItemProps {
-  chatItems: ChatListItemProps[];
+  chatItems: ChatListItemProps[]
 }
 
 interface ChatListType extends ChatListProps {
-  chatListItemsKeys: string[];
+  chatListItemsKeys: string[]
 }
 
 export default class ChatList extends Block<ChatListType> {
   constructor (props: ChatListProps) {
-    const chatList = props.chatItems.reduce((list: {[key: string]: ChatListItem} = {}, chatData) => {
+    const chatList = props.chatItems.reduce((list: Record<string, ChatListItem> = {}, chatData) => {
       const component: ChatListItem = new ChatListItem(chatData)
       list[component._id] = component
       return list

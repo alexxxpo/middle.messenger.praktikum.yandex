@@ -1,24 +1,32 @@
-import Block from "../../core/Block";
-import { Button } from "../../components";
+import Block from '../../core/Block'
+import { Button } from '../../components'
 
+interface PopupType {
+  buttonChange: Button
+}
 
+export interface PopupProps {
+  title?: string
+  errorLoad?: boolean
+  notSelected?: boolean
+}
 
-export default class Popup extends Block {
-    constructor(props) {
-        super({
-            ...props,
-            buttonChange: new Button({
-                type: "primary",
-                label: "Поменять"
-            })
-        })
-    }
+export default class Popup extends Block<PopupType> {
+  constructor (props: PopupProps) {
+    super({
+      ...props,
+      buttonChange: new Button({
+        type: 'primary',
+        label: 'Поменять'
+      })
+    })
+  }
 
-    render(): string {
-        return `
+  render (): string {
+    return `
         <div class="popup">
             <form class="popup__form">
-                <h3 class="popup__form_title">Загрузите файл {{title}}</h3>
+                <h3 class="popup__form_title">{{title}}</h3>
                 <div class="popup__form_inner">
                     <label><input type="file" name={{name}} id=""></label>
                 </div>
@@ -29,5 +37,5 @@ export default class Popup extends Block {
             </form>
         </div>
         `
-    }
+  }
 }

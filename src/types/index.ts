@@ -1,5 +1,7 @@
-export interface EventsPropsType {
-  [key: string]: () => void
+export type EventsPropsType = Record<string, () => void>
+
+export type EventsType = {
+  [event: string]: EventListenerOrEventListenerObject
 }
 
 export interface PagesList {

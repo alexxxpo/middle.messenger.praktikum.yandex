@@ -1,9 +1,7 @@
 import Block from '../../core/Block'
 
 interface SearchProps {
-  events?: {
-    [key: string]: () => void;
-  }
+  events?: Record<string, () => void>
 }
 
 export default class Search extends Block<SearchProps> {

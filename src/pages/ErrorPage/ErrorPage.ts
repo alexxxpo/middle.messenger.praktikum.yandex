@@ -1,9 +1,9 @@
 import { ErrorComp } from '../../components'
-import { ErrorPropsType } from '../../components/ErrorComp/ErrorComp';
+import { type ErrorPropsType } from '../../components/ErrorComp/ErrorComp'
 import Block from '../../core/Block'
 
-type ErrorPageType = {
-  errorComp: ErrorComp;
+interface ErrorPageType {
+  errorComp: ErrorComp
 }
 
 export default class ErrorPage extends Block<ErrorPageType> {
