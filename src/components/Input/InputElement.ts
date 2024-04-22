@@ -1,5 +1,5 @@
 import Block from "../../core/Block";
-import { CommonBlockProps, EventsType } from "../../types";
+import { EventsType } from "../../types";
 import ErrorLine from "./ErrorLine";
 import Input from "./Input";
 

@@ -1,6 +1,8 @@
 import EventBus from './EventBus'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
+import { Button, Input } from '../components'
+import ErrorLine from '../components/Input/ErrorLine'
 
 
 
@@ -12,7 +14,7 @@ export default class Block<PropsType = {}> {
     FLOW_RENDER: 'flow:render'
   }
 
-  children
+  children: {[child: string]: Input | Button | ErrorLine}
   props
   eventBus: () => EventBus
   private _element
