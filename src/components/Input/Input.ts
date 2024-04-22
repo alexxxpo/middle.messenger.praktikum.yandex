@@ -1,8 +1,8 @@
 import Block from '../../core/Block'
-import { type EventsPropsType } from '../../types'
+import { EventsType } from '../../types'
 
 interface InputPropsType {
-  events?: EventsPropsType
+  events?: EventsType
   label?: string
   error?: boolean
   errorText?: string
@@ -23,7 +23,7 @@ export default class Input extends Block<InputPropsType> {
     return `
             <div class="input">
                 <label class="input__label {{className}}">
-                    <input class="input__text" ${this.props.error ?? false ? 'error' : ''} name={{name}} type={{type}} ${this.props.required ?? false ? 'required' : ''}>
+                    <input class="input__text" ${this.props.error ?? false ? 'data-error' : ''} name={{name}} type={{type}} ${this.props.required ?? false ? 'required' : ''}>
                     <span class="input__placeholder">{{label}}</span>
                     <span class="input__error">{{errorText}}</span>
                 </label>
