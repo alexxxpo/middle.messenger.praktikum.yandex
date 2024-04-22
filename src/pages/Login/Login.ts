@@ -41,7 +41,7 @@ export default class LoginPage extends Block<LoginType> {
       this.children.inputLogin.setProps({ error: true, errorText: 'Минимум 3 латинских буквы' });
       return;
     } else {
-      this.children.inputLogin.setProps({ error: false, errorText: null })
+      this.children.inputLogin.setProps({ error: false, errorText: '' })
     }
 
     this.setProps({ login: inputValue })
@@ -49,7 +49,7 @@ export default class LoginPage extends Block<LoginType> {
 
   onChangePassword(e) {
     const inputValue = e.target.value;
-    
+
     const condition1 = /[A-Z]/.test(inputValue)
     const condition2 = /[a-z]/.test(inputValue)
     const condition3 = /[0-9]/.test(inputValue)
@@ -59,7 +59,7 @@ export default class LoginPage extends Block<LoginType> {
       this.children.inputPass.setProps({ error: true, errorText: 'Пароль некорректен' });
       return;
     } else {
-      this.children.inputPass.setProps({ error: false, errorText: null })
+      this.children.inputPass.setProps({ error: false, errorText: '' })
     }
 
     this.setProps({ password: inputValue })

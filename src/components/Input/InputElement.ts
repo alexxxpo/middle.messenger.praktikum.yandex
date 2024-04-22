@@ -7,12 +7,12 @@ import Input from "./Input";
 interface InputElementProps {
     errorText?: string;
     events?: EventsType;
-    label:string;
-    name: string;
+    label?:string;
+    name?: string;
 }
 
 interface InputElementType extends InputElementProps {
-    [input: string]: Input | ErrorLine | string | EventsType | undefined;    
+    [input: string]: Input | ErrorLine | string | EventsType | undefined | boolean ;    
 }
 
 class InputElement extends Block<InputElementType> {
