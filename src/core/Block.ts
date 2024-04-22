@@ -4,7 +4,7 @@ import Handlebars from 'handlebars'
 
 
 
-export default class Block<PropsType> {
+export default class Block<PropsType = {}> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -25,7 +25,7 @@ export default class Block<PropsType> {
      * @returns {void}
      */
 
-  constructor(propsWithChildren = {}) {
+  constructor(propsWithChildren: PropsType) {
 
     const eventBus = new EventBus()
 

@@ -1,33 +1,23 @@
 import Block from '../../core/Block'
 import { EventsType } from '../../types'
 
-interface InputPropsType {
-  events?: EventsType
-  label?: string
-  error?: boolean
-  errorText?: string
-  name: string
-  type?: string
-  required?: boolean
-  className?: string
+interface InputProps {
+  events: EventsType
 }
 
-export default class Input extends Block<InputPropsType> {
-  constructor (props: InputPropsType) {
-    super({
-      ...props
-    })
-  }
+class Input extends Block {
+    constructor(props: InputProps) {
+        super({...props})
+    }
 
-  render (): string {
-    return `
-            <div class="input">
-                <label class="input__label {{className}}">
-                    <input class="input__text" ${this.props.error ?? false ? 'data-error' : ''} name={{name}} type={{type}} ${this.props.required ?? false ? 'required' : ''}>
-                    <span class="input__placeholder">{{label}}</span>
-                    <span class="input__error">{{errorText}}</span>
-                </label>
-            </div>
-            `
-  }
+    render(): string {
+        return `
+            <input
+                class="input__element"
+                placeholder=""
+            />
+        `
+    }
 }
+
+export default Input;

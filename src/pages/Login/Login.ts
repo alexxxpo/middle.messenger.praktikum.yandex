@@ -13,11 +13,12 @@ export default class LoginPage extends Block<LoginType> {
   init(): void {
 
     const onChangeLoginBind = this.onChangeLogin.bind(this);
+    const onChangePasswordBind = this.onChangePassword.bind(this);
     const onLoginBind = this.onLogin.bind(this);
 
 
-    const inputLogin = new Input({ label: 'Введите логин', name: 'login', onBlur: onChangeLoginBind  });
-    const inputPass = new Input({ label: 'Введите пароль', name: 'password' });
+    const inputLogin = new Input({ label: 'Введите логин', name: 'login', events: { blur: onChangeLoginBind } });
+    const inputPass = new Input({ label: 'Введите пароль', name: 'password', events: { blur: onChangePasswordBind } });
     const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: onLoginBind } });
     const buttonReg = new Button({ label: 'Нет аккаунта?', type: 'link' });
 
@@ -32,24 +33,42 @@ export default class LoginPage extends Block<LoginType> {
 
 
   onChangeLogin(e) {
-    console.log('asd');
-
     const inputValue = e.target.value;
-    const regExp = /[a-zA-Z]+/
+    console.log(inputValue);
+
+    const regExp = /[a-zA-Z]{3,}/
     if (regExp.test(inputValue) === false) {
-      this.children.inputLogin.setProps({ error: true, errorText: 'some error' });
+      this.children.inputLogin.setProps({ error: true, errorText: 'Минимум 3 латинских буквы' });
       return;
     } else {
       this.children.inputLogin.setProps({ error: false, errorText: null })
-      console.log('valid value');
     }
 
     this.setProps({ login: inputValue })
   }
 
+  onChangePassword(e) {
+    const inputValue = e.target.value;
+    
+    const condition1 = /[A-Z]/.test(inputValue)
+    const condition2 = /[a-z]/.test(inputValue)
+    const condition3 = /[0-9]/.test(inputValue)
+    const condition4 = /[^.$]{8,40}/.test(inputValue)
+
+    if (!condition1 || !condition2 || !condition3 || !condition4) {
+      this.children.inputPass.setProps({ error: true, errorText: 'Пароль некорректен' });
+      return;
+    } else {
+      this.children.inputPass.setProps({ error: false, errorText: null })
+    }
+
+    this.setProps({ password: inputValue })
+  }
+
   onLogin() {
     console.log({
-      login: this.login
+      login: this.props.login
+
     })
 
   }
