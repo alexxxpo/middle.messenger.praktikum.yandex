@@ -1,12 +1,13 @@
 import EventBus from './EventBus'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { Button, Input } from '../components'
-import ErrorLine from '../components/Input/ErrorLine'
+import { type Button, type Input } from '../components'
+import type ErrorLine from '../components/Input/ErrorLine'
 
+type PropsType = Record<string, string>
+type ChildrenType = Record<string, Button | Input | ErrorLine>
 
-
-export default class Block<PropsType = {}> {
+export default class Block<T = {}> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -14,8 +15,8 @@ export default class Block<PropsType = {}> {
     FLOW_RENDER: 'flow:render'
   }
 
-  children: {[child: string]: Input | Button | ErrorLine}
-  props
+  children: ChildrenType
+  props: PropsType
   eventBus: () => EventBus
   private _element
   _id: string = nanoid(6)
@@ -27,8 +28,7 @@ export default class Block<PropsType = {}> {
      * @returns {void}
      */
 
-  constructor(propsWithChildren: PropsType) {
-
+  constructor (propsWithChildren: T) {
     const eventBus = new EventBus()
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
@@ -44,15 +44,15 @@ export default class Block<PropsType = {}> {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _makePropsProxy(props) {
+  private _makePropsProxy (props) {
     const self = this
 
     return new Proxy(props, {
-      get(target, prop) {
+      get (target, prop) {
         const value = target[prop]
         return typeof value === 'function' ? value.bind(target) : value
       },
-      set(target, prop, value) {
+      set (target, prop, value) {
         const oldTarget = { ...target }
         target[prop] = value
 
@@ -62,30 +62,30 @@ export default class Block<PropsType = {}> {
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
       },
-      deleteProperty() {
+      deleteProperty () {
         throw new Error('Нет доступа')
       }
     })
   }
 
-  private _registerEvents(eventBus: EventBus): void {
+  private _registerEvents (eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
   }
 
-  private _init(): void {
+  private _init (): void {
     this.init()
 
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
   }
 
-  init(): void {
+  init (): void {
 
   }
 
-  private _render(): void {
+  private _render (): void {
     const propsAndStubs = { ...this.props }
 
     Object.entries(this.children).forEach(([key, child]) => {
@@ -112,16 +112,16 @@ export default class Block<PropsType = {}> {
     this._addEvents()
   }
 
-  render(): string {
+  render (): string {
     return ''
   }
 
-  private _createDocumentElement(tagName: string): HTMLElement {
+  private _createDocumentElement (tagName: string): HTMLElement {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName)
   }
 
-  private _addEvents(): void {
+  private _addEvents (): void {
     const { events = {} } = this.props
 
     Object.keys(events).forEach(eventName => {
@@ -129,9 +129,9 @@ export default class Block<PropsType = {}> {
     })
   }
 
-  private _componentDidMount(): void {
+  private _componentDidMount (): void {
     this.componentDidMount()
-    
+
     console.log('CDM')
 
     Object.values(this.children).forEach(child => {
@@ -139,13 +139,13 @@ export default class Block<PropsType = {}> {
     })
   }
 
-  componentDidMount(oldProps = {}): void { }
+  componentDidMount (oldProps: PropsType = {}): void { }
 
-  dispatchComponentDidMount(): void {
+  dispatchComponentDidMount (): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
-  _componentDidUpdate(oldProps = {}, newProps = {}): void {
+  _componentDidUpdate (oldProps = {}, newProps = {}): void {
     console.log('CDU')
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
@@ -154,11 +154,11 @@ export default class Block<PropsType = {}> {
     this._render()
   }
 
-  componentDidUpdate(oldProps, newProps): boolean {
+  componentDidUpdate (oldProps: PropsType, newProps: PropsType): boolean {
     return true
   }
 
-  _getChildrenAndProps(propsAndChildren) {
+  _getChildrenAndProps (propsAndChildren) {
     const children = {}
     const props = {}
 
@@ -173,7 +173,7 @@ export default class Block<PropsType = {}> {
     return { children, props }
   }
 
-  setProps = (nextProps: PropsType): void => {
+  setProps = (nextProps): void => {
     if (!nextProps) {
       return
     }
@@ -181,22 +181,19 @@ export default class Block<PropsType = {}> {
     Object.assign(this.props, nextProps)
   }
 
-  get element(): HTMLElement | null {
+  get element (): HTMLElement | null {
     return this._element
   }
 
-
-  getContent(): HTMLElement {
+  getContent (): HTMLElement {
     return this.element
   }
 
-
-
-  show(): void {
+  show (): void {
     this.getContent().style.display = 'block'
   }
 
-  hide(): void {
+  hide (): void {
     this.getContent().style.display = 'none'
   }
 }

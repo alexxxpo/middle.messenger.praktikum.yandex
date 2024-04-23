@@ -22,7 +22,7 @@ function navigate (page: string): void {
   const [source, context] = pages[page]
   const container = document.getElementById('app')
 
-  if (source instanceof Object ) {
+  if (source instanceof Object) {
   // @ts-expect-error
 
     const page = new source(context)

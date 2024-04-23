@@ -1,23 +1,23 @@
 import Block from '../../core/Block'
-import { EventsType } from '../../types'
+import { type EventsType } from '../../types'
 
 interface InputProps {
   events: EventsType
 }
 
 class Input extends Block {
-    constructor(props: InputProps) {
-        super({...props})
-    }
+  constructor (props: InputProps) {
+    super({ ...props })
+  }
 
-    render(): string {
-        return `
+  render (): string {
+    return `
             <input
                 class="input__element"
                 placeholder=""
             />
         `
-    }
+  }
 }
 
-export default Input;
+export default Input

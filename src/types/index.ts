@@ -1,6 +1,4 @@
-export type EventsType = {
-  [event: string]: EventListenerOrEventListenerObject
-}
+export type EventsType = Record<string, EventListenerOrEventListenerObject>
 
 export interface CommonBlockProps {
   events: EventsType
