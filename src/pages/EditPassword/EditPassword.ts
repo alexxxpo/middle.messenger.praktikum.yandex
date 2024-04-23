@@ -21,22 +21,22 @@ export default class EditPassword extends Block<EditPasswordType> {
 
     super({
       ...props,
-
       pFieldsKeys: Object.keys(pFields),
       ...pFields,
-
-      pImage: new PImage({
-        className: 'profilePage__PImage'
-      }),
-
-      backButton: new BackButton({}),
-
-      displayName: props.fieldsProps?.filter(f => f.name === 'display_name')[0].value ?? '',
-
-      saveButton: new Button({ label: 'Сохранить', type: 'primary' })
-
     })
   }
+
+  init(): void {
+    const oldPasword = new PField({ label: 'Старый пароль', type: 'password', value: 'sdafadfa', name: 'old_password' })
+    const newPassword = new PField({ label: 'Новый пароль', type: 'password', value: 'ivanivanov', name: 'new_password' })
+    const newPasswordAgain = new PField({ label: 'Повторите новый пароль', type: 'password', value: 'ivanivanov', name: 'new_password' })
+    const displayName = new PField({ label: 'Имя в чате', type: 'text', value: 'Иван', disabled: true, name: 'display_name' })
+  
+
+    const pImage = new PImage({
+      className: 'profilePage__PImage'
+    })
+  } 
 
   render (): string {
     return `

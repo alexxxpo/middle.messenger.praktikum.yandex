@@ -8,6 +8,7 @@ interface InputElementProps {
   events?: EventsType
   label?: string
   name?: string
+  type?: string
 }
 
 interface InputElementType extends InputElementProps {
@@ -22,7 +23,8 @@ class InputElement extends Block<InputElementType> {
       Input: new Input({
         events: {
           blur: props.events?.blur ?? (() => {})
-        }
+        },
+        type: props.type
       }),
       ErrorLine: new ErrorLine({
         errorText: props.errorText ?? ''

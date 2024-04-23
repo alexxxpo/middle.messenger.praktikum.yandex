@@ -4,7 +4,7 @@ import Handlebars from 'handlebars'
 import { type Button, type Input } from '../components'
 import type ErrorLine from '../components/Input/ErrorLine'
 
-type PropsType = Record<string, string>
+type PropsType = Record<string, string | string[] | number | boolean>
 type ChildrenType = Record<string, Button | Input | ErrorLine>
 
 export default class Block<T = {}> {

@@ -3,6 +3,7 @@ import { type EventsType } from '../../types'
 
 interface InputProps {
   events: EventsType
+  type?: string
 }
 
 class Input extends Block {
@@ -15,6 +16,7 @@ class Input extends Block {
             <input
                 class="input__element"
                 placeholder=""
+                type="{{type}}"
             />
         `
   }

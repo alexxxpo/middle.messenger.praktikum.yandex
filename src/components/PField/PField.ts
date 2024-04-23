@@ -21,7 +21,7 @@ export default class PField extends Block<PFieldProps> {
         <div class="pField">
             <span class="pField__label">{{label}}</span>
             <label class="pField__label">
-                <input class="pField__input" type={{type}} ${this.props.disabled ?? false ? 'disabled' : ''} value={{value}}>  
+                <input class="pField__input" type={{type}} ${this.props.disabled === true ? 'disabled' : ''} value={{value}}>  
             </label>
         </div>
         `

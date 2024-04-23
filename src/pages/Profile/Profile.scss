@@ -56,6 +56,10 @@
         line-height: 16px;
     }
 
+    &__fields {
+        margin-bottom: 40px;
+    }
+
     &__Button {
         text-align: left;
     }
@@ -69,6 +73,12 @@
     &__buttonField {
         display: flex;
         justify-content: start;
+        padding: 0;
+    }
+
+    &__saveButtonField {
+        display: flex;
+        width: 280px;
         padding: 0;
     }
 }

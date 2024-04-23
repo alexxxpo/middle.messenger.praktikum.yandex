@@ -9,6 +9,7 @@ export const chatList = {
     },
     {
       name: 'Иван',
+      messageCount: 4,
       message: 'Привет, как дела?',
       active: true
     },

@@ -28,7 +28,7 @@ export default class ChatList extends Block<ChatListType> {
   render (): string {
     return `
             <div class="chatList">
-                ${this.props.chatListItemsKeys.map((key) => `{{{ ${key} }}}`).join(' ')}
+                ${Array.isArray(this.props.chatListItemsKeys) ? this.props.chatListItemsKeys.map((key) => `{{{ ${key} }}}`).join(' ') : ''}
             </div>
         `
   }
