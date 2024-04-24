@@ -1,5 +1,5 @@
 import Block from '../../core/Block'
-import { EventsType } from '../../types'
+import { type EventsType } from '../../types'
 import PFieldInput from './PFieldInput'
 
 export interface PFieldProps {
@@ -24,18 +24,18 @@ export default class PField extends Block<PFieldType> {
       ...props,
       Input: new PFieldInput({
         events: {
-          blur: props.events?.blur ?? [()=>{}]
+          blur: props.events?.blur ?? [() => {}]
         },
         name: props.name,
-        className: "pField__input",
+        className: 'pField__input',
         value: props.value,
         disabled: props.disabled
       })
     })
   }
 
-  componentDidUpdate(oldProps: { [x: string]: string | number | boolean | string[] }, newProps: { [x: string]: string | number | boolean | string[] }): boolean {
-    if(oldProps.disabled !== newProps.disabled) {
+  componentDidUpdate (oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
+    if (oldProps.disabled !== newProps.disabled) {
       this.children.Input.setProps({
         disabled: this.props.disabled,
         error: this.props.error

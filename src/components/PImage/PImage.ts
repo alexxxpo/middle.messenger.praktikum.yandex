@@ -1,5 +1,5 @@
 import Block from '../../core/Block'
-import { EventsType } from '../../types'
+import { type EventsType } from '../../types'
 
 interface PImageType {
   className?: string

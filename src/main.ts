@@ -3,8 +3,9 @@ import Handlebars from 'handlebars'
 import * as Components from './components'
 import * as Pages from './pages'
 import { chatList, profileFields } from './utils/chatlistdata'
+import type Block from './core/Block'
 
-const pages: Record<string, unknown> = {
+const pages: Record<string, unknown > = {
   login: [Pages.Login],
   registration: [Pages.Registration],
   chatlist: [Pages.ChatListPage, chatList],
@@ -16,28 +17,27 @@ const pages: Record<string, unknown> = {
 Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp) })
 
 function navigate (page: string): void {
-  const [source, context] = pages[page]
+  const [Source, context] = pages[page]
   const container = document.getElementById('app')
 
-  if (source instanceof Object) {
-  // @ts-expect-error
-
-    const page = new source(context)
-    container.innerHTML = ''
-    container.append(page.getContent())
-    page.dispatchComponentDidMount()
+  if (Source instanceof Object) {
+    const page = new Source(context) as Block<Record<string, unknown>>
+    if (container !== null) {
+      container.innerHTML = ''
+      container.append(page.getContent() as Node)
+      page.dispatchComponentDidMount()
+    }
     return
   }
 
-  if (container !== null) container.innerHTML = Handlebars.compile(source)(context)
+  if (container !== null) container.innerHTML = Handlebars.compile(Source)(context)
 }
 
 document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
 
 document.addEventListener('click', e => {
-  // @ts-expect-error
-  const page = e.target.getAttribute('page')
-  if (page) {
+  const page = e.target?.getAttribute('page') as string
+  if (page !== null) {
     navigate(page)
 
     e.preventDefault()

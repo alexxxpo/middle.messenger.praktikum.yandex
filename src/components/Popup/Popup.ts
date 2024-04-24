@@ -19,7 +19,7 @@ export default class Popup extends Block<PopupType> {
       buttonChange: new Button({
         type: 'primary',
         label: 'Поменять',
-        events: {click: props.clickButton || (()=>{})} 
+        events: { click: [props.clickButton = () => {}] ?? [() => {}] }
       })
     })
   }

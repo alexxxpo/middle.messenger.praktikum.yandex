@@ -1,5 +1,5 @@
 import Block from '../../core/Block'
-import { EventsType } from '../../types'
+import { type EventsType } from '../../types'
 
 interface ButtonPropsType {
   events?: EventsType
@@ -16,7 +16,7 @@ export default class Button extends Block<ButtonPropsType> {
   }
 
   render (): string {
-    if(this.props.type === "primary") {
+    if (this.props.type === 'primary') {
       return `
         <button 
         class="button {{className}}" 

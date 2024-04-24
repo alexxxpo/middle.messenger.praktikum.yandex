@@ -4,10 +4,10 @@ import Handlebars from 'handlebars'
 import { type Button, type Input } from '../components'
 import type ErrorLine from '../components/Input/ErrorLine'
 
-type PropsType = Record<string, string | string[] | number | boolean>
+type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown>
 type ChildrenType = Record<string, Button | Input | ErrorLine>
 
-export default class Block<T = {}> {
+export default class Block<T extends Record<string, any> > {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -18,7 +18,7 @@ export default class Block<T = {}> {
   children: ChildrenType
   props: PropsType
   eventBus: () => EventBus
-  private _element
+  private _element: HTMLElement | null = null
   _id: string = nanoid(6)
 
   /** JSDoc
@@ -33,6 +33,8 @@ export default class Block<T = {}> {
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
 
+    // const makePropsProxy = this._makePropsProxy.bind(this)
+
     this.props = this._makePropsProxy({ ...props })
 
     this.children = children
@@ -44,17 +46,17 @@ export default class Block<T = {}> {
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _makePropsProxy (props) {
+  private _makePropsProxy (props: PropsType): PropsType {
     const self = this
 
     return new Proxy(props, {
       get (target, prop) {
-        const value = target[prop]
+        const value = target[prop as string]
         return typeof value === 'function' ? value.bind(target) : value
       },
       set (target, prop, value) {
         const oldTarget = { ...target }
-        target[prop] = value
+        target[prop as string] = value
 
         // Запускаем обновление компоненты
         // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
@@ -95,7 +97,7 @@ export default class Block<T = {}> {
     const fragment = this._createDocumentElement('template') as HTMLTemplateElement
 
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs)
-    const newElement = fragment.content.firstElementChild
+    const newElement: HTMLElement | null = fragment.content.firstElementChild
 
     Object.values(this.children).forEach(child => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
@@ -103,7 +105,7 @@ export default class Block<T = {}> {
       stub?.replaceWith(child.getContent())
     })
 
-    if (this._element) {
+    if (this._element !== null && newElement !== null) {
       this._element.replaceWith(newElement)
     }
 
@@ -122,11 +124,12 @@ export default class Block<T = {}> {
   }
 
   private _addEvents (): void {
-    const { events = {} } = this.props
-
-    Object.keys(events).forEach(eventName => {
-      if(Array.isArray(events[eventName])) events[eventName].forEach(event => this._element?.addEventListener(eventName, event))
-    })
+    const { events } = this.props
+    if (events !== null && events !== undefined) {
+      Object.keys(events).forEach(eventName => {
+        if (Array.isArray(events[eventName])) events[eventName].forEach((event: EventListenerOrEventListenerObject) => this._element?.addEventListener(eventName, event))
+      })
+    }
   }
 
   private _componentDidMount (): void {
@@ -158,9 +161,9 @@ export default class Block<T = {}> {
     return true
   }
 
-  _getChildrenAndProps (propsAndChildren) {
-    const children = {}
-    const props = {}
+  _getChildrenAndProps (propsAndChildren: T): { children: ChildrenType, props: PropsType } {
+    const children: ChildrenType = {}
+    const props: PropsType = {}
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -173,8 +176,8 @@ export default class Block<T = {}> {
     return { children, props }
   }
 
-  setProps = (nextProps): void => {
-    if (!nextProps) {
+  setProps = (nextProps: PropsType): void => {
+    if (nextProps === undefined) {
       return
     }
 
@@ -190,10 +193,12 @@ export default class Block<T = {}> {
   }
 
   show (): void {
-    this.getContent().style.display = 'block'
+    const element = this.getContent()
+    if (element !== null) element.style.display = 'block'
   }
 
   hide (): void {
-    this.getContent().style.display = 'none'
+    const element = this.getContent()
+    if (element !== null) element.style.display = 'none'
   }
 }
