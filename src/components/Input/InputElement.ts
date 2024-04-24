@@ -24,7 +24,8 @@ class InputElement extends Block<InputElementType> {
         events: {
           blur: props.events?.blur ?? (() => {})
         },
-        type: props.type
+        type: props.type,
+        name: props.name ?? ''
       }),
       ErrorLine: new ErrorLine({
         errorText: props.errorText ?? ''

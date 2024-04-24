@@ -45,3 +45,8 @@
   font-size: 20px;
   font-weight: 500;
 }
+
+.button {
+  outline: none;
+  border: none;
+}

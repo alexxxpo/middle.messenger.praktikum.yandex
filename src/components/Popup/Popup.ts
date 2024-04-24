@@ -9,6 +9,7 @@ export interface PopupProps {
   title?: string
   errorLoad?: boolean
   notSelected?: boolean
+  clickButton?: EventListenerOrEventListenerObject
 }
 
 export default class Popup extends Block<PopupType> {
@@ -17,7 +18,8 @@ export default class Popup extends Block<PopupType> {
       ...props,
       buttonChange: new Button({
         type: 'primary',
-        label: 'Поменять'
+        label: 'Поменять',
+        events: {click: props.clickButton || (()=>{})} 
       })
     })
   }

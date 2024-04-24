@@ -21,10 +21,14 @@
 }
 
 .pField__input {
-    color: #999;
+    color: var(--text-secondary-color);
     border: none;
     outline: none;
     text-align: right;
+}
+
+.pField__input[error] {
+    color: var(--error-color)
 }
 
 .pField__input:disabled {

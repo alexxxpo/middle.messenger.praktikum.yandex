@@ -1,5 +1,6 @@
 import { Button, Input } from '../../components'
 import Block from '../../core/Block'
+import { logFields } from '../../utils/LogFormFields'
 import { InputValidation, conditions } from '../../utils/validations'
 
 type LoginType = Record<string, Input | Button >
@@ -13,19 +14,18 @@ export default class LoginPage extends Block<LoginType> {
 
   init (): void {
     const onChangeInput = InputValidation.bind(this)
-    const onLoginBind = this.onLogin.bind(this)
 
     const inputLogin = new Input({
       label: 'Введите логин',
       name: 'login',
-      events: { blur: e => { onChangeInput(e, this.children.inputLogin, 'Некорректное значение', ...conditions.login) } }
+      events: { blur: [e => { onChangeInput(e, this.children.inputLogin, 'Некорректное значение', ...conditions.login) }] }
     })
     const inputPass = new Input({
       label: 'Введите пароль',
       name: 'password',
-      events: { blur: e => { onChangeInput(e, this.children.inputPass, 'Некорректное значение', ...conditions.password) } }
+      events: { blur: [e => { onChangeInput(e, this.children.inputPass, 'Некорректное значение', ...conditions.password) }] }
     })
-    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: onLoginBind } })
+    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [logFields] } })
     const buttonReg = new Button({ label: 'Нет аккаунта?', type: 'link' })
 
     this.children = {
@@ -35,10 +35,6 @@ export default class LoginPage extends Block<LoginType> {
       buttonLogin,
       buttonReg
     }
-  }
-
-  onLogin (): void {
-    console.log(this.props)
   }
 
   render (): string {

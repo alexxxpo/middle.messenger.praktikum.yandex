@@ -125,14 +125,14 @@ export default class Block<T = {}> {
     const { events = {} } = this.props
 
     Object.keys(events).forEach(eventName => {
-      this._element?.addEventListener(eventName, events[eventName])
+      if(Array.isArray(events[eventName])) events[eventName].forEach(event => this._element?.addEventListener(eventName, event))
     })
   }
 
   private _componentDidMount (): void {
     this.componentDidMount()
 
-    console.log('CDM')
+    // console.log('CDM')
 
     Object.values(this.children).forEach(child => {
       child.dispatchComponentDidMount()
@@ -146,7 +146,7 @@ export default class Block<T = {}> {
   }
 
   _componentDidUpdate (oldProps = {}, newProps = {}): void {
-    console.log('CDU')
+    // console.log('CDU')
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
       return
@@ -185,7 +185,7 @@ export default class Block<T = {}> {
     return this._element
   }
 
-  getContent (): HTMLElement {
+  getContent (): HTMLElement | null {
     return this.element
   }
 

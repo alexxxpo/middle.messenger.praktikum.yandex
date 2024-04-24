@@ -4,10 +4,14 @@ import { type EventsType } from '../../types'
 interface InputProps {
   events: EventsType
   type?: string
+  className?: string
+  error?: boolean
+  value?: string
+  disabled?: boolean
   name: string
 }
 
-class Input extends Block {
+class PFieldInput extends Block {
   constructor (props: InputProps) {
     super({ ...props })
   }
@@ -15,13 +19,16 @@ class Input extends Block {
   render (): string {
     return `
             <input
-                class="input__element"
+                class="{{className}}"
                 placeholder=""
-                type="{{type}}"
+                value="{{value}}"
+                type="{{type}}" 
                 name="{{name}}"
+                ${this.props.disabled === true ? 'disabled' : ''} 
+                ${this.props.error === true ? 'error' : ''} 
             />
         `
   }
 }
 
-export default Input
+export default PFieldInput

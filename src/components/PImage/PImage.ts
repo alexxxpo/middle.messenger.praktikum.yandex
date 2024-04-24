@@ -1,7 +1,9 @@
 import Block from '../../core/Block'
+import { EventsType } from '../../types'
 
 interface PImageType {
   className?: string
+  events?: EventsType
 }
 
 export default class PImage extends Block<PImageType> {

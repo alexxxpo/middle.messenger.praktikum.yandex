@@ -2,15 +2,12 @@ import './style.css'
 import Handlebars from 'handlebars'
 import * as Components from './components'
 import * as Pages from './pages'
-import { chatList, fields, profileFields, editPassword } from './utils/chatlistdata'
+import { chatList, profileFields } from './utils/chatlistdata'
 
 const pages: Record<string, unknown> = {
   login: [Pages.Login],
   registration: [Pages.Registration],
   chatlist: [Pages.ChatListPage, chatList],
-  editpassword: [Pages.EditPassword, { fieldsProps: editPassword }],
-  edit: [Pages.EditProfile, { fields }],
-  edit_popup: [Pages.EditProfile, { fieldsProps: fields, popup: true, popupProps: { title: 'Загрузите файл' } }],
   profile: [Pages.Profile, { fieldsProps: profileFields }],
   404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
   500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
