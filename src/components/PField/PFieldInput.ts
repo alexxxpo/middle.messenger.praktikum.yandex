@@ -11,7 +11,7 @@ interface InputProps {
   name: string
 }
 
-class PFieldInput extends Block {
+class PFieldInput extends Block<Record<string, unknown>> {
   constructor (props: InputProps) {
     super({ ...props })
   }

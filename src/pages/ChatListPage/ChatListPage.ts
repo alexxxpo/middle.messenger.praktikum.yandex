@@ -2,7 +2,7 @@ import { Button, ChatList, Search } from '../../components'
 import { type ChatListProps } from '../../components/ChatList/ChatList'
 import Block from '../../core/Block'
 
-export default class ChatListPage extends Block {
+export default class ChatListPage extends Block<Record<string, unknown>> {
   constructor (props: ChatListProps) {
     super({
       chatList: new ChatList(props),

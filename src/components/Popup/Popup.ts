@@ -2,7 +2,7 @@ import Block from '../../core/Block'
 import { Button } from '../../components'
 
 interface PopupType {
-  buttonChange: Button
+  buttonChange?: Button;
 }
 
 export interface PopupProps {
@@ -19,7 +19,7 @@ export default class Popup extends Block<PopupType> {
       buttonChange: new Button({
         type: 'primary',
         label: 'Поменять',
-        events: { click: [props.clickButton = () => {}] ?? [() => {}] }
+        events: { click: [props.clickButton = () => {}] || [() => {}] }
       })
     })
   }

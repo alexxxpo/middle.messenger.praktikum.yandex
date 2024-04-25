@@ -20,7 +20,7 @@ export default class Registration extends Block<RegType> {
       type: 'email',
       name: 'email',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regEmail, 'Некорректное значение', ...conditions.email) }]
+        blur: [e => { onChangeInput(e, this.children.regEmail as Input, 'Некорректное значение', ...conditions.email) }]
       }
     })
 
@@ -28,7 +28,7 @@ export default class Registration extends Block<RegType> {
       label: 'Введите логин',
       name: 'login',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regLogin, 'Некорректное значение', ...conditions.login) }]
+        blur: [e => { onChangeInput(e, this.children.regLogin as Input, 'Некорректное значение', ...conditions.login) }]
       }
     })
 
@@ -37,7 +37,7 @@ export default class Registration extends Block<RegType> {
       type: 'text',
       name: 'first_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regFirstName, 'Некорректное значение', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.regFirstName as Input, 'Некорректное значение', ...conditions.names) }]
       }
     })
 
@@ -46,7 +46,7 @@ export default class Registration extends Block<RegType> {
       type: 'text',
       name: 'second_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regSecondName, 'Некорректное значение', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.regSecondName as Input, 'Некорректное значение', ...conditions.names) }]
       }
     })
 
@@ -55,7 +55,7 @@ export default class Registration extends Block<RegType> {
       type: 'tel',
       name: 'phone',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regPhone, 'Неверный формат', ...conditions.phone) }]
+        blur: [e => { onChangeInput(e, this.children.regPhone as Input, 'Неверный формат', ...conditions.phone) }]
       }
     })
 
@@ -64,7 +64,7 @@ export default class Registration extends Block<RegType> {
       name: 'password',
       type: 'password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regPass, 'Некорректное значение', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.regPass as Input, 'Некорректное значение', ...conditions.password) }]
       }
     })
 
@@ -73,7 +73,7 @@ export default class Registration extends Block<RegType> {
       name: 'password',
       type: 'password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.regPassAgain, 'Некорректное значение', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.regPassAgain as Input, 'Некорректное значение', ...conditions.password) }]
       }
     })
 

@@ -1,11 +1,12 @@
 import EventBus from './EventBus'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { type Button, type Input } from '../components'
+import { BackButton, ChatList, ChatListItem, ErrorComp, PField, PImage, Popup, Search, type Button, type Input } from '../components'
 import type ErrorLine from '../components/Input/ErrorLine'
+import { EventsType } from '../types'
 
-type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown>
-type ChildrenType = Record<string, Button | Input | ErrorLine>
+type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
+type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | ChatList | ChatListItem | ErrorComp | PField | PImage | Search>
 
 export default class Block<T extends Record<string, any> > {
   static EVENTS = {
@@ -97,12 +98,12 @@ export default class Block<T extends Record<string, any> > {
     const fragment = this._createDocumentElement('template') as HTMLTemplateElement
 
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs)
-    const newElement: HTMLElement | null = fragment.content.firstElementChild
+    const newElement: HTMLElement | null = fragment.content.firstElementChild as HTMLElement
 
     Object.values(this.children).forEach(child => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`)
+      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`) as HTMLElement
 
-      stub?.replaceWith(child.getContent())
+      stub?.replaceWith(child.getContent() as Node)
     })
 
     if (this._element !== null && newElement !== null) {
@@ -124,7 +125,7 @@ export default class Block<T extends Record<string, any> > {
   }
 
   private _addEvents (): void {
-    const { events } = this.props
+    const { events } = this.props as Record<string,EventsType>
     if (events !== null && events !== undefined) {
       Object.keys(events).forEach(eventName => {
         if (Array.isArray(events[eventName])) events[eventName].forEach((event: EventListenerOrEventListenerObject) => this._element?.addEventListener(eventName, event))
@@ -142,7 +143,7 @@ export default class Block<T extends Record<string, any> > {
     })
   }
 
-  componentDidMount (oldProps: PropsType = {}): void { }
+  componentDidMount (oldProps: PropsType = {}): void { oldProps }
 
   dispatchComponentDidMount (): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
@@ -158,6 +159,8 @@ export default class Block<T extends Record<string, any> > {
   }
 
   componentDidUpdate (oldProps: PropsType, newProps: PropsType): boolean {
+    oldProps
+    newProps
     return true
   }
 
@@ -176,7 +179,7 @@ export default class Block<T extends Record<string, any> > {
     return { children, props }
   }
 
-  setProps = (nextProps: PropsType): void => {
+  setProps = (nextProps: Record<string, unknown>): void => {
     if (nextProps === undefined) {
       return
     }

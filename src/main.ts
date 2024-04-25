@@ -5,19 +5,21 @@ import * as Pages from './pages'
 import { chatList, profileFields } from './utils/chatlistdata'
 import type Block from './core/Block'
 
-const pages: Record<string, unknown > = {
-  login: [Pages.Login],
-  registration: [Pages.Registration],
+type Constructable<T = any> = new (...args: any[]) => T;
+
+const pages: Record<string, [Constructable, Record<string, unknown | undefined>] > = {
+  login: [Pages.Login, {}],
+  registration: [Pages.Registration, {}],
   chatlist: [Pages.ChatListPage, chatList],
   profile: [Pages.Profile, { fieldsProps: profileFields }],
   404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
   500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
-  nav: [Pages.NavPage]
+  nav: [Pages.NavPage, {}]
 }
-Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp) })
+Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
 function navigate (page: string): void {
-  const [Source, context] = pages[page]
+  const [Source, context] = pages[page] 
   const container = document.getElementById('app')
 
   if (Source instanceof Object) {
@@ -36,7 +38,8 @@ function navigate (page: string): void {
 document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
 
 document.addEventListener('click', e => {
-  const page = e.target?.getAttribute('page') as string
+  const target = e.target as HTMLElement
+  const page = target?.getAttribute('page') as string
   if (page !== null) {
     navigate(page)
 

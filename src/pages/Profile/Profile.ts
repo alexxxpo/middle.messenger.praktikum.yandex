@@ -1,4 +1,4 @@
-import { BackButton, Button, PField, PImage, Popup } from '../../components'
+import { BackButton, Button, Input, PField, PImage, Popup } from '../../components'
 import { type PFieldProps } from '../../components/PField/PField'
 import { type PopupProps } from '../../components/Popup/Popup'
 import Block from '../../core/Block'
@@ -29,6 +29,7 @@ export default class Profile extends Block<ProfileType> {
     const onChangeDataBind = this.onChangeData.bind(this)
     const onSaveDataBind = this.onSaveData.bind(this)
     const onChangePasswordBind = this.onChangePassword.bind(this)
+    const onImageChangeBind = this.onImageChange.bind(this)
 
     const onChangeInput = InputValidation.bind(this)
 
@@ -40,7 +41,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'email',
       events: {
-        blur: [e => { onChangeInput(e, this.children.email, 'Некорректный email', ...conditions.email) }]
+        blur: [e => { onChangeInput(e, this.children.email as Input, 'Некорректный email', ...conditions.email) }]
       }
     })
     const login = new PField({
@@ -50,7 +51,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'login',
       events: {
-        blur: [e => { onChangeInput(e, this.children.login, 'Некорректный логин', ...conditions.login) }]
+        blur: [e => { onChangeInput(e, this.children.login as Input, 'Некорректный логин', ...conditions.login) }]
       }
     })
     const firstName = new PField({
@@ -60,7 +61,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'first_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.firstName, 'Некорректное имя', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.firstName as Input, 'Некорректное имя', ...conditions.names) }]
       }
     })
     const secondName = new PField({
@@ -70,7 +71,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'second_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.secondName, 'Некорректная фамилия', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.secondName as Input, 'Некорректная фамилия', ...conditions.names) }]
       }
     })
     const displayName = new PField({
@@ -80,7 +81,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'display_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.displayName, 'Некорректное имя', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.displayName as Input, 'Некорректное имя', ...conditions.names) }]
       }
     })
     const phone = new PField({
@@ -90,7 +91,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'phone',
       events: {
-        blur: [e => { onChangeInput(e, this.children.phone, 'Некорректный номер', ...conditions.phone) }]
+        blur: [e => { onChangeInput(e, this.children.phone as Input, 'Некорректный номер', ...conditions.phone) }]
       }
     })
 
@@ -101,7 +102,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'sdafadfa',
       name: 'old_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.oldPasword, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.oldPasword as Input, 'Некорректный формат', ...conditions.password) }]
       }
     })
     const newPassword = new PField({
@@ -110,7 +111,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'ivanivanov',
       name: 'new_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.newPassword, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.newPassword as Input, 'Некорректный формат', ...conditions.password) }]
       }
     })
     const newPasswordAgain = new PField({
@@ -119,7 +120,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'ivanivanov',
       name: 'new_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.newPasswordAgain, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.newPasswordAgain as Input, 'Некорректный формат', ...conditions.password) }]
       }
     })
 
@@ -163,7 +164,7 @@ export default class Profile extends Block<ProfileType> {
     const pImage = new PImage({
       className: 'profilePage__PImage',
       events: {
-        click: [e => { this.setProps({ popup: true }) }]
+        click: [onImageChangeBind]
       }
     })
 
@@ -236,6 +237,10 @@ export default class Profile extends Block<ProfileType> {
       editData: false,
       editPassword: false
     })
+  }
+
+  onImageChange(): void {
+    this.setProps({ popup: true })
   }
 
   render (): string {

@@ -7,7 +7,7 @@ interface InputProps {
   name: string
 }
 
-class Input extends Block {
+class Input extends Block<Record<string, unknown>> {
   constructor (props: InputProps) {
     super({ ...props })
   }

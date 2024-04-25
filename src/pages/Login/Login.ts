@@ -18,12 +18,12 @@ export default class LoginPage extends Block<LoginType> {
     const inputLogin = new Input({
       label: 'Введите логин',
       name: 'login',
-      events: { blur: [e => { onChangeInput(e, this.children.inputLogin, 'Некорректное значение', ...conditions.login) }] }
+      events: { blur: [e => { onChangeInput(e, this.children.inputLogin as Input, 'Некорректное значение', ...conditions.login) }] }
     })
     const inputPass = new Input({
       label: 'Введите пароль',
       name: 'password',
-      events: { blur: [e => { onChangeInput(e, this.children.inputPass, 'Некорректное значение', ...conditions.password) }] }
+      events: { blur: [e => { onChangeInput(e, this.children.inputPass as Input, 'Некорректное значение', ...conditions.password) }] }
     })
     const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [logFields] } })
     const buttonReg = new Button({ label: 'Нет аккаунта?', type: 'link' })

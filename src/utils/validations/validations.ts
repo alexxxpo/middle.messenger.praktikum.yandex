@@ -1,7 +1,7 @@
 import { type Input } from '../../components'
 import type Block from '../../core/Block'
 
-export function InputValidation (this: Block, event: Event, input: Input, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
+export function InputValidation (this: Block<Record<string, unknown>>, event: Event, input: Input, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
   const el = event.target as HTMLInputElement
   const inputValue = el.value
   let error = false
@@ -11,7 +11,7 @@ export function InputValidation (this: Block, event: Event, input: Input, errorT
     }
   })
   error ? input.setProps({ error: true, errorText }) : input.setProps({ error: false, errorText: '' })
-  this.setProps({ [input.props.name.toString()]: inputValue })
+  this.setProps({ [input.props.name as string]: inputValue })
 }
 
 export const conditions = {

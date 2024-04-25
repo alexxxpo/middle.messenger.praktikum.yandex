@@ -35,7 +35,7 @@ export default class ChatListItem extends Block<ChatListItemProps> {
                                 {{message}}
                             </p>
                         </div>
-                        <div class="chatListItem__messageCount" ${this.props.messageCount > '0' || this.props.messageCount !== undefined ? 'show' : ''}>{{messageCount}}</div>
+                        <div class="chatListItem__messageCount" ${this.props.messageCount as number > 0 || this.props.messageCount !== undefined ? 'show' : ''}>{{messageCount}}</div>
                     </div>
                 </div>
             </div>

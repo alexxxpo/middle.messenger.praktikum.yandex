@@ -22,7 +22,7 @@ class InputElement extends Block<InputElementType> {
       ...props,
       Input: new Input({
         events: {
-          blur: props.events?.blur ?? (() => {})
+          blur: props.events?.blur ?? [(() => {})]
         },
         type: props.type,
         name: props.name ?? ''
@@ -38,7 +38,7 @@ class InputElement extends Block<InputElementType> {
       return false
     }
 
-    this.children.ErrorLine.setProps(newProps)
+    this.children.ErrorLine.setProps({...newProps})
     return true
   }
 
