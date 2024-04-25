@@ -16,7 +16,7 @@ export default class Button extends Block<ButtonPropsType> {
   }
 
   render (): string {
-    if (this.props.type === 'primary') {
+    if (this.props.type === 'primary' || this.props.type === 'round') {
       return `
         <button 
         class="button {{className}}" 

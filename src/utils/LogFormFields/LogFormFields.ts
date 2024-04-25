@@ -23,13 +23,15 @@ export function serializeForm(formNode: HTMLFormElement): void {
           break;
         case 'second_name':
           valid = validate(value, ...conditions.names)
-          break;          
+          break;
         case 'display_name':
           valid = validate(value, ...conditions.names)
           break;
         case 'phone':
           valid = validate(value, ...conditions.phone)
-          element.blur()
+          break;
+        case 'message':
+          valid = validate(value, /(.+)/)
           break;
       }
       return { name, value, valid }
