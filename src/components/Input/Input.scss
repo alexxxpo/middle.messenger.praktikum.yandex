@@ -42,8 +42,7 @@
     display: none;
   }
   
-  .input__element:not(:placeholder-shown) + .input__label,
-  .input__element:focus + .input__label {
+  .input__element:not(:placeholder-shown) + .input__label, .input__element:focus + .input__label {
     transform: translateY(-36px);
     font-size: 9px;
   }
@@ -55,4 +54,3 @@
   .input__error .input__element {
     color: var(--error-color);
   }
-  
