@@ -1,5 +1,5 @@
-import Block from '../../core/Block'
-import { type EventsType } from '../../types'
+import { Block } from '../../core/index.ts'
+import { type EventsType } from '../../types/index.ts'
 
 interface InputProps {
   events: EventsType
@@ -8,11 +8,11 @@ interface InputProps {
 }
 
 class Input extends Block<Record<string, unknown>> {
-  constructor (props: InputProps) {
+  constructor(props: InputProps) {
     super({ ...props })
   }
 
-  render (): string {
+  render(): string {
     return `
             <input
                 class="input__element"

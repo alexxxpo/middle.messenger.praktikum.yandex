@@ -1,4 +1,4 @@
-import Block from '../../core/Block'
+import { Block } from '../../core/index.ts'
 
 export interface ChatListItemProps {
   active?: boolean

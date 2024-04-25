@@ -1,8 +1,8 @@
-import { conditions, validate } from "../validations"
+import { conditions, validate } from "../validations/index.ts"
 
 export function serializeForm(formNode: HTMLFormElement): void {
   if (formNode === null) return
-  const elements = formNode.elements as Iterable<HTMLInputElement>
+  const elements = Array.from(formNode.elements) as HTMLInputElement[]
   const data = Array.from(elements)
     .filter((item) => item.name !== '')
     .map((element) => {

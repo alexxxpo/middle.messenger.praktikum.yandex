@@ -1,9 +1,9 @@
-import { Button, ChatList, Search } from '../../components'
-import { type ChatListProps } from '../../components/ChatList/ChatList'
-import Block from '../../core/Block'
+import { Button, ChatList, Search } from '../../components/index.ts'
+import { type ChatListProps } from '../../components/ChatList/ChatList.ts'
+import { Block } from '../../core/index.ts'
 
 export default class ChatListPage extends Block<Record<string, unknown>> {
-  constructor (props: ChatListProps) {
+  constructor(props: ChatListProps) {
     super({
       chatList: new ChatList(props),
       profileButton: new Button({
@@ -15,7 +15,7 @@ export default class ChatListPage extends Block<Record<string, unknown>> {
     })
   }
 
-  render (): string {
+  render(): string {
     return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">

@@ -1,6 +1,6 @@
-import Block from '../../core/Block'
-import { ChatListItem } from '../ChatListItem'
-import { type ChatListItemProps } from '../ChatListItem/ChatListItem'
+import {Block} from '../../core/index.ts'
+import { ChatListItem } from '../ChatListItem/index.ts'
+import { type ChatListItemProps } from '../ChatListItem/ChatListItem.ts'
 
 export interface ChatListProps extends ChatListItemProps {
   chatItems: ChatListItemProps[]

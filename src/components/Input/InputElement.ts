@@ -1,7 +1,7 @@
-import Block from '../../core/Block'
+import { Block } from '../../core/index.ts'
 import { type EventsType } from '../../types'
-import ErrorLine from './ErrorLine'
-import Input from './Input'
+import ErrorLine from './ErrorLine.ts'
+import Input from './Input.ts'
 
 interface InputElementProps {
   errorText?: string
@@ -17,12 +17,12 @@ interface InputElementType extends InputElementProps {
 }
 
 class InputElement extends Block<InputElementType> {
-  constructor (props: InputElementProps) {
+  constructor(props: InputElementProps) {
     super({
       ...props,
       Input: new Input({
         events: {
-          blur: props.events?.blur ?? [(() => {})]
+          blur: props.events?.blur ?? [(() => { })]
         },
         type: props.type,
         name: props.name ?? ''
@@ -33,16 +33,16 @@ class InputElement extends Block<InputElementType> {
     })
   }
 
-  componentDidUpdate (oldProps: InputElementProps, newProps: InputElementProps): boolean {
+  componentDidUpdate(oldProps: InputElementProps, newProps: InputElementProps): boolean {
     if (oldProps === newProps) {
       return false
     }
 
-    this.children.ErrorLine.setProps({...newProps})
+    this.children.ErrorLine.setProps({ ...newProps })
     return true
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="input {{#if error}}input__error{{/if}}" >
             <label class="input__container">

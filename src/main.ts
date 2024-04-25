@@ -1,13 +1,13 @@
 import './style.scss'
 import Handlebars from 'handlebars'
-import * as Components from './components'
-import * as Pages from './pages'
-import { chatList, profileFields } from './utils/chatlistdata'
-import type Block from './core/Block'
+import * as Components from './components/index.ts'
+import * as Pages from './pages/index.ts'
+import { chatList, profileFields } from './utils/chatlistdata.ts'
+import type { Block } from './core/index.ts'
 
 type Constructable<T = any> = new (...args: any[]) => T;
 
-const pages: Record<string, [Constructable, Record<string, unknown | undefined>] > = {
+const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
   login: [Pages.Login, {}],
   registration: [Pages.Registration, {}],
   chatlist: [Pages.ChatListPage, chatList],
@@ -18,8 +18,8 @@ const pages: Record<string, [Constructable, Record<string, unknown | undefined>]
 }
 Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
-function navigate (page: string): void {
-  const [Source, context] = pages[page] 
+function navigate(page: string): void {
+  const [Source, context] = pages[page]
   const container = document.getElementById('app')
 
   if (Source instanceof Object) {

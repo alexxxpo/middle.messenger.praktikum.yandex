@@ -1,9 +1,9 @@
-import { BackButton, Button, Input, PField, PImage, Popup } from '../../components'
-import { type PFieldProps } from '../../components/PField/PField'
-import { type PopupProps } from '../../components/Popup/Popup'
-import Block from '../../core/Block'
-import { logFields } from '../../utils/LogFormFields'
-import { InputValidation, conditions } from '../../utils/validations'
+import { BackButton, Button, Input, PField, PImage, Popup } from '../../components/index.ts'
+import { type PFieldProps } from '../../components/PField/PField.ts'
+import { type PopupProps } from '../../components/Popup/Popup.ts'
+import { Block } from '../../core/index.ts'
+import { logFields } from '../../utils/LogFormFields/index.ts'
+import { InputValidation, conditions } from '../../utils/validations/index.ts'
 
 export interface ProfileProps {
   popupProps?: PopupProps
@@ -17,7 +17,7 @@ export interface ProfileType extends ProfileProps {
 }
 
 export default class Profile extends Block<ProfileType> {
-  constructor (props: ProfileProps) {
+  constructor(props: ProfileProps) {
     super({
       ...props,
       editPassword: false,
@@ -25,7 +25,7 @@ export default class Profile extends Block<ProfileType> {
     })
   }
 
-  init (): void {
+  init(): void {
     const onChangeDataBind = this.onChangeData.bind(this)
     const onSaveDataBind = this.onSaveData.bind(this)
     const onChangePasswordBind = this.onChangePassword.bind(this)
@@ -194,7 +194,7 @@ export default class Profile extends Block<ProfileType> {
     }
   }
 
-  onChangeData (): void {
+  onChangeData(): void {
     const names = ['email', 'login', 'first_name', 'second_name', 'display_name', 'phone']
     Object.values(this.children).forEach(child => {
       if (names.includes(child.props.name as string)) {
@@ -209,7 +209,7 @@ export default class Profile extends Block<ProfileType> {
     })
   }
 
-  onChangePassword (): void {
+  onChangePassword(): void {
     const names = ['old_password', 'new_password', 'new_password_again']
     Object.values(this.children).forEach(child => {
       if (names.includes(child.props.name as string)) {
@@ -224,7 +224,7 @@ export default class Profile extends Block<ProfileType> {
     })
   }
 
-  onSaveData (): void {
+  onSaveData(): void {
     const names = ['email', 'login', 'first_name', 'second_name', 'display_name', 'phone', 'old_password', 'new_password', 'new_password_again']
     Object.values(this.children).forEach(child => {
       if (names.includes(child.props.name as string)) {
@@ -243,7 +243,7 @@ export default class Profile extends Block<ProfileType> {
     this.setProps({ popup: true })
   }
 
-  render (): string {
+  render(): string {
     return `
         <main class="page profilePage">
             <div class="profilePage__userInfo">
@@ -255,7 +255,7 @@ export default class Profile extends Block<ProfileType> {
                     <h2 class="profilePage__title">${this.children.displayName.props.value as string}</h2>   
 
                     ${this.props.editPassword === false
-                    ? `<div class="profilePage__fields">
+        ? `<div class="profilePage__fields">
                       {{{ email }}}
                       {{{ login }}}
                       {{{ firstName }}}
@@ -263,23 +263,23 @@ export default class Profile extends Block<ProfileType> {
                       {{{ displayName }}}
                       {{{ phone }}}
                     </div>`
-: ''}
+        : ''}
 
                     ${this.props.editPassword === true
-                    ? `<div class="profilePage__fields">
+        ? `<div class="profilePage__fields">
                       {{{ oldPasword }}}
                       {{{ newPassword }}}
                       {{{ newPasswordAgain }}}
                     </div>`
-: ''}
+        : ''}
 
                     ${this.props.editPassword === true || this.props.editData === true
-                    ? `<div class="profilePage__buttons">
+        ? `<div class="profilePage__buttons">
                         <div class="pField profilePage__saveButtonField">
                             {{{buttonSave}}}
                         </div>
                     </div>`
-                    : `<div class="profilePage__buttons">
+        : `<div class="profilePage__buttons">
                         <div class="pField profilePage__buttonField">
                             {{{ buttonChangeData }}}
                         </div>

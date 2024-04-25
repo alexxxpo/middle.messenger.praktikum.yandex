@@ -1,1 +1,1 @@
-export * from './LogFormFields'
+export * from './LogFormFields.ts'

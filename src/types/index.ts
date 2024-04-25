@@ -1,5 +1,4 @@
-import { BackButton, Button, ChatList, ChatListItem, ErrorComp, Input, PField, PImage, Popup, Search } from "../components"
-import ErrorLine from "../components/Input/ErrorLine"
+import { BackButton, Button, ChatList, ChatListItem, ErrorComp, Input, PField, PImage, Popup, Search, ErrorLine } from "../components/index.ts"
 
 export type EventsType = Record<string, EventListenerOrEventListenerObject[]>
 

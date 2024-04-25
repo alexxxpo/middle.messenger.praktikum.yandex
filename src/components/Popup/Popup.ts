@@ -1,5 +1,5 @@
-import Block from '../../core/Block'
-import { Button } from '../../components'
+import { Block } from '../../core/index.ts'
+import { Button } from '../../components/index.ts'
 
 interface PopupType {
   buttonChange?: Button;
@@ -13,18 +13,18 @@ export interface PopupProps {
 }
 
 export default class Popup extends Block<PopupType> {
-  constructor (props: PopupProps) {
+  constructor(props: PopupProps) {
     super({
       ...props,
       buttonChange: new Button({
         type: 'primary',
         label: 'Поменять',
-        events: { click: [props.clickButton = () => {}] || [() => {}] }
+        events: { click: [props.clickButton = () => { }] || [() => { }] }
       })
     })
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="popup">
             <form class="popup__form">

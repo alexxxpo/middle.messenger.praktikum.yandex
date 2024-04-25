@@ -1,6 +1,6 @@
-import Block from '../../core/Block'
-import { type EventsType } from '../../types'
-import PFieldInput from './PFieldInput'
+import { Block } from '../../core/index.ts'
+import { type EventsType } from '../../types/index.ts'
+import PFieldInput from './PFieldInput.ts'
 
 export interface PFieldProps {
   label?: string
@@ -19,7 +19,7 @@ interface PFieldType extends PFieldProps {
 }
 
 export default class PField extends Block<PFieldType> {
-  constructor (props: PFieldProps) {
+  constructor(props: PFieldProps) {
     super({
       ...props,
       Input: new PFieldInput({
@@ -33,16 +33,16 @@ export default class PField extends Block<PFieldType> {
     })
   }
 
-  componentDidUpdate (oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
-    
+  componentDidUpdate(oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
+
     if (oldProps.disabled !== newProps.disabled) {
-      
+
       this.children.Input.setProps({
         disabled: this.props.disabled,
       })
     }
     if (oldProps.error !== newProps.error) {
-      
+
       this.children.Input.setProps({
         error: this.props.error
       })
@@ -50,7 +50,7 @@ export default class PField extends Block<PFieldType> {
     return true
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="pField">
             <span class="pField__label">{{label}}</span>

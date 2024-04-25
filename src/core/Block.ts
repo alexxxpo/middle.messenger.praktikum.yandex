@@ -1,9 +1,8 @@
-import EventBus from './EventBus'
+import {EventBus} from './index.ts'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { BackButton, ChatList, ChatListItem, ErrorComp, PField, PImage, Popup, Search, type Button, type Input } from '../components'
-import type ErrorLine from '../components/Input/ErrorLine'
-import { EventsType } from '../types'
+import { BackButton, ChatList, ChatListItem, ErrorComp, PField, PImage, Popup, Search, type Button, type Input, ErrorLine } from '../components/index.ts'
+import { EventsType } from '../types/index.ts'
 
 type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
 type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | ChatList | ChatListItem | ErrorComp | PField | PImage | Search>

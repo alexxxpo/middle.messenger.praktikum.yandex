@@ -1,5 +1,5 @@
-import Block from '../../core/Block'
-import { Button } from '../../components'
+import { Block } from '../../core/index.ts'
+import { Button } from '../../components/index.ts'
 
 interface BackButtonProps {
   className?: string

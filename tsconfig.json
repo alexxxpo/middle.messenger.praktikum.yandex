@@ -20,7 +20,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src"

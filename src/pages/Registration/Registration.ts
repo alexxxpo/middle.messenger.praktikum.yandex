@@ -1,18 +1,18 @@
-import { Button, Input } from '../../components'
-import Block from '../../core/Block'
-import { logFields } from '../../utils/LogFormFields'
-import { InputValidation, conditions } from '../../utils/validations'
+import { Button, Input } from '../../components/index.ts'
+import { Block } from '../../core/index.ts'
+import { logFields } from '../../utils/LogFormFields/index.ts'
+import { InputValidation, conditions } from '../../utils/validations/index.ts'
 
 type RegType = Record<string, Input | Button>
 
 export default class Registration extends Block<RegType> {
-  constructor (props = {}) {
+  constructor(props = {}) {
     super({
       ...props
     })
   }
 
-  init (): void {
+  init(): void {
     const onChangeInput = InputValidation.bind(this)
 
     const regEmail = new Input({
@@ -104,7 +104,7 @@ export default class Registration extends Block<RegType> {
     }
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="page registration_page">
             <div class="form__container">

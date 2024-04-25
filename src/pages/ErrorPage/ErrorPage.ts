@@ -1,19 +1,19 @@
-import { ErrorComp } from '../../components'
-import { type ErrorPropsType } from '../../components/ErrorComp/ErrorComp'
-import Block from '../../core/Block'
+import { ErrorComp } from '../../components/index.ts'
+import { type ErrorPropsType } from '../../components/ErrorComp/ErrorComp.ts'
+import { Block } from '../../core/index.ts'
 
 interface ErrorPageType {
   errorComp: ErrorComp
 }
 
 export default class ErrorPage extends Block<ErrorPageType> {
-  constructor (props: ErrorPropsType) {
+  constructor(props: ErrorPropsType) {
     super({
       errorComp: new ErrorComp(props)
     })
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="page errorPage">
             <div class="errorPage__errorComp">

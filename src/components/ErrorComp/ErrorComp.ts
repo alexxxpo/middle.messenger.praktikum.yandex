@@ -1,5 +1,5 @@
-import Block from '../../core/Block'
-import { Button } from '../Button'
+import { Block } from '../../core/index.ts'
+import { Button } from '../Button/index.ts'
 
 export interface ErrorPropsType {
   errNo?: string
@@ -11,7 +11,7 @@ interface ErrorCompType extends ErrorPropsType {
 }
 
 export default class ErrorComp extends Block<ErrorCompType> {
-  constructor (props: ErrorPropsType) {
+  constructor(props: ErrorPropsType) {
     super({
       ...props,
       button: new Button({
@@ -21,7 +21,7 @@ export default class ErrorComp extends Block<ErrorCompType> {
     })
   }
 
-  render (): string {
+  render(): string {
     return `
         <div class="errorComp">
             <h1 class="errorComp__errNo">{{errNo}}</h1>
