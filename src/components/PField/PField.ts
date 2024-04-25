@@ -23,21 +23,27 @@ export default class PField extends Block<PFieldType> {
     super({
       ...props,
       Input: new PFieldInput({
-        events: {
-          blur: props.events?.blur ?? [() => {}]
-        },
+        events: props.events || {},
         name: props.name,
         className: 'pField__input',
         value: props.value,
-        disabled: props.disabled
+        disabled: props.disabled,
+        type: props.type
       })
     })
   }
 
   componentDidUpdate (oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
+    
     if (oldProps.disabled !== newProps.disabled) {
+      
       this.children.Input.setProps({
         disabled: this.props.disabled,
+      })
+    }
+    if (oldProps.error !== newProps.error) {
+      
+      this.children.Input.setProps({
         error: this.props.error
       })
     }

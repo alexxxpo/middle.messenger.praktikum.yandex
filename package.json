@@ -12,7 +12,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "start": "npm run build && node server.js",
-    "eslint": "npx eslint src/ --fix"
+    "eslint": "npx eslint src/ --fix",
+    "styleLint": "npx stylelint **/*.scss"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",

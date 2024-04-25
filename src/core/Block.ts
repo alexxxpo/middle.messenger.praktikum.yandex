@@ -133,6 +133,15 @@ export default class Block<T extends Record<string, any> > {
     }
   }
 
+  private _removeEvents(): void {
+    const { events } = this.props as Record<string,EventsType>
+    if (events !== null && events !== undefined) {
+      Object.keys(events).forEach(eventName => {
+        if (Array.isArray(events[eventName])) events[eventName].forEach((event: EventListenerOrEventListenerObject) => this._element?.removeEventListener(eventName, event))
+      })
+    }
+  }
+
   private _componentDidMount (): void {
     this.componentDidMount()
 
@@ -151,6 +160,7 @@ export default class Block<T extends Record<string, any> > {
 
   _componentDidUpdate (oldProps = {}, newProps = {}): void {
     // console.log('CDU')
+    this._removeEvents()
     const response = this.componentDidUpdate(oldProps, newProps)
     if (!response) {
       return
