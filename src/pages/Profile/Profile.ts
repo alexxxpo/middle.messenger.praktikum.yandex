@@ -41,7 +41,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'email',
       events: {
-        blur: [e => { onChangeInput(e, this.children.email as Input, 'Некорректный email', ...conditions.email) }]
+        blur: [e => { onChangeInput(e, this.children.email as Input, 'Некорректный формат email', ...conditions.email) }]
       }
     })
     const login = new PField({
@@ -51,7 +51,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'login',
       events: {
-        blur: [e => { onChangeInput(e, this.children.login as Input, 'Некорректный логин', ...conditions.login) }]
+        blur: [e => { onChangeInput(e, this.children.login as Input, 'Может содеражать цифры, но не состоять из них', ...conditions.login) }]
       }
     })
     const firstName = new PField({
@@ -61,7 +61,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'first_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.firstName as Input, 'Некорректное имя', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.firstName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names) }]
       }
     })
     const secondName = new PField({
@@ -71,7 +71,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'second_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.secondName as Input, 'Некорректная фамилия', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.secondName as Input, 'Фамилия должна начинаться с заглавной буквы', ...conditions.names) }]
       }
     })
     const displayName = new PField({
@@ -81,7 +81,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'display_name',
       events: {
-        blur: [e => { onChangeInput(e, this.children.displayName as Input, 'Некорректное имя', ...conditions.names) }]
+        blur: [e => { onChangeInput(e, this.children.displayName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names) }]
       }
     })
     const phone = new PField({
@@ -91,7 +91,7 @@ export default class Profile extends Block<ProfileType> {
       disabled: true,
       name: 'phone',
       events: {
-        blur: [e => { onChangeInput(e, this.children.phone as Input, 'Некорректный номер', ...conditions.phone) }]
+        blur: [e => { onChangeInput(e, this.children.phone as Input, 'Телефон может содержать только цифры и может начинаться с +', ...conditions.phone) }]
       }
     })
 
@@ -102,7 +102,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'sdafadfa',
       name: 'old_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.oldPasword as Input, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.oldPasword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
       }
     })
     const newPassword = new PField({
@@ -111,7 +111,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'ivanivanov',
       name: 'new_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.newPassword as Input, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.newPassword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
       }
     })
     const newPasswordAgain = new PField({
@@ -120,7 +120,7 @@ export default class Profile extends Block<ProfileType> {
       value: 'ivanivanov',
       name: 'new_password',
       events: {
-        blur: [e => { onChangeInput(e, this.children.newPasswordAgain as Input, 'Некорректный формат', ...conditions.password) }]
+        blur: [e => { onChangeInput(e, this.children.newPasswordAgain as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
       }
     })
 
