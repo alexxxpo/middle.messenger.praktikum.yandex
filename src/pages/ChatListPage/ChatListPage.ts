@@ -72,7 +72,7 @@ export default class ChatListPage extends Block<Record<string, unknown>> {
                         </li>
                         <li class="messagesList__item img">
                             <div class="message">
-                                <img class="message_img" src="${img}" />
+                                <img class="message_img" src="${img}" alt="Изображение сообщения" />
                             </div>
                         </li>
                         <li class="messagesList__item text self">

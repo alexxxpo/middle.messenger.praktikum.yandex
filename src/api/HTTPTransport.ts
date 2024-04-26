@@ -20,21 +20,23 @@ type OptionsType = {
     timeout: number
 }
 
+type HTTPMethod = (url: string, options: OptionsType) => Promise<unknown>
+
 export default class HTTPTransport {
-    get = (url: string | URL, options: OptionsType) => {
+    get: HTTPMethod = (url, options) => {
         const params = queryStringify(options.data)
         return this.request(url + params, { ...options, method: METHODS.GET }, options.timeout as number);
     };
 
-    put = (url: string, options: OptionsType) => {
+    put: HTTPMethod = (url, options) => {
         return this.request(url, { ...options, method: METHODS.PUT }, options.timeout as number);
     }
 
-    post = (url: string, options: OptionsType) => {
+    post: HTTPMethod = (url, options) => {
         return this.request(url, { ...options, method: METHODS.POST }, options.timeout as number);
     }
 
-    delete = (url: string, options: OptionsType) => {
+    delete: HTTPMethod = (url, options) => {
         return this.request(url, { ...options, method: METHODS.DELETE }, options.timeout as number);
     }
 
