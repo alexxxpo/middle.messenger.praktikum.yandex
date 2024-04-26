@@ -63,6 +63,11 @@
     &__Button {
         text-align: left;
     }
+    
+    &__buttons {
+        max-width: 510px;
+        margin: 0 auto;
+    }
 
     &__exitButton {
         a {

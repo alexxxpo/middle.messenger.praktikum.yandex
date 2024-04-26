@@ -1,13 +1,18 @@
+.pField__container {
+    border-bottom: 1px solid #eaeaea;
+    max-width: 510px;
+    margin: 0 auto;
+
+}
+
 .pField {
     display: flex;
     justify-content: space-between;
-    max-width: 510px;
-    margin: 0 auto;
     padding: 10px 0;
     font-size: 13px;
     font-weight: 500;
     line-height: 13px;
-    border-bottom: 1px solid #eaeaea;
+    
 }
 
 .pField:last-child {
@@ -34,3 +39,18 @@
 .pField__input:disabled {
     background: transparent;
 }
+
+.input__text-error {
+    color: var(--error-color);
+    font-size: 12px;
+    font-weight: 400;
+    display: none;
+  }
+  
+  .input__error .input__text-error {
+    display: block;
+  }
+  
+  .input__error .input__element {
+    color: var(--error-color);
+  }

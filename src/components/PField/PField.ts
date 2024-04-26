@@ -1,5 +1,6 @@
 import { Block } from '../../core/index.ts'
 import { type EventsType } from '../../types/index.ts'
+import ErrorLine from '../Input/ErrorLine.ts'
 import PFieldInput from './PFieldInput.ts'
 
 export interface PFieldProps {
@@ -12,10 +13,12 @@ export interface PFieldProps {
   error?: boolean
   events?: EventsType
   blur?: EventListenerOrEventListenerObject
+  errorText?: string
 }
 
 interface PFieldType extends PFieldProps {
   Input: PFieldInput
+  errorLine: ErrorLine
 }
 
 export default class PField extends Block<PFieldType> {
@@ -29,6 +32,9 @@ export default class PField extends Block<PFieldType> {
         value: props.value,
         disabled: props.disabled,
         type: props.type
+      }),
+      errorLine: new ErrorLine({
+        errorText: props.errorText || ''
       })
     })
   }
@@ -47,16 +53,25 @@ export default class PField extends Block<PFieldType> {
         error: this.props.error
       })
     }
+
+    if(newProps.error === true) {
+      this.children.errorLine.setProps({
+        errorText: this.props.errorText
+      })
+    }
     return true
   }
 
   render(): string {
     return `
-        <div class="pField">
-            <span class="pField__label">{{label}}</span>
-            <label class="pField__label">
-                {{{Input}}}
-            </label>
+        <div class="pField__container ${this.props.error ? 'input__error' : ''}">
+            <div class="pField ">
+                <span class="pField__label">{{label}}</span>
+                <label class="pField__label">
+                    {{{Input}}}
+                </label>
+            </div>
+            {{{errorLine}}}
         </div>
         `
   }
