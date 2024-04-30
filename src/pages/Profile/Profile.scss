@@ -49,15 +49,24 @@
         margin-bottom: 21px;
     }
 
-    h2 {
+    &__title {
         margin-bottom: 60px;
         font-weight: 600;
         font-size: 16px;
         line-height: 16px;
     }
 
+    &__fields {
+        margin-bottom: 40px;
+    }
+
     &__Button {
         text-align: left;
+    }
+    
+    &__buttons {
+        max-width: 510px;
+        margin: 0 auto;
     }
 
     &__exitButton {
@@ -70,5 +79,14 @@
         display: flex;
         justify-content: start;
         padding: 0;
+    }
+
+    &__saveButtonField {
+        margin: 0 auto;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 280px;
     }
 }

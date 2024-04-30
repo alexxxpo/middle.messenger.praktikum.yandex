@@ -1,3 +1,3 @@
-import './ChatListPage.scss';
+import './ChatListPage.scss'
 
-export { default as ChatListPage } from './ChatListPage.hbs?raw';
+export { default as ChatListPage } from './ChatListPage.ts'

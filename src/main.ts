@@ -1,40 +1,49 @@
-import './style.css'
-import Handlebars from "handlebars";
-import * as Components from './components';
-import * as Pages from './pages';
-import chatList from './utils/chatlistdata'
+import './style.scss'
+import Handlebars from 'handlebars'
+import * as Components from './components/index.ts'
+import * as Pages from './pages/index.ts'
+import { chatList, profileFields } from './utils/chatlistdata.ts'
+import type { Block } from './core/index.ts'
 
-const pages = {
-    'login': [Pages.Login],
-    'registration': [Pages.Registration],
-    'chatlist': [Pages.ChatListPage, chatList],
-    'editpassword': [Pages.EditPassword],
-    'edit': [Pages.EditProfile],
-    'edit_popup': [Pages.EditProfile, {popup: true}],
-    'profile': [Pages.Profile],
-    '404': [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
-    '500': [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
-    'nav': [Pages.NavPage]
-};
+type Constructable<T = any> = new (...args: any[]) => T;
 
-Object.entries(Components).forEach(([name, comp]) => Handlebars.registerPartial(name, comp));
+const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
+  login: [Pages.Login, {}],
+  registration: [Pages.Registration, {}],
+  chatlist: [Pages.ChatListPage, chatList],
+  profile: [Pages.Profile, { fieldsProps: profileFields }],
+  404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
+  500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
+  nav: [Pages.NavPage, {}]
+}
+Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
-function navigate(page: string) {
-    //@ts-ignore
-    const [source, context] = pages[page];
-    const container = document.getElementById('app')!;
-    container.innerHTML = Handlebars.compile(source)(context);
+function navigate(page: string): void {
+  const [Source, context] = pages[page]
+  const container = document.getElementById('app')
+
+  if (Source instanceof Object) {
+    const page = new Source(context) as Block<Record<string, unknown>>
+    if (container !== null) {
+      container.innerHTML = ''
+      container.append(page.getContent() as Node)
+      page.dispatchComponentDidMount()
+    }
+    return
+  }
+
+  if (container !== null) container.innerHTML = Handlebars.compile(Source)(context)
 }
 
-document.addEventListener('DOMContentLoaded', () => navigate('nav'));
+document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
 
 document.addEventListener('click', e => {
-    //@ts-ignore
-    const page = e.target.getAttribute('page');
-    if (page) {
-        navigate(page);
+  const target = e.target as HTMLElement
+  const page = target?.getAttribute('page') as string
+  if (page !== null) {
+    navigate(page)
 
-        e.preventDefault();
-        // e.stopImmediatePropagation();
-    }
-});
+    e.preventDefault()
+    e.stopImmediatePropagation()
+  }
+})

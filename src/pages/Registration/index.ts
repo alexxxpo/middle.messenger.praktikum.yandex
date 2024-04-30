@@ -1,3 +1,3 @@
-import './Registration.css';
+import './Registration.scss'
 
-export {default as Registration } from './Registration.hbs?raw';
+export { default as Registration } from './Registration.ts'

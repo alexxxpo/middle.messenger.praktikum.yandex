@@ -1,3 +1,3 @@
-import './Login.css';
+import './Login.scss'
 
-export { default as Login } from './Login.hbs?raw';
+export { default as Login } from './Login.ts'

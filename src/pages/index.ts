@@ -1,8 +1,6 @@
-export { Login } from './Login';
-export { Registration } from './Registration';
-export { ErrorPage } from './ErrorPage';
-export { Profile } from './Profile';
-export { EditProfile } from './EditProfile';
-export { EditPassword } from './EditPassword';
-export { ChatListPage } from './ChatListPage';
-export { NavPage } from './NavPage';
+export { Login } from './Login/index.ts'
+export { Registration } from './Registration/index.ts'
+export { ErrorPage } from './ErrorPage/index.ts'
+export { Profile } from './Profile/index.ts'
+export { ChatListPage } from './ChatListPage/index.ts'
+export { NavPage } from './NavPage/index.ts'
