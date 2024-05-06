@@ -1,4 +1,5 @@
 import { Button, Input } from '../../components/index.ts'
+import Router from '../../core/Router.ts'
 import { Block } from '../../core/index.ts'
 import { logFields } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
@@ -14,6 +15,9 @@ export default class Registration extends Block<RegType> {
 
   init(): void {
     const onChangeInput = InputValidation.bind(this)
+    const toLoginPage = () => {
+      Router.go('/')
+    }
 
     const regEmail = new Input({
       label: 'Почта',
@@ -79,7 +83,10 @@ export default class Registration extends Block<RegType> {
 
     const buttonLogin = new Button({
       type: 'link',
-      label: 'Войти'
+      label: 'Войти',
+      events: {
+        click: [toLoginPage]
+      }
     })
 
     const buttonReg = new Button({

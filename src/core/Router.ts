@@ -68,3 +68,5 @@ class Router {
         return this.routes.find(route => route.match(pathname));
     }
 }
+
+export default new Router('#app')

@@ -5,45 +5,50 @@ import * as Pages from './pages/index.ts'
 import { chatList, profileFields } from './utils/chatlistdata.ts'
 import type { Block } from './core/index.ts'
 import { Constructable } from './types/index.ts'
+import Router from './core/Router.ts'
 
-
-const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
-  login: [Pages.Login, {}],
-  registration: [Pages.Registration, {}],
-  chatlist: [Pages.ChatListPage, chatList],
-  profile: [Pages.Profile, { fieldsProps: profileFields }],
-  404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
-  500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
-  nav: [Pages.NavPage, {}]
-}
 Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
-function navigate(page: string): void {
-  const [Source, context] = pages[page]
-  const container = document.getElementById('app')
+// const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
+//   login: [Pages.Login, {}],
+//   registration: [Pages.Registration, {}],
+//   chatlist: [Pages.ChatListPage, chatList],
+//   profile: [Pages.Profile, { fieldsProps: profileFields }],
+//   404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
+//   500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
+//   nav: [Pages.NavPage, {}]
+// }
 
-  if (Source instanceof Object) {
-    const page = new Source(context) as Block<Record<string, unknown>>
-    if (container !== null) {
-      container.innerHTML = ''
-      container.append(page.getContent() as Node)
-      page.dispatchComponentDidMount()
-    }
-    return
-  }
+// function navigate(page: string): void {
+//   const [Source, context] = pages[page]
+//   const container = document.getElementById('app')
 
-  if (container !== null) container.innerHTML = Handlebars.compile(Source)(context)
-}
+//   if (Source instanceof Object) {
+//     const page = new Source(context) as Block<Record<string, unknown>>
+//     if (container !== null) {
+//       container.innerHTML = ''
+//       container.append(page.getContent() as Node)
+//       page.dispatchComponentDidMount()
+//     }
+//     return
+//   }
 
-document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
+//   if (container !== null) container.innerHTML = Handlebars.compile(Source)(context)
+// }
 
-document.addEventListener('click', e => {
-  const target = e.target as HTMLElement
-  const page = target?.getAttribute('page') as string
-  if (page !== null) {
-    navigate(page)
+// document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
 
-    e.preventDefault()
-    e.stopImmediatePropagation()
-  }
-})
+// document.addEventListener('click', e => {
+//   const target = e.target as HTMLElement
+//   const page = target?.getAttribute('page') as string
+//   if (page !== null) {
+//     navigate(page)
+
+//     e.preventDefault()
+//     e.stopImmediatePropagation()
+//   }
+// })
+
+const router = Router
+
+router.use('/', Pages.Login).use('/sign-up', Pages.Registration).start()

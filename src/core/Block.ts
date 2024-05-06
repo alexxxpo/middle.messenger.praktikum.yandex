@@ -206,7 +206,7 @@ export default class Block<T extends Record<string, any> > {
 
   show (): void {
     const element = this.getContent()
-    if (element !== null) element.style.display = 'block'
+    if (element !== null) element.removeAttribute('style')
   }
 
   hide (): void {
