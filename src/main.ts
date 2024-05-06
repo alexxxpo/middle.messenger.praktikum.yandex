@@ -4,8 +4,8 @@ import * as Components from './components/index.ts'
 import * as Pages from './pages/index.ts'
 import { chatList, profileFields } from './utils/chatlistdata.ts'
 import type { Block } from './core/index.ts'
+import { Constructable } from './types/index.ts'
 
-type Constructable<T = any> = new (...args: any[]) => T;
 
 const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
   login: [Pages.Login, {}],
