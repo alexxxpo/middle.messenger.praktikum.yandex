@@ -2,53 +2,34 @@ import './style.scss'
 import Handlebars from 'handlebars'
 import * as Components from './components/index.ts'
 import * as Pages from './pages/index.ts'
-import { chatList, profileFields } from './utils/chatlistdata.ts'
-import type { Block } from './core/index.ts'
-import { Constructable } from './types/index.ts'
 import Router from './core/Router.ts'
+import { Store } from './core/Store.ts'
+
+export enum Routes {
+    Login = '/',
+    Registration = '/sign-up',
+    Profile = '/settings',
+    Chats = '/messenger',
+    Error = '*'
+}
 
 Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
-// const pages: Record<string, [Constructable, Record<string, unknown | undefined>]> = {
-//   login: [Pages.Login, {}],
-//   registration: [Pages.Registration, {}],
-//   chatlist: [Pages.ChatListPage, chatList],
-//   profile: [Pages.Profile, { fieldsProps: profileFields }],
-//   404: [Pages.ErrorPage, { errNo: 404, message: 'Не туда попали' }],
-//   500: [Pages.ErrorPage, { errNo: 500, message: 'Мы уже фиксим' }],
-//   nav: [Pages.NavPage, {}]
-// }
-
-// function navigate(page: string): void {
-//   const [Source, context] = pages[page]
-//   const container = document.getElementById('app')
-
-//   if (Source instanceof Object) {
-//     const page = new Source(context) as Block<Record<string, unknown>>
-//     if (container !== null) {
-//       container.innerHTML = ''
-//       container.append(page.getContent() as Node)
-//       page.dispatchComponentDidMount()
-//     }
-//     return
-//   }
-
-//   if (container !== null) container.innerHTML = Handlebars.compile(Source)(context)
-// }
-
-// document.addEventListener('DOMContentLoaded', () => { navigate('nav') })
-
-// document.addEventListener('click', e => {
-//   const target = e.target as HTMLElement
-//   const page = target?.getAttribute('page') as string
-//   if (page !== null) {
-//     navigate(page)
-
-//     e.preventDefault()
-//     e.stopImmediatePropagation()
-//   }
-// })
-
 const router = Router
+window.router = router
 
-router.use('/', Pages.Login).use('/sign-up', Pages.Registration).start()
+window.store = new Store({
+    isLoading: false,
+    loginError: null,
+    chats: [],
+    user: null,
+    selectedCard: null
+});
+
+router
+    .use(Routes.Login, Pages.Login)
+    .use(Routes.Registration, Pages.Registration)
+    .use(Routes.Profile, Pages.Profile)
+    .use(Routes.Chats, Pages.ChatListPage)
+    .use(Routes.Error, Pages.ErrorPage)
+    .start()

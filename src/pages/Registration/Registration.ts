@@ -1,8 +1,9 @@
 import { Button, Input } from '../../components/index.ts'
 import Router from '../../core/Router.ts'
 import { Block } from '../../core/index.ts'
-import { logFields } from '../../utils/LogFormFields/index.ts'
+import { logFields, getModel } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
+import { create } from '../../services/Auth.service.ts'
 
 type RegType = Record<string, Input | Button>
 
@@ -93,7 +94,7 @@ export default class Registration extends Block<RegType> {
       type: 'primary',
       label: 'Зарегистрироваться',
       events: {
-        click: [logFields]
+        click: [logFields, e => create(getModel(e))]
       }
     })
 

@@ -201,6 +201,15 @@ export default class Block<T extends Record<string, any> > {
   }
 
   getContent (): HTMLElement | null {
+    if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      setTimeout(() => {
+        if (
+          this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+        ) {
+          this.dispatchComponentDidMount();
+        }
+      }, 100);
+    }
     return this.element
   }
 

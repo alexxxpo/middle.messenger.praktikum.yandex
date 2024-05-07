@@ -1,8 +1,9 @@
 import { Button, Input } from '../../components/index.ts'
 import Router from '../../core/Router.ts'
 import { Block } from '../../core/index.ts'
-import { logFields } from '../../utils/LogFormFields/index.ts'
+import { logFields, getModel } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
+import { login, me } from '../../services/Auth.service.ts'
 
 type LoginType = Record<string, Input | Button>
 
@@ -13,6 +14,12 @@ export default class LoginPage extends Block<LoginType> {
     })
   }
 
+  
+
+  componentDidMount(oldProps: any): void {
+    me()
+  }
+  
   init(): void {
     const onChangeInput = InputValidation.bind(this)
     const toRegPage = () => {
@@ -29,7 +36,7 @@ export default class LoginPage extends Block<LoginType> {
       name: 'password',
       events: { blur: [e => { onChangeInput(e, this.children.inputPass as Input, 'Некорректное значение', ...conditions.password) }] }
     })
-    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [logFields] } })
+    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [logFields, e => login(getModel(e))] } })
     const buttonReg = new Button({ label: 'Нет аккаунта?', type: 'link', events: { click: [toRegPage] } })
 
     this.children = {
@@ -39,6 +46,7 @@ export default class LoginPage extends Block<LoginType> {
       buttonLogin,
       buttonReg
     }
+
   }
 
   render(): string {

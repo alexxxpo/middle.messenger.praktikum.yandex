@@ -1,6 +1,6 @@
 import { conditions, validate } from "../validations/index.ts"
 
-export function serializeForm(formNode: HTMLFormElement): void {
+export function serializeForm(formNode: HTMLFormElement): Record<string, string | boolean>[] {
   if (formNode === null) return
   const elements = Array.from(formNode.elements) as HTMLInputElement[]
   const data = Array.from(elements)
@@ -37,6 +37,7 @@ export function serializeForm(formNode: HTMLFormElement): void {
       return { name, value, valid }
     })
   console.log(data)
+  return data
 }
 
 export function logFields(e: Event): void {
@@ -44,4 +45,17 @@ export function logFields(e: Event): void {
   const target = e.target as HTMLButtonElement
   const form = target.form
   if (form !== null) serializeForm(form)
+}
+
+export function getModel(e) {
+  e.preventDefault()
+  const target = e.target as HTMLButtonElement
+  const form = target.form
+  let raw: Record<string, string | boolean>[]
+  if (form !== null) raw = serializeForm(form)
+  const fields = raw.reduce((acc, item) => {
+    acc[item.name] = item.value
+    return acc
+  }, {})
+  return JSON.stringify(fields)
 }
