@@ -26,6 +26,8 @@ window.store = new Store({
     selectedCard: null
 });
 
+// console.log(window.store)
+
 router
     .use(Routes.Login, Pages.Login)
     .use(Routes.Registration, Pages.Registration)

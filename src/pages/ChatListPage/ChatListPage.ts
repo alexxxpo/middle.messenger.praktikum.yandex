@@ -1,25 +1,42 @@
-import { Button, ChatList, MessageInput, Search } from '../../components/index.ts'
-import { type ChatListProps } from '../../components/ChatList/ChatList.ts'
+import { Button, ChatList, ChatListItem, MessageInput, Search, TopPanel } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
 import { logFields } from '../../utils/LogFormFields/LogFormFields.ts'
+import { me } from '../../services/Auth.service.ts'
+import { loadChats } from '../../services/Chats.service.ts'
+import { logout } from '../../services/Auth.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
+import { connect } from '../../utils/connect.ts'
 
-export default class ChatListPage extends Block<Record<string, unknown>> {
-  constructor(props: ChatListProps) {
-    super({
-      chatList: new ChatList(props),
-      profileButton: new Button({
-        type: 'link',
-        className: 'profileButton',
-        label: 'Профиль'
-      }),
-      search: new Search({})
-    })
+class ChatListPage extends Block<Record<string, unknown>> {
+
+  componentDidMount() {
+    me()
+    loadChats()
+    console.log('cdm page')
+
   }
+
   init() {
+    console.log('init page')
+
+    const chatList = new ChatList({ chats: this.mapChatsToComponents(this.props.chats) || [],  showEmpty: this.props.chats.length === 0})
+
+    const profileButton = new Button({
+      type: 'link',
+      className: 'profileButton',
+      label: 'Профиль',
+      events: {
+        click: [logout]
+      }
+    })
+
+    const search = new Search({})
+
+    const topPanel = new TopPanel({title: "Active chat"})
+
     const messageInput = new MessageInput({
       name: 'message',
-      className: 'chatListPage__messageInput'    
+      className: 'chatListPage__messageInput'
     })
 
     const sendButton = new Button({
@@ -33,11 +50,32 @@ export default class ChatListPage extends Block<Record<string, unknown>> {
     this.children = {
       ...this.children,
       messageInput,
-      sendButton
+      sendButton,
+      chatList,
+      profileButton,
+      search,
+      topPanel
     }
   }
 
+  componentDidUpdate(oldProps, newProps) {
+    if (oldProps.chats !== newProps.chats) {
+      console.log('cdu page')
+      this.children.chatList.setProps({
+        chats: this.mapChatsToComponents(newProps.chats) || [],
+        showEmpty: newProps.chats.length === 0
+      })
+    }
+  }
+
+  mapChatsToComponents(chats) {
+    return chats?.map((chat) => new ChatListItem({ ...chat }))
+  }
+
+
+
   render(): string {
+    console.log(this)
     return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
@@ -52,10 +90,11 @@ export default class ChatListPage extends Block<Record<string, unknown>> {
                 </div>
             </div>
             <div class="chatListPage__messageArea">
-                    ${this.props.noMessage ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>` 
-                    : 
-                    `
+                    ${this.props.noMessage ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
+        :
+        `
                     <div class="chatListPage__chatInfo">
+                      {{{topPanel}}}
                     </div>
                     <ul class="messagesList">
                         <li class="messagesList__item date">
@@ -93,3 +132,7 @@ export default class ChatListPage extends Block<Record<string, unknown>> {
         `
   }
 }
+
+const mapStateToProps = ({ chats, currentUser }) => ({ chats, currentUser })
+
+export default connect(mapStateToProps)(ChatListPage)

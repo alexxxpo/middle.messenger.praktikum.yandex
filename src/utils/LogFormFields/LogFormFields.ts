@@ -36,7 +36,6 @@ export function serializeForm(formNode: HTMLFormElement): Record<string, string 
       }
       return { name, value, valid }
     })
-  console.log(data)
   return data
 }
 

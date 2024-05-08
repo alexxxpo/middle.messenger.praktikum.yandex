@@ -1,35 +1,41 @@
-import {Block} from '../../core/index.ts'
-import { ChatListItem } from '../ChatListItem/index.ts'
+import { Block } from '../../core/index.ts'
 import { type ChatListItemProps } from '../ChatListItem/ChatListItem.ts'
+import { connect } from '../../utils/connect.ts'
 
 export interface ChatListProps extends ChatListItemProps {
   chatItems: ChatListItemProps[]
 }
 
 interface ChatListType extends ChatListProps {
-  chatListItemsKeys: string[]
 }
 
-export default class ChatList extends Block<ChatListType> {
-  constructor (props: ChatListProps) {
-    const chatList = props.chatItems.reduce((list: Record<string, ChatListItem> = {}, chatData) => {
-      const component: ChatListItem = new ChatListItem(chatData)
-      list[component._id] = component
-      return list
-    }, {})
-
+class ChatList extends Block<ChatListType> {
+  constructor(props: ChatListProps) {
     super({
-      ...props,
-      chatListItemsKeys: Object.keys(chatList),
-      ...chatList
+      ...props
     })
   }
 
-  render (): string {
+  render(): string {
+    console.log(this)
     return `
-            <div class="chatList">
-                ${Array.isArray(this.props.chatListItemsKeys) ? this.props.chatListItemsKeys.map((key) => `{{{ ${key} }}}`).join(' ') : ''}
-            </div>
-        `
+        {{#if isLoading}}
+            <span>Загрузка списка чатов</span>
+        {{else}}
+            {{#if showEmpty}}
+                <span>Нет чатов</span>
+            {{else}}
+                <div class="chatList">
+                    <ul>
+                        {{{chats}}}
+                    </ul>
+                </div>
+            {{/if}}
+        {{/if}}
+    `
   }
 }
+
+const mapStateToProps = ({ isLoading }) => ({ isLoading })
+
+export default connect(mapStateToProps)(ChatList)

@@ -4,7 +4,16 @@ const chatsApi = new HTTPTransport('https://ya-praktikum.tech/api/v2');
 
 export default class ChatsApi {
     async getChats() {
-        const { response } = await chatsApi.get('/chats', { credentials: 'include', headers: { mode: 'cors', accept: 'application/json' } })
-        return response;
+        return await chatsApi.get('/chats', { withCredentials: true })
+    }
+
+    async createChat(title: string) {
+        return await chatsApi.post('/chats', {
+            withCredentials: true,
+            data: JSON.stringify({ title }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
     }
 }

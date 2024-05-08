@@ -81,7 +81,6 @@ export default class HTTPTransport {
             xhr.ontimeout = reject;
 
             if (method === METHOD.GET || data === undefined) {
-                console.log('send')
                 xhr.send();
             } else {
                 xhr.send(data);

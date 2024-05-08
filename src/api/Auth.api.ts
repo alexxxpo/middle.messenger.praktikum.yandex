@@ -29,6 +29,9 @@ export default class AuthApi {
     }
 
     async logout() {
-        return authApi.post('/logout')
+        return authApi.post('/logout', {
+            mode: 'cors',
+            withCredentials: true,
+        })
     }
 }
