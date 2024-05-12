@@ -1,0 +1,27 @@
+.topPanel {
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: #efefef 1px solid;
+
+    &__avatar_container {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #efefef;
+    }
+
+    &__title {
+        justify-self: flex-start;
+    }
+
+    &__info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+}

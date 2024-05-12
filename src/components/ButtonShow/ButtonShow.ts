@@ -1,5 +1,4 @@
 import { Block } from "../../core";
-import { connect } from "../../utils/connect.ts";
 
 class ButtonShow extends Block<Record<string, string>> {
     constructor(props: Record<string, string>) {
@@ -10,7 +9,7 @@ class ButtonShow extends Block<Record<string, string>> {
 
     render(): string {
         return `
-            <div class="buttonShow">
+            <div class="buttonShow {{className}}">
                 <span class="buttonShow__dot"></span>
                 <span class="buttonShow__dot"></span>
                 <span class="buttonShow__dot"></span>            
@@ -19,4 +18,4 @@ class ButtonShow extends Block<Record<string, string>> {
     }
 }
 
-export default connect(() => {})(ButtonShow)
+export default ButtonShow

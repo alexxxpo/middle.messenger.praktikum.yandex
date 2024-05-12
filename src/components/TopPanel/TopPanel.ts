@@ -1,5 +1,7 @@
 import { Block } from "../../core";
 import { connect } from "../../utils/connect";
+import { ButtonAddUser } from "../ButtonAddUser";
+import { ButtonDeleteUser } from "../ButtonDeleteUser";
 import { ButtonShow } from "../ButtonShow";
 
 class TopPanel extends Block<Record<string, unknown>> {
@@ -7,18 +9,38 @@ class TopPanel extends Block<Record<string, unknown>> {
         super({...props})        
     }
     init() {
-        const buttonShow = new ButtonShow({})
+        const buttonShow = new ButtonShow({
+            className: 'topPanel__buttonShow'
+        })
+        const buttonAddUser = new ButtonAddUser({
+            
+        })
+        const buttonDeleteUser = new ButtonDeleteUser({
+
+        })
         this.children = {
             ...this.children,
-            buttonShow
+            buttonShow,
+            buttonAddUser,
+            buttonDeleteUser
         }
     }
 
     render(): string {
         return `
             <div class="topPanel {{className}}">
-                <img src="{{avatar}} ${this.props.activeChat?.avatar || ''}"/>
-                <h2 class="topPanel__title">{{title}} ${this.props.activeChat?.title || ''}</h2>
+                <div class="topPanel__info">
+
+                    <div class="topPanel__avatar_container">
+                        <img 
+                            class="topPanel__avatar" 
+                            src="{{avatar}} ${this.props.activeChat?.avatar || ''} " 
+                        />
+                    </div>
+
+                    <h2 class="topPanel__title">{{title}} ${this.props.activeChat?.title || ''}</h2>
+                </div>
+
                 {{{buttonShow}}}
             </div>
         `
