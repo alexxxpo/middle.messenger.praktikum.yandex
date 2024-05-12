@@ -7,7 +7,7 @@ export const login = async (model) => {
     window.store.set({ isLoading: true });
     try {
         await authApi.login(model);
-        window.router.go(Routes.Chats);        
+        window.router.go(Routes.Chats);    
     } catch (error) {
         console.log(error)
         window.store.set({ loginError: 'some error' });
@@ -21,6 +21,7 @@ export const create = async (model) => {
     window.store.set({ isLoading: true });
     try {
         await authApi.create(model);
+        window.router.go(Routes.Chats);
     } catch (error) {
         console.log(error)
         window.store.set({ signUpError: 'some error' });
