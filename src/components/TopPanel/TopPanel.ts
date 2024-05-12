@@ -3,6 +3,7 @@ import { connect } from "../../utils/connect";
 import { ButtonAddUser } from "../ButtonAddUser";
 import { ButtonDeleteUser } from "../ButtonDeleteUser";
 import { ButtonShow } from "../ButtonShow";
+import { ChatsControlButtons } from "../ChatsControlButtons";
 
 class TopPanel extends Block<Record<string, unknown>> {
     constructor(props: Record<string, unknown>) {
@@ -16,13 +17,17 @@ class TopPanel extends Block<Record<string, unknown>> {
             
         })
         const buttonDeleteUser = new ButtonDeleteUser({
-
+            
+        })
+        const сhatsControlButtons = new ChatsControlButtons({
+            
         })
         this.children = {
             ...this.children,
             buttonShow,
             buttonAddUser,
-            buttonDeleteUser
+            buttonDeleteUser,
+            сhatsControlButtons
         }
     }
 
@@ -42,6 +47,8 @@ class TopPanel extends Block<Record<string, unknown>> {
                 </div>
 
                 {{{buttonShow}}}
+
+                {{{сhatsControlButtons}}}
             </div>
         `
     }

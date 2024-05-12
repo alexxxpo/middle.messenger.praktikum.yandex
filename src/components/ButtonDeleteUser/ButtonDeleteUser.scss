@@ -7,7 +7,16 @@
     flex-flow: column nowrap;
     border: var(--main-color) 1.5px solid;
     border-radius: 50%;
-    cursor: pointer;
+    
+    &__container {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        font-size: 12px;
+        line-height: 14px;
+    }
 
     &__cross {
         width: 100%;
