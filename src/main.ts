@@ -27,7 +27,6 @@ window.store = new Store({
     currentUser: null
 });
 
-// console.log(window.store)
 
 router
     .use(Routes.Login, Pages.Login)

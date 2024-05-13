@@ -1,8 +1,8 @@
-import { Button, ChatList, ChatListItem, MessageInput, Search, TopPanel } from '../../components/index.ts'
+import { Button, ChatList, ChatListItem, MessageInput, PopupAddUser, Search, TopPanel } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
-import { logFields } from '../../utils/LogFormFields/LogFormFields.ts'
+import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
-import { loadChats } from '../../services/Chats.service.ts'
+import { createChat, loadChats } from '../../services/Chats.service.ts'
 import { logout } from '../../services/Auth.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
@@ -10,15 +10,21 @@ import { Routes } from '../../main.ts'
 
 class ChatListPage extends Block<Record<string, unknown>> {
 
-  componentDidMount() {
-    me()
-    loadChats()
-    console.log('cdm page')
-
-  }
-
   init() {
-    console.log('init page')
+    const getUserInfo = async () => {
+      if (window.store.state.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      if (window.store.state.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
+    }
+    getUserInfo()
+
+    const addChat = (e) => {
+      createChat(JSON.parse(getModel(e)))
+    }
+
+    const popupAddUser = new PopupAddUser({
+      title: 'Добавить пользователя',
+      clickButton: addChat
+    })
 
     const chatList = new ChatList({ chats: this.mapChatsToComponents(this.props.chats) || [],  showEmpty: this.props.chats.length === 0})
 
@@ -55,7 +61,8 @@ class ChatListPage extends Block<Record<string, unknown>> {
       chatList,
       profileButton,
       search,
-      topPanel
+      topPanel,
+      popupAddUser
     }
   }
 
@@ -67,6 +74,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
         showEmpty: newProps.chats.length === 0
       })
     }
+    return true
   }
 
   mapChatsToComponents(chats) {
@@ -76,7 +84,6 @@ class ChatListPage extends Block<Record<string, unknown>> {
 
 
   render(): string {
-    console.log(this)
     return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
@@ -91,7 +98,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
                 </div>
             </div>
             <div class="chatListPage__messageArea">
-                    ${this.props.noMessage ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
+                    ${!this.props.activeChat ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
         :
         `
                     <div class="chatListPage__chatInfo">
@@ -134,6 +141,6 @@ class ChatListPage extends Block<Record<string, unknown>> {
   }
 }
 
-const mapStateToProps = ({ chats, currentUser }) => ({ chats, currentUser })
+const mapStateToProps = ({ chats, currentUser, activeChat }) => ({ chats, currentUser, activeChat })
 
 export default connect(mapStateToProps)(ChatListPage)

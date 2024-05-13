@@ -7,10 +7,10 @@ export default class ChatsApi {
         return await chatsApi.get('/chats', { withCredentials: true })
     }
 
-    async createChat(title: string) {
+    async createChat(data) {
         return await chatsApi.post('/chats', {
             withCredentials: true,
-            data: JSON.stringify({ title }),
+            data: JSON.stringify(data),
             headers: {
                 "Content-Type": "application/json"
             }

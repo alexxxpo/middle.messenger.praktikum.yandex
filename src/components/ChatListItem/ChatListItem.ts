@@ -25,7 +25,6 @@ class ChatListItem extends Block<ChatListItemProps> {
             id: props.id
           }
           setActiveChat(card)
-          console.log(window.store.state)
         }]
       }
     })
@@ -49,7 +48,7 @@ class ChatListItem extends Block<ChatListItemProps> {
                     <div class="chatListItem__meta">
                         <div class="lastMessage">
                             <p>
-                                ${this.props.currentUser.id === this.props.created_by ? '<span>Вы:</span>' : ''}
+                                ${this.props.currentUser?.id === this.props.created_by ? '<span>Вы:</span>' : ''}
                                 {{message}}
                             </p>
                         </div>

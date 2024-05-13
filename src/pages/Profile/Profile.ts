@@ -2,6 +2,7 @@ import { BackButton, Button, Input, PField, PImage, Popup } from '../../componen
 import { type PFieldProps } from '../../components/PField/PField.ts'
 import { type PopupProps } from '../../components/Popup/Popup.ts'
 import { Block } from '../../core/index.ts'
+import { Routes } from '../../main.ts'
 import { logout, me } from '../../services/Auth.service.ts'
 import { changeUserData } from '../../services/Users.service.ts'
 import { connect } from '../../utils/connect.ts'
@@ -30,12 +31,12 @@ class Profile extends Block<ProfileType> {
 
   componentDidUpdate(oldProps, newProps): boolean {
     if (oldProps.currentUser !== newProps.currentUser) {
-      this.children.email.setProps({ value: newProps.currentUser.email })
-      this.children.login.setProps({ value: newProps.currentUser.login })
-      this.children.firstName.setProps({ value: newProps.currentUser.first_name })
-      this.children.secondName.setProps({ value: newProps.currentUser.second_name })
-      this.children.phone.setProps({ value: newProps.currentUser.phone })
-      this.children.displayName.setProps({ value: newProps.currentUser.display_name })
+      this.children.email.setProps({ value: newProps.currentUser?.email })
+      this.children.login.setProps({ value: newProps.currentUser?.login })
+      this.children.firstName.setProps({ value: newProps.currentUser?.first_name })
+      this.children.secondName.setProps({ value: newProps.currentUser?.second_name })
+      this.children.phone.setProps({ value: newProps.currentUser?.phone })
+      this.children.displayName.setProps({ value: newProps.currentUser?.display_name })
       console.log(oldProps, newProps)
       console.log(this)
 
@@ -45,7 +46,13 @@ class Profile extends Block<ProfileType> {
   }
 
   init(): void {
-    if(this.props.currentUser === null) me()
+    const getUserInfo = async () => {
+      if (window.store.state.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      if (window.store.state.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+    }
+    getUserInfo()
+
+    
 
     const onChangeDataBind = this.onChangeData.bind(this)
     const onSaveDataBind = this.onSaveData.bind(this)

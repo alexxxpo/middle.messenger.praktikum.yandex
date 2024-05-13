@@ -67,8 +67,8 @@ export const logout = async () => {
     window.store.set({ isLoading: true });
     try {
         await authApi.logout();
-        window.store.set({ currentUser: null })
         window.router.go(Routes.Login)
+        window.store.set({ currentUser: null })
     } catch (error) {
         console.log(error)
         window.store.set({ logoutError: 'some error' });

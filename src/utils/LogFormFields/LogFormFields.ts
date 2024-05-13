@@ -48,6 +48,8 @@ export function logFields(e: Event): void {
 
 export function getModel(e) {
   e.preventDefault()
+  console.log(e)
+
   const target = e.target as HTMLButtonElement
   const form = target.form
   let raw: Record<string, string | boolean>[]
@@ -56,5 +58,6 @@ export function getModel(e) {
     acc[item.name] = item.value
     return acc
   }, {})
+  console.log(fields)
   return JSON.stringify(fields)
 }

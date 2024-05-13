@@ -17,7 +17,6 @@ class ChatList extends Block<ChatListType> {
   }
 
   render(): string {
-    console.log(this)
     return `
         {{#if isLoading}}
             <span>Загрузка списка чатов</span>
