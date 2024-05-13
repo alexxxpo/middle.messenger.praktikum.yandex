@@ -59,6 +59,10 @@ export default class PField extends Block<PFieldType> {
         errorText: this.props.errorText
       })
     }
+
+    if(newProps.value !== oldProps.value) {
+      this.children.Input.setProps({value: newProps.value})
+    }
     return true
   }
 

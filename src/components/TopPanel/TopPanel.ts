@@ -3,6 +3,7 @@ import { connect } from "../../utils/connect";
 import { ButtonAddUser } from "../ButtonAddUser";
 import { ButtonDeleteUser } from "../ButtonDeleteUser";
 import { ButtonShow } from "../ButtonShow";
+import { ChatControl } from "../ChatControl";
 import { ChatsControlButtons } from "../ChatsControlButtons";
 
 class TopPanel extends Block<Record<string, unknown>> {
@@ -10,24 +11,26 @@ class TopPanel extends Block<Record<string, unknown>> {
         super({...props})        
     }
     init() {
-        const buttonShow = new ButtonShow({
-            className: 'topPanel__buttonShow'
-        })
-        const buttonAddUser = new ButtonAddUser({
+        // const buttonShow = new ButtonShow({
+        //     className: 'topPanel__buttonShow'
+        // })
+        // const buttonAddUser = new ButtonAddUser({
             
-        })
-        const buttonDeleteUser = new ButtonDeleteUser({
+        // })
+        // const buttonDeleteUser = new ButtonDeleteUser({
             
-        })
-        const сhatsControlButtons = new ChatsControlButtons({
+        // })
+        // const сhatsControlButtons = new ChatsControlButtons({
             
-        })
+        // })
+        const chatControl = new ChatControl({})
         this.children = {
             ...this.children,
-            buttonShow,
-            buttonAddUser,
-            buttonDeleteUser,
-            сhatsControlButtons
+            chatControl
+            // buttonShow,
+            // buttonAddUser,
+            // buttonDeleteUser,
+            // сhatsControlButtons
         }
     }
 
@@ -45,6 +48,7 @@ class TopPanel extends Block<Record<string, unknown>> {
 
                     <h2 class="topPanel__title">{{title}} ${this.props.activeChat?.title || ''}</h2>
                 </div>
+                {{{chatControl}}}
 
                 {{{buttonShow}}}
 

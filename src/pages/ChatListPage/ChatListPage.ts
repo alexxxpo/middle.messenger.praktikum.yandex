@@ -6,6 +6,7 @@ import { loadChats } from '../../services/Chats.service.ts'
 import { logout } from '../../services/Auth.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
+import { Routes } from '../../main.ts'
 
 class ChatListPage extends Block<Record<string, unknown>> {
 
@@ -26,7 +27,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
       className: 'profileButton',
       label: 'Профиль',
       events: {
-        click: [logout]
+        click: [() => {window.router.go(Routes.Profile)}]
       }
     })
 

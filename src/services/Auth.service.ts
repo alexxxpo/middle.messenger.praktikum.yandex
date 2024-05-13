@@ -39,7 +39,6 @@ export const me = async () => {
             case 200:
                 window.store.set({ currentUser: JSON.parse(response) })
                 window.store.set({ getUserError: null })
-                window.router.go(Routes.Chats)
                 break;
             case 400:
                 window.store.set({ getUserError: JSON.parse(response) })

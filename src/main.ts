@@ -23,7 +23,8 @@ window.store = new Store({
     loginError: null,
     chats: [],
     user: null,
-    selectedCard: null
+    selectedCard: null,
+    currentUser: null
 });
 
 // console.log(window.store)

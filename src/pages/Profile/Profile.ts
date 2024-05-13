@@ -2,6 +2,8 @@ import { BackButton, Button, Input, PField, PImage, Popup } from '../../componen
 import { type PFieldProps } from '../../components/PField/PField.ts'
 import { type PopupProps } from '../../components/Popup/Popup.ts'
 import { Block } from '../../core/index.ts'
+import { logout, me } from '../../services/Auth.service.ts'
+import { connect } from '../../utils/connect.ts'
 import { logFields } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
 
@@ -16,7 +18,7 @@ export interface ProfileType extends ProfileProps {
 
 }
 
-export default class Profile extends Block<ProfileType> {
+class Profile extends Block<ProfileType> {
   constructor(props: ProfileProps) {
     super({
       ...props,
@@ -25,7 +27,25 @@ export default class Profile extends Block<ProfileType> {
     })
   }
 
+  componentDidUpdate(oldProps, newProps): boolean {
+    if (oldProps.currentUser !== newProps.currentUser) {
+      this.children.email.setProps({ value: newProps.currentUser.email })
+      this.children.login.setProps({ value: newProps.currentUser.login })
+      this.children.firstName.setProps({ value: newProps.currentUser.first_name })
+      this.children.secondName.setProps({ value: newProps.currentUser.second_name })
+      this.children.phone.setProps({ value: newProps.currentUser.phone })
+      this.children.displayName.setProps({ value: newProps.currentUser.display_name })
+      console.log(oldProps, newProps)
+      console.log(this)
+
+      return true
+    }
+    return true
+  }
+
   init(): void {
+    if(this.props.currentUser === null) me()
+
     const onChangeDataBind = this.onChangeData.bind(this)
     const onSaveDataBind = this.onSaveData.bind(this)
     const onChangePasswordBind = this.onChangePassword.bind(this)
@@ -37,7 +57,7 @@ export default class Profile extends Block<ProfileType> {
     const email = new PField({
       label: 'Почта',
       type: 'text',
-      value: 'pochta@yandex.ru',
+      value: '',
       disabled: true,
       name: 'email',
       events: {
@@ -47,7 +67,7 @@ export default class Profile extends Block<ProfileType> {
     const login = new PField({
       label: 'Логин',
       type: 'text',
-      value: 'ivanivanov',
+      value: '',
       disabled: true,
       name: 'login',
       events: {
@@ -57,7 +77,7 @@ export default class Profile extends Block<ProfileType> {
     const firstName = new PField({
       label: 'Имя',
       type: 'text',
-      value: 'Иван',
+      value: '',
       disabled: true,
       name: 'first_name',
       events: {
@@ -67,7 +87,7 @@ export default class Profile extends Block<ProfileType> {
     const secondName = new PField({
       label: 'Фамилия',
       type: 'text',
-      value: 'Иванов',
+      value: '',
       disabled: true,
       name: 'second_name',
       events: {
@@ -77,7 +97,7 @@ export default class Profile extends Block<ProfileType> {
     const displayName = new PField({
       label: 'Имя в чате',
       type: 'text',
-      value: 'Иван',
+      value: '',
       disabled: true,
       name: 'display_name',
       events: {
@@ -87,7 +107,7 @@ export default class Profile extends Block<ProfileType> {
     const phone = new PField({
       label: 'Телефон',
       type: 'text',
-      value: '+7(909)9673030',
+      value: '',
       disabled: true,
       name: 'phone',
       events: {
@@ -146,7 +166,10 @@ export default class Profile extends Block<ProfileType> {
     const buttonExit = new Button({
       type: 'link',
       label: 'Выйти',
-      className: 'profilePage__Button profilePage__exitButton'
+      className: 'profilePage__Button profilePage__exitButton',
+      events: { 
+        click: [logout] 
+      }
     })
 
     // button save
@@ -159,7 +182,11 @@ export default class Profile extends Block<ProfileType> {
     })
 
     // common
-    const backButton = new BackButton({})
+    const backButton = new BackButton({
+      events: {
+        click: [() => { window.router.back() }]
+      }
+    })
 
     const pImage = new PImage({
       className: 'profilePage__PImage',
@@ -244,15 +271,19 @@ export default class Profile extends Block<ProfileType> {
   }
 
   render(): string {
+    if(this.props.isLoading) return `
+      <div>Загрузка данных о пользователе...</div>
+    `
+
     return `
-        <main class="page profilePage">
+        <main class="page profilePage">        
             <div class="profilePage__userInfo">
                 {{{ backButton }}}
         
                 {{{pImage}}}
 
                 <form>
-                    <h2 class="profilePage__title">${this.children.displayName.props.value as string}</h2>   
+                    <h2 class="profilePage__title">${this.props.currentUser?.display_name as string || 'Здесь будет отображаться Ваше имя'}</h2>   
 
                     ${this.props.editPassword === false
         ? `<div class="profilePage__fields">
@@ -297,3 +328,7 @@ export default class Profile extends Block<ProfileType> {
         `
   }
 }
+
+const mapStateToProps = ({ currentUser, isLoading }) => ({ currentUser, isLoading })
+
+export default connect(mapStateToProps)(Profile)

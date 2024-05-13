@@ -36,7 +36,7 @@ class LoginPage extends Block<LoginType> {
       name: 'password',
       events: { blur: [e => { onChangeInput(e, this.children.inputPass as Input, 'Некорректное значение', ...conditions.password) }] }
     })
-    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [logFields, e => login(getModel(e))] } })
+    const buttonLogin = new Button({ label: 'Авторизироваться', type: 'primary', events: { click: [e => login(getModel(e))] } })
     const buttonReg = new Button({ label: 'Нет аккаунта?', type: 'link', events: { click: [toRegPage] } })
     const buttonOut = new Button({ label: 'Выйти', type: 'link', events: { click: [logout] } })
 

@@ -1,0 +1,9 @@
+.chatControl {
+    position: relative;
+
+    &__chatsControlButtons {
+        position: absolute;
+        right: 0;
+        top: 180%;
+    }
+}
