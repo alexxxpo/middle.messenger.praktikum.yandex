@@ -18,8 +18,12 @@ class LoginPage extends Block<LoginType> {
 
   init(): void {
     const getUserInfo = async () => {
-      if (window.store.state.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (window.store.state.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+      console.log(this.props);
+      
+      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      console.log(this.props);
+
+      if (this.props.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
     }
     getUserInfo()
 
@@ -122,6 +126,6 @@ class LoginPage extends Block<LoginType> {
   }
 }
 
-const mapStateToProps = ({ isLoading }) => ({ isLoading })
+const mapStateToProps = ({ isLoading, currentUser }) => ({ isLoading, currentUser })
 
 export default connect(mapStateToProps)(LoginPage)
