@@ -39,6 +39,20 @@ export default class PField extends Block<PFieldType> {
     })
   }
 
+  init() {
+    this.children.Input.setProps({
+      events: {
+        change: [
+          (e) => {
+            this.setProps({
+              value: e.target.value
+            })
+          }
+        ]
+      }
+    })
+  }
+
   componentDidUpdate(oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
 
     if (oldProps.disabled !== newProps.disabled) {

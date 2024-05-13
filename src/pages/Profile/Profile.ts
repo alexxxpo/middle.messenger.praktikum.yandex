@@ -3,8 +3,9 @@ import { type PFieldProps } from '../../components/PField/PField.ts'
 import { type PopupProps } from '../../components/Popup/Popup.ts'
 import { Block } from '../../core/index.ts'
 import { logout, me } from '../../services/Auth.service.ts'
+import { changeUserData } from '../../services/Users.service.ts'
 import { connect } from '../../utils/connect.ts'
-import { logFields } from '../../utils/LogFormFields/index.ts'
+import { getModel, logFields } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
 
 export interface ProfileProps {
@@ -177,7 +178,7 @@ class Profile extends Block<ProfileType> {
       type: 'primary',
       label: 'Сохранить',
       events: {
-        click: [logFields, onSaveDataBind]
+        click: [(e) => {changeUserData({...this.props.currentUser, ...JSON.parse(getModel(e))})}, onSaveDataBind]
       }
     })
 
