@@ -7,6 +7,8 @@ import { login, me, logout } from '../../services/Auth.service.ts'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
 
+const router = Router
+
 type LoginType = Record<string, Input | Button>
 
 class LoginPage extends Block<LoginType> {
@@ -19,14 +21,14 @@ class LoginPage extends Block<LoginType> {
   init(): void {
     const getUserInfo = async () => {
       if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (this.props.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+      if (this.props.currentUser !== null) router.go(Routes.Chats) // Если данные есть, то переходим в чаты
     }
     getUserInfo()
 
     // Handlers
     const onChangeInput = InputValidation.bind(this)
     const toRegPage = () => {
-      Router.go('/sign-up')
+      router.go('/sign-up')
     }
 
     // Children init
@@ -96,8 +98,6 @@ class LoginPage extends Block<LoginType> {
   }
 
   render(): string {
-    console.log(this.props.isLoading);
-    
     return `{{#if isLoading}}
                 <h2>Загрузка данных</h2>
             {{else}}

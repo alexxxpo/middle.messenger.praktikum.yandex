@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { type EventsType } from '../../types/index.ts'
+import { type EventsType } from '../../types/types.ts'
 import ErrorLine from '../Input/ErrorLine.ts'
 import PFieldInput from './PFieldInput.ts'
 

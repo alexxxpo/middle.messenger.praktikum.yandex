@@ -1,46 +1,49 @@
-import { StoreEvents } from "../core/Store";
+import { IState, StoreEvents } from "../core/Store";
 import isEqual from './isEqual';
+import Store from "../core/Store";
+import { Block } from "../core";
+import { Constructable } from "../types/types";
 
-export function connect(mapStateToProps, dispatch?) {
-    return function(Component) {
-      return class extends Component{
-        private onChangeStoreCallback: () => void;
-        constructor(props) {
-          const store = window.store;
-          // сохраняем начальное состояние
-          let state = mapStateToProps(store.getState());
-  
-          super({...props, ...state});
+export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
+  return function (Component: Constructable<Block<Record<string, unknown>>>) {
+    return class extends Component {
+      private onChangeStoreCallback: () => void;
+      constructor(props: Record<string, unknown>) {
+        const store = Store;
+        // сохраняем начальное состояние
+        let state = mapStateToProps(store.getState());
 
-          const dispatchHundler = {};
-          Object.entries(dispatch || {}).forEach(([key, hundler]) => {
-            dispatchHundler[key] = (...args) => hundler(window.store.set.bind(window.store), ...args)
-          })
+        super({ ...props, ...state });
 
-          this.setProps({...dispatchHundler});
+        const dispatchHandler = {};
+        Object.entries(dispatch || {}).forEach(([key, handler]) => {
+          dispatchHandler[key] = (...args) => handler(Store.set.bind(Store), ...args)
+        })
 
-          this.onChangeStoreCallback = () => {
+        this.setProps({ ...dispatchHandler });
 
-            // при обновлении получаем новое состояние
-            const newState = mapStateToProps(store.getState());
+        this.onChangeStoreCallback = () => {
 
-            // если что-то из используемых данных поменялось, обновляем компонент
-            if (!isEqual(state, newState)) {
-              this.setProps({...newState});
-            }
+          // при обновлении получаем новое состояние
+          const newState = mapStateToProps(store.getState());
 
-            // не забываем сохранить новое состояние
-            state = newState;
+          // если что-то из используемых данных поменялось, обновляем компонент
+          if (!isEqual(state, newState)) {
+            this.setProps({ ...newState });
           }
-  
-          // подписываемся на событие
-          store.on(StoreEvents.Updated, this.onChangeStoreCallback);
+
+          // не забываем сохранить новое состояние
+          state = newState;
         }
+
+        // подписываемся на событие
+        store.on(StoreEvents.Updated, this.onChangeStoreCallback);
+      }
 
 
       componentWillUnmount() {
         super.componentWillUnmount();
-        window.store.off(StoreEvents.Updated, this.onChangeStoreCallback);
+        Store.off(StoreEvents.Updated, this.onChangeStoreCallback);
       }
     }
   }

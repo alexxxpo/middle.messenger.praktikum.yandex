@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { type EventsType } from '../../types'
+import { type EventsType } from '../../types/types.ts'
 import ErrorLine from './ErrorLine.ts'
 import Input from './Input.ts'
 

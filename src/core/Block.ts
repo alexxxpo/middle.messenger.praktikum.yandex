@@ -1,11 +1,11 @@
 import { EventBus } from './index.ts'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { BackButton, ErrorComp, PField, PImage, Popup, Search, type Button, type Input, ErrorLine } from '../components/index.ts'
-import { EventsType } from '../types/index.ts'
+import { BackButton, ErrorComp, PField, PImage, Popup, Search, Button, Input, ErrorLine, ChatList, ChatListItem } from '../components/index.ts'
+import { EventsType } from '../types/types.ts'
 
 type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
-type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | ChatList | ChatListItem | ErrorComp | PField | PImage | Search>
+type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | typeof ChatList | typeof ChatListItem | ErrorComp | PField | PImage | Search>
 
 export default class Block<T extends Record<string, any>> {
   static EVENTS = {
@@ -95,8 +95,8 @@ export default class Block<T extends Record<string, any>> {
     Object.entries(propsAndStubs).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         propsAndStubs[key] = value.map((item) => {
-          if (item instanceof Block) {
-            childrenProps.push(item)
+          if (item) {
+            childrenProps.push(item as ChildrenType)
             return `<div data-id="${item._id}"></div>`
           }
 

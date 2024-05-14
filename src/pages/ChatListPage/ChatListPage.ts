@@ -78,7 +78,6 @@ class ChatListPage extends Block<Record<string, unknown>> {
 
   componentDidUpdate(oldProps, newProps) {
     if (oldProps.chats !== newProps.chats) {
-      console.log('cdu page')
       this.children.chatList.setProps({
         chats: this.mapChatsToComponents(newProps.chats) || [],
         showEmpty: newProps.chats.length === 0

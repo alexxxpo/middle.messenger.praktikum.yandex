@@ -60,6 +60,7 @@ class ChatsControlButtons extends Block<Record<string, string | boolean>> {
 
         }
 
+        // Children        
         const buttonAddUser = new ButtonAddUser({
             title: 'Добавить пользователя',
             events: {

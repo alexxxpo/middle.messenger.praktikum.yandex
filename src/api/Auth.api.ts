@@ -1,4 +1,5 @@
 import HTTPTransport from "../core/HTTPTransport";
+import { ILogin } from "../types/types";
 
 const authApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth');
 
@@ -13,9 +14,9 @@ export default class AuthApi {
         })
     }
 
-    async login(data) {
+    async login(data: ILogin) {
         return authApi.post('/signin', { 
-            data, 
+            data: JSON.stringify(data), 
             headers: { "Content-Type": "application/json" },
             withCredentials: true,
          });

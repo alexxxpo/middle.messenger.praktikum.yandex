@@ -1,6 +1,6 @@
 import { Block } from '../../core/index.ts'
 import { setActiveChat } from '../../services/Chats.service.ts'
-import { EventsType } from '../../types/index.ts'
+import { EventsType } from '../../types/types.ts'
 import { connect } from '../../utils/connect.ts'
 
 export interface ChatListItemProps {

@@ -1,4 +1,4 @@
-import { Constructable } from "../types";
+import { Constructable } from "../types/types";
 import Block from "./Block";
 
 export default class Route<T = Record<string, unknown>> {

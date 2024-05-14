@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { type EventsType } from '../../types/index.ts'
+import { type EventsType } from '../../types/types.ts'
 
 interface ButtonPropsType {
   events?: EventsType
