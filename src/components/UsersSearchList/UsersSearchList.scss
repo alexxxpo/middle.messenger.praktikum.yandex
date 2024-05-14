@@ -1,0 +1,19 @@
+.usersSearchList {
+    list-style: none;
+    li {
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #efefef;
+        cursor: pointer;
+    }
+
+    &__container {
+        padding: 15px;
+        position: absolute;
+        left: 110%;
+        top: 0;
+        border-radius: 12px;
+        background: #fff;
+    }
+
+}

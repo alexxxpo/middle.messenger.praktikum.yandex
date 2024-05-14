@@ -1,9 +1,8 @@
-import { Button, ChatList, ChatListItem, MessageInput, PopupAddUser, Search, TopPanel } from '../../components/index.ts'
+import { Button, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
 import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
 import { createChat, loadChats } from '../../services/Chats.service.ts'
-import { logout } from '../../services/Auth.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
@@ -17,16 +16,27 @@ class ChatListPage extends Block<Record<string, unknown>> {
     }
     getUserInfo()
 
+    // Handlers
     const addChat = (e) => {
       createChat(JSON.parse(getModel(e)))
     }
 
-    const popupAddUser = new PopupAddUser({
-      title: 'Добавить пользователя',
-      clickButton: addChat
+    const addUser = (e) => {
+      createChat(JSON.parse(getModel(e)))
+    }
+    
+    // Children
+
+    const popupAddChat = new PopupAdd({
+      title: 'Добавить чат',
+      clickButton: addChat,
+      name: 'title'
     })
 
-    const chatList = new ChatList({ chats: this.mapChatsToComponents(this.props.chats) || [],  showEmpty: this.props.chats.length === 0})
+    const chatList = new ChatList({ 
+      chats: this.mapChatsToComponents(this.props.chats) || [],  
+      showEmpty: this.props.chats.length === 0
+    })
 
     const profileButton = new Button({
       type: 'link',
@@ -62,7 +72,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
       profileButton,
       search,
       topPanel,
-      popupAddUser
+      popupAddChat,
     }
   }
 

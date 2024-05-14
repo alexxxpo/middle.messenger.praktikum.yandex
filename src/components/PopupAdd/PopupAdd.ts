@@ -1,5 +1,6 @@
 import { Block } from '../../core/index.ts'
-import { Button } from '../../components/index.ts'
+import { connect } from '../../utils/connect.ts';
+import { Button, Input, UsersSearchList } from '../index.ts'
 
 interface PopupType {
   buttonChange?: Button;
@@ -7,22 +8,37 @@ interface PopupType {
 
 export interface PopupProps {
   title?: string
+  name: string
   errorLoad?: boolean
   notSelected?: boolean
   clickButton?: EventListenerOrEventListenerObject
+  changeInput?: EventListenerOrEventListenerObject
 }
 
-export default class Popup extends Block<PopupType> {
+class Popup extends Block<PopupType> {
   constructor(props: PopupProps) {
     super({
       ...props,
       buttonChange: new Button({
         type: 'primary',
         label: 'Добавить',
-        events: { click: [props.clickButton] }
+        events: { 
+          click: [props.clickButton] || [] 
+        }
+      }),
+      input: new Input({
+        name: props.name,
+        type: 'text',
+        events: {
+          change: [props.changeInput] || []
+        }
+      }),
+      usersSearchList: new UsersSearchList({
+        listClick: props.listClick
       })
     })
   }
+
 
   render(): string {
     return `
@@ -30,14 +46,19 @@ export default class Popup extends Block<PopupType> {
             <form class="popup__form">
                 <h3 class="popup__form_title">{{title}}</h3>
                 <div class="popup__form_inner">
-                    <label><input type="text" name="title"></label>
+                    {{{input}}}
                 </div>
                 <div class="popup__form_button">
                     {{{ buttonChange }}}
                 </div>
                 <p class="popup__form_errorMessage">{{errorMessage}}</p>
+                {{{usersSearchList}}}
             </form>
         </div>
         `
   }
 }
+
+const mapStateToProps = ({isLoading}) => ({isLoading})
+
+export default connect(mapStateToProps)(Popup)

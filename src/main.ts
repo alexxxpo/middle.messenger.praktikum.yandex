@@ -19,12 +19,14 @@ const router = Router
 window.router = router
 
 window.store = new Store({
-    isLoading: false,
+    isLoading: true,
     loginError: null,
     chats: [],
     user: null,
     selectedCard: null,
-    currentUser: null
+    currentUser: null,
+    usersSearch: [],
+    activeChat: null
 });
 
 

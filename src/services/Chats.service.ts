@@ -59,12 +59,12 @@ export const createChat = async (title: string) => {
                 window.router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ getChatsError: "Ошибка на сервере" })
+                window.store.set({ createChatsError: "Ошибка на сервере" })
                 window.store.set({ chats: [] })
                 window.router.go(Routes.Error)
                 break;
             default:
-                window.store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
+                window.store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
                 window.store.set({ chats: [] })
                 window.router.go(Routes.Login)
                 break;
@@ -72,7 +72,43 @@ export const createChat = async (title: string) => {
 
     } catch (error) {
         console.error(error)
-        window.store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
+        window.store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
+    } finally {
+        window.store.set({ isLoading: false });
+    }
+
+}
+
+export const addUserToChat = async (userData) => {
+    window.store.set({ isLoading: true });
+    try {
+        const data = await chatsApi.addUserToChat(userData);
+        const { response, status } = data
+        switch (status) {
+            case 200:
+                window.store.set({ addUserToChatError: null })
+                break;
+            case 400:
+                loadChats()
+                window.store.set({ addUserToChatError: JSON.parse(response) })
+                break;
+            case 401:
+                window.store.set({ addUserToChatError: "Пользователь не авторизован" })
+                window.router.go(Routes.Login)
+                break;
+            case 500:
+                window.store.set({ addUserToChatsError: "Ошибка на сервере" })
+                window.router.go(Routes.Error)
+                break;
+            default:
+                window.store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
+                window.router.go(Routes.Login)
+                break;
+        }
+
+    } catch (error) {
+        console.error(error)
+        window.store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
     } finally {
         window.store.set({ isLoading: false });
     }

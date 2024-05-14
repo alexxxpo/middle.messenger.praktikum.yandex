@@ -30,7 +30,7 @@ class Profile extends Block<ProfileType> {
   }
 
   componentDidUpdate(oldProps, newProps): boolean {
-    if (oldProps.currentUser !== newProps.currentUser) {
+    
       this.children.email.setProps({ value: newProps.currentUser?.email })
       this.children.login.setProps({ value: newProps.currentUser?.login })
       this.children.firstName.setProps({ value: newProps.currentUser?.first_name })
@@ -39,16 +39,12 @@ class Profile extends Block<ProfileType> {
       this.children.displayName.setProps({ value: newProps.currentUser?.display_name })
       console.log(oldProps, newProps)
       console.log(this)
-
-      return true
-    }
     return true
   }
 
   init(): void {
     const getUserInfo = async () => {
-      if (window.store.state.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (window.store.state.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+      if (this.props.currentUser === null) window.router.go(Routes.Login)
     }
     getUserInfo()
 
@@ -65,7 +61,7 @@ class Profile extends Block<ProfileType> {
     const email = new PField({
       label: 'Почта',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.email || '',
       disabled: true,
       name: 'email',
       events: {
@@ -75,7 +71,7 @@ class Profile extends Block<ProfileType> {
     const login = new PField({
       label: 'Логин',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.login || '',
       disabled: true,
       name: 'login',
       events: {
@@ -85,7 +81,7 @@ class Profile extends Block<ProfileType> {
     const firstName = new PField({
       label: 'Имя',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.first_name || '',
       disabled: true,
       name: 'first_name',
       events: {
@@ -95,7 +91,7 @@ class Profile extends Block<ProfileType> {
     const secondName = new PField({
       label: 'Фамилия',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.second_name || '',
       disabled: true,
       name: 'second_name',
       events: {
@@ -105,7 +101,7 @@ class Profile extends Block<ProfileType> {
     const displayName = new PField({
       label: 'Имя в чате',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.display_name || '',
       disabled: true,
       name: 'display_name',
       events: {
@@ -115,7 +111,7 @@ class Profile extends Block<ProfileType> {
     const phone = new PField({
       label: 'Телефон',
       type: 'text',
-      value: '',
+      value: this.props.currentUser?.phone || '',
       disabled: true,
       name: 'phone',
       events: {
@@ -229,6 +225,7 @@ class Profile extends Block<ProfileType> {
     }
   }
 
+
   onChangeData(): void {
     const names = ['email', 'login', 'first_name', 'second_name', 'display_name', 'phone']
     Object.values(this.children).forEach(child => {
@@ -278,7 +275,7 @@ class Profile extends Block<ProfileType> {
     this.setProps({ popup: true })
   }
 
-  render(): string {
+  render(): string {    
     if(this.props.isLoading) return `
       <div>Загрузка данных о пользователе...</div>
     `

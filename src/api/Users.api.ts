@@ -12,4 +12,14 @@ export default class UsersApi {
             }
          })
     }
+
+    async searchUsersByLogin(data) {
+        return await usersApi.post('/search', {
+            withCredentials: true,
+            data: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+         })
+    }
 }

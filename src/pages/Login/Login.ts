@@ -18,21 +18,18 @@ class LoginPage extends Block<LoginType> {
 
   init(): void {
     const getUserInfo = async () => {
-      console.log(this.props);
-      
       if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      console.log(this.props);
-
       if (this.props.currentUser !== null) window.router.go(Routes.Chats) // Если данные есть, то переходим в чаты
     }
     getUserInfo()
 
+    // Handlers
     const onChangeInput = InputValidation.bind(this)
-
     const toRegPage = () => {
       Router.go('/sign-up')
     }
 
+    // Children init
     const inputLogin = new Input({
       label: 'Введите логин',
       name: 'login',
@@ -99,6 +96,8 @@ class LoginPage extends Block<LoginType> {
   }
 
   render(): string {
+    console.log(this.props.isLoading);
+    
     return `{{#if isLoading}}
                 <h2>Загрузка данных</h2>
             {{else}}

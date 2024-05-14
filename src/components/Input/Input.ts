@@ -5,6 +5,7 @@ interface InputProps {
   events: EventsType
   type?: string
   name: string
+  value?: string
 }
 
 class Input extends Block<Record<string, unknown>> {
@@ -19,6 +20,7 @@ class Input extends Block<Record<string, unknown>> {
                 placeholder=""
                 type="{{type}}"
                 name="{{name}}"
+                value="{{value}}"
             />
         `
   }

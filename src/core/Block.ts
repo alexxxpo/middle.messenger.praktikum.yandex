@@ -1,7 +1,7 @@
 import { EventBus } from './index.ts'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { BackButton, ChatList, ChatListItem, ErrorComp, PField, PImage, Popup, Search, type Button, type Input, ErrorLine } from '../components/index.ts'
+import { BackButton, ErrorComp, PField, PImage, Popup, Search, type Button, type Input, ErrorLine } from '../components/index.ts'
 import { EventsType } from '../types/index.ts'
 
 type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
@@ -33,8 +33,6 @@ export default class Block<T extends Record<string, any>> {
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
 
-    // const makePropsProxy = this._makePropsProxy.bind(this)
-
     this.props = this._makePropsProxy({ ...props })
 
     this.children = children
@@ -57,9 +55,6 @@ export default class Block<T extends Record<string, any>> {
       set(target, prop, value) {
         const oldTarget = { ...target }
         target[prop as string] = value
-
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
 
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
@@ -222,21 +217,21 @@ export default class Block<T extends Record<string, any>> {
     Object.assign(this.props, nextProps)
   }
 
-  get element(): HTMLElement | null {
+  getElement(): HTMLElement | null {
     return this._element
   }
 
   getContent(): HTMLElement | null {
-    if (this.element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+    if (this._element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
       setTimeout(() => {
         if (
-          this.element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+          this._element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
         ) {
           this.dispatchComponentDidMount();
         }
       }, 100);
     }
-    return this.element
+    return this._element
   }
 
   show(): void {

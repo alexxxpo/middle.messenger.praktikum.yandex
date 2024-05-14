@@ -5,7 +5,7 @@ const authApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth');
 export default class AuthApi {
     async create(data) {
         return authApi.post('/signup', {
-            data, mode: 'cors',
+            data,
             withCredentials: true,
             headers: {
                 "Content-Type": "application/json"
@@ -23,7 +23,6 @@ export default class AuthApi {
 
     async me() {
         return authApi.get('/user', {
-            mode: 'cors',
             withCredentials: true,
         });
     }

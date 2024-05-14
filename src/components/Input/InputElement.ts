@@ -9,6 +9,7 @@ interface InputElementProps {
   label?: string
   name?: string
   type?: string
+  value?: string
 }
 
 interface InputElementType extends InputElementProps {
@@ -22,7 +23,7 @@ class InputElement extends Block<InputElementType> {
       ...props,
       Input: new Input({
         events: {
-          blur: props.events?.blur ?? [(() => { })]
+          blur: props.events?.blur || [(() => { })],
         },
         type: props.type,
         name: props.name ?? ''
@@ -36,6 +37,10 @@ class InputElement extends Block<InputElementType> {
   componentDidUpdate(oldProps: InputElementProps, newProps: InputElementProps): boolean {
     if (oldProps === newProps) {
       return false
+    }
+
+    if (oldProps.value !== newProps.value) {
+      this.children.Input.setProps({value: newProps.value})
     }
 
     this.children.ErrorLine.setProps({ ...newProps })
