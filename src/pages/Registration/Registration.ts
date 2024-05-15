@@ -3,117 +3,130 @@ import Router from '../../core/Router.ts'
 import { Block } from '../../core/index.ts'
 import { logFields, getModel } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
-import { create } from '../../services/Auth.service.ts'
+import { create, me } from '../../services/Auth.service.ts'
+import { CreateUser } from '../../types/types.ts'
+import { Routes } from '../../main.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
+
+const router = Router
 
 type RegType = Record<string, Input | Button>
 
-export default class Registration extends Block<RegType> {
-  constructor(props = {}) {
-    super({
-      ...props
-    })
-  }
+class Registration extends Block<RegType> {
+	constructor(props = {}) {
+		super({
+			...props
+		})
+	}
 
-  init(): void {
-    const onChangeInput = InputValidation.bind(this)
-    const toLoginPage = () => {
-      Router.go('/')
-    }
+	init(): void {
+		const getUserInfo = async () => {
+			if (this.props.currentUser === null) await me()               // Если нет данных о пользователе, то делаем запрос
+			if (this.props.currentUser !== null) router.go(Routes.Chats)  // Если данные есть, то переходим в чаты
+		}
+		getUserInfo()
 
-    const regEmail = new Input({
-      label: 'Почта',
-      type: 'email',
-      name: 'email',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regEmail as Input, 'Некорректный формат email (example@example.com)', ...conditions.email) }]
-      }
-    })
+		// Handlers
+		const onChangeInput = InputValidation.bind(this)
+		const toLoginPage = () => {
+			router.go(Routes.Login)
+		}
 
-    const regLogin = new Input({
-      label: 'Введите логин',
-      name: 'login',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regLogin as Input, 'Может содеражать цифры, но не состоять из них', ...conditions.login) }]
-      }
-    })
+		// Children
+		const regEmail = new Input({
+			label: 'Почта',
+			type: 'email',
+			name: 'email',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regEmail as Input, 'Некорректный формат email (example@example.com)', ...conditions.email) }]
+			}
+		})
 
-    const regFirstName = new Input({
-      label: 'Имя',
-      type: 'text',
-      name: 'first_name',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regFirstName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names) }]
-      }
-    })
+		const regLogin = new Input({
+			label: 'Введите логин',
+			name: 'login',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regLogin as Input, 'Может содеражать цифры, но не состоять из них', ...conditions.login) }]
+			}
+		})
 
-    const regSecondName = new Input({
-      label: 'Фамилия',
-      type: 'text',
-      name: 'second_name',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regSecondName as Input, 'Фамилия должна начинаться с заглавной буквы', ...conditions.names) }]
-      }
-    })
+		const regFirstName = new Input({
+			label: 'Имя',
+			type: 'text',
+			name: 'first_name',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regFirstName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names) }]
+			}
+		})
 
-    const regPhone = new Input({
-      label: 'Телефон',
-      type: 'tel',
-      name: 'phone',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regPhone as Input, 'Телефон может содержать только цифры и может начинаться с +', ...conditions.phone) }]
-      }
-    })
+		const regSecondName = new Input({
+			label: 'Фамилия',
+			type: 'text',
+			name: 'second_name',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regSecondName as Input, 'Фамилия должна начинаться с заглавной буквы', ...conditions.names) }]
+			}
+		})
 
-    const regPass = new Input({
-      label: 'Введите пароль',
-      name: 'password',
-      type: 'password',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regPass as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
-      }
-    })
+		const regPhone = new Input({
+			label: 'Телефон',
+			type: 'tel',
+			name: 'phone',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regPhone as Input, 'Телефон может содержать только цифры и может начинаться с +', ...conditions.phone) }]
+			}
+		})
 
-    const regPassAgain = new Input({
-      label: 'Пароль (еще раз)',
-      name: 'password',
-      type: 'password',
-      events: {
-        blur: [e => { onChangeInput(e, this.children.regPassAgain as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
-      }
-    })
+		const regPass = new Input({
+			label: 'Введите пароль',
+			name: 'password',
+			type: 'password',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regPass as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
+			}
+		})
 
-    const buttonLogin = new Button({
-      type: 'link',
-      label: 'Войти',
-      events: {
-        click: [toLoginPage]
-      }
-    })
+		const regPassAgain = new Input({
+			label: 'Пароль (еще раз)',
+			name: 'password',
+			type: 'password',
+			events: {
+				blur: [e => { onChangeInput(e, this.children.regPassAgain as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) }]
+			}
+		})
 
-    const buttonReg = new Button({
-      type: 'primary',
-      label: 'Зарегистрироваться',
-      events: {
-        click: [logFields, e => create(getModel(e))]
-      }
-    })
+		const buttonLogin = new Button({
+			type: 'link',
+			label: 'Войти',
+			events: {
+				click: [toLoginPage]
+			}
+		})
 
-    this.children = {
-      ...this.children,
-      regEmail,
-      regLogin,
-      regFirstName,
-      regSecondName,
-      regPhone,
-      regPass,
-      regPassAgain,
-      buttonLogin,
-      buttonReg
-    }
-  }
+		const buttonReg = new Button({
+			type: 'primary',
+			label: 'Зарегистрироваться',
+			events: {
+				click: [logFields, e => create(getModel(e) as CreateUser)]
+			}
+		})
 
-  render(): string {
-    return `
+		this.children = {
+			...this.children,
+			regEmail,
+			regLogin,
+			regFirstName,
+			regSecondName,
+			regPhone,
+			regPass,
+			regPassAgain,
+			buttonLogin,
+			buttonReg
+		}
+	}
+
+	render(): string {
+		return `
         <div class="page registration_page">
             <div class="form__container">
         
@@ -138,5 +151,9 @@ export default class Registration extends Block<RegType> {
             </div>
         </div>
         `
-  }
+	}
 }
+
+const mapStateToProps: MapStateToProps = ({currentUser}) => ({currentUser})
+
+export default connect(mapStateToProps)(Registration)

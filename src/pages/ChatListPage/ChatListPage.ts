@@ -1,4 +1,4 @@
-import { Button, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel } from '../../components/index.ts'
+import { Button, ButtonAddUser, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
 import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
@@ -8,98 +8,124 @@ import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
 import { IState } from '../../core/Store.ts'
 import Router from '../../core/Router.ts'
-import { ChatsResponse, CreateChat } from '../../types/types.ts'
+import { ChatsResponse, CreateChat, UserResponse } from '../../types/types.ts'
 
 const router = Router
 
-interface ChatListPageType extends Record<string, unknown> {
-  chats: ChatsResponse[]
+type ChatListPageProps = {
+	chats: ChatsResponse[];
+	currentUser: UserResponse;
+	activeChat: ChatsResponse;
+	showPopup: boolean;
 }
 
-class ChatListPage extends Block<ChatListPageType> {
+class ChatListPage extends Block<ChatListPageProps> {
 
-  init() {
-    const getUserInfo = async () => {
-      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
-    }
-    getUserInfo()
+	init() {
+		const getUserInfo = async () => {
+			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+			if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
+		}
+		getUserInfo()
 
-    // Handlers
-    const addChat = (e: Event) => {
-      createChat(getModel(e) as CreateChat)
-    }
-    
-    // Children
+		// Handlers
+		const addChat = (e: Event) => {
+			createChat(getModel(e) as CreateChat)
+			this.setProps({showPopup: false})
+		}
 
-    const popupAddChat = new PopupAdd({
-      title: 'Добавить чат',
-      clickButton: addChat,
-      name: 'title'
-    })
+		const closePopup = (e: Event) => {
+			e.stopPropagation()
+			if (e.target === this.children.popupAddChat.getElement()) {
+				this.setProps({ showPopup: false })
+			}
+		}
+		const closePopupBind = closePopup.bind(this)
 
-    const chatList = new ChatList({ 
-      chats: this.mapChatsToComponents(this.props.chats) || [],  
-      showEmpty: this.props.chats
-    })
+		// Children
 
-    const profileButton = new Button({
-      type: 'link',
-      className: 'profileButton',
-      label: 'Профиль',
-      events: {
-        click: [() => {router.go(Routes.Profile)}]
-      }
-    })
+		const popupAddChat = new PopupAdd({
+			title: 'Добавить чат',
+			clickButton: addChat,
+			name: 'title',
+			events: {
+				click: [
+					closePopupBind
+				]
+			}
+		})
 
-    const search = new Search({})
+		const chatList = new ChatList({
+			chats: this.mapChatsToComponents(this.props.chats) || [],
+			showEmpty: this.props.chats
+		})
 
-    const topPanel = new TopPanel({title: "Active chat"})
+		const profileButton = new Button({
+			type: 'link',
+			className: 'profileButton',
+			label: 'Профиль',
+			events: {
+				click: [() => { router.go(Routes.Profile) }]
+			}
+		})
 
-    const messageInput = new MessageInput({
-      name: 'message',
-      className: 'chatListPage__messageInput',
-      type: 'text'
-    })
+		const search = new Search({})
 
-    const sendButton = new Button({
-      type: 'round',
-      label: '->',
-      events: {
-        click: [logFields]
-      }
-    })
+		const topPanel = new TopPanel({ title: "Active chat" })
 
-    this.children = {
-      ...this.children,
-      messageInput,
-      sendButton,
-      chatList,
-      profileButton,
-      search,
-      topPanel,
-      popupAddChat,
-    }
-  }
+		const messageInput = new MessageInput({
+			name: 'message',
+			className: 'chatListPage__messageInput',
+			type: 'text'
+		})
 
-  componentDidUpdate(oldProps: ChatListPageType, newProps: ChatListPageType) {
-    if (oldProps.chats !== newProps.chats) {
-      this.children.chatList.setProps({
-        chats: this.mapChatsToComponents(newProps.chats) || [],
-        showEmpty: newProps.chats.length === 0
-      })
-    }
-    return true
-  }
+		const sendButton = new Button({
+			type: 'round',
+			label: '->',
+			events: {
+				click: [logFields]
+			}
+		})
 
-  mapChatsToComponents(chats: ChatsResponse[]) {
-    return chats?.map((chat) => new ChatListItem({ ...chat }))
-  }
+		const addChatButton = new ButtonAddUser({
+			events: {
+				click: [
+					() => this.setProps({showPopup: true})
+				]
+			}
+		})
+
+		this.children = {
+			...this.children,
+			messageInput,
+			sendButton,
+			chatList,
+			profileButton,
+			search,
+			topPanel,
+			popupAddChat,
+			addChatButton
+		}
+	}
+
+	componentDidUpdate(oldProps: ChatListPageProps, newProps: ChatListPageProps) {
+		if (oldProps.chats !== newProps.chats) {
+			this.children.chatList.setProps({
+				chats: this.mapChatsToComponents(newProps.chats) || [],
+				showEmpty: newProps.chats.length === 0
+			})
+		}
+		return true
+	}
+
+	mapChatsToComponents(chats: ChatsResponse[]) {
+		return chats?.map((chat) => new ChatListItem({ ...chat }))
+	}
 
 
 
-  render(): string {
-    return `
+	render(): string {
+		return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
                 <div class="chatListPage__profileButton">
@@ -111,11 +137,14 @@ class ChatListPage extends Block<ChatListPageType> {
                 <div class="chatListPage__chatList">
                     {{{ chatList }}}
                 </div>
+                <div class="chatListPage_addChatButton">
+                    {{{addChatButton}}}
+                </div>
             </div>
             <div class="chatListPage__messageArea">
                     ${!this.props.activeChat ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
-        :
-        `
+				:
+				`
                     <div class="chatListPage__chatInfo">
                       {{{topPanel}}}
                     </div>
@@ -151,9 +180,10 @@ class ChatListPage extends Block<ChatListPageType> {
                     </form>
                     `}
             </div>
+			${this.props.showPopup === true ? `{{{popupAddChat}}}` : ``}
         </main>
         `
-  }
+	}
 }
 
 const mapStateToProps: (state: IState) => IState = ({ chats, currentUser, activeChat }) => ({ chats, currentUser, activeChat })

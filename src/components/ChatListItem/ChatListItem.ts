@@ -31,7 +31,6 @@ class ChatListItem extends Block<ChatListItemProps> {
   }
 
   render(): string {
-    console.log('chatListItem', this)
     return `
         <div class="chatListItem" ${this.props.active === true ? 'active' : ''}>
             <div class="chatListItem__wrapper">

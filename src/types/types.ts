@@ -47,6 +47,10 @@ export type CreateChat = {
 	title: string;
 }
 
+export type CreateChatResponse = {
+	chatId: number;
+}
+
 export type ChatsResponse = {
 	id: number;
 	title: string;

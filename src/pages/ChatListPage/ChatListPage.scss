@@ -10,6 +10,12 @@
         border-right: 1px solid #eaeaea;    
     }
 
+    &_addChatButton {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+    }
+
     &__profileButton{
         padding-right: 10px;
         .profileButton {

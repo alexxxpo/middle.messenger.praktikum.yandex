@@ -9,8 +9,6 @@ export function InputValidation (this: Block, event: Event, input: Block, errorT
 }
 
 export function validate(str: string, ...conditions: RegExp[]): boolean {
-  console.log('validate', str);
-  
   let valid = true
   conditions.forEach(condition => {
     if (condition.test(str) === false) {

@@ -1,7 +1,13 @@
 import { Block } from "../../core";
+import { EventsType } from "../../types/types";
 
-class ButtonAddUser extends Block<Record<string, string>> {
-    constructor(props: Record<string, string>) {
+type ButtonAddUserProps = {
+    events?: EventsType;
+    title?: string
+}
+
+class ButtonAddUser extends Block<ButtonAddUserProps> {
+    constructor(props: ButtonAddUserProps) {
         super({
             ...props
         })
