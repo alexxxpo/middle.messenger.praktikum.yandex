@@ -22,4 +22,17 @@ export default class UsersApi {
             }
          })
     }
+
+    async changeAvatar(data) {
+        const form = new FormData(data)
+        console.log(data, form);
+        
+        return await usersApi.put('/profile/avatar', {
+            withCredentials: true,
+            data: form,
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+         })
+    }
 }

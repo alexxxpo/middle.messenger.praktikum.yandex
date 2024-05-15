@@ -1,21 +1,26 @@
 import { Block } from "../../core";
-import { connect } from "../../utils/connect";
+import { ChatsResponse } from "../../types/types";
+import { MapStateToProps, connect } from "../../utils/connect";
 import { ChatControl } from "../ChatControl";
 
-class TopPanel extends Block<Record<string, unknown>> {
-    constructor(props: Record<string, unknown>) {
-        super({...props})        
-    }
-    init() {
-        const chatControl = new ChatControl({})
-        this.children = {
-            ...this.children,
-            chatControl
-        }
-    }
+type TopPanelProps = {
+	activeChat: ChatsResponse
+}
 
-    render(): string {
-        return `
+class TopPanel extends Block {
+	constructor(props: TopPanelProps) {
+		super({ ...props })
+	}
+	init() {
+		const chatControl = new ChatControl({})
+		this.children = {
+			...this.children,
+			chatControl
+		}
+	}
+
+	render(): string {
+		return `
             <div class="topPanel {{className}}">
                 <div class="topPanel__info">
 
@@ -35,9 +40,9 @@ class TopPanel extends Block<Record<string, unknown>> {
                 {{{сhatsControlButtons}}}
             </div>
         `
-    }
+	}
 }
 
-const mapStateToProps = ({isLoading, activeChat}) => ({isLoading, activeChat})
+const mapStateToProps: MapStateToProps = ({ isLoading, activeChat }) => ({ isLoading, activeChat })
 
 export default connect(mapStateToProps)(TopPanel)

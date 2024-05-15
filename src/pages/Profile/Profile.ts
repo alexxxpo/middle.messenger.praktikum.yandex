@@ -4,7 +4,7 @@ import { type PopupProps } from '../../components/Popup/Popup.ts'
 import { Block } from '../../core/index.ts'
 import Router from '../../core/Router.ts'
 import { logout, me } from '../../services/Auth.service.ts'
-import { changeUserData } from '../../services/Users.service.ts'
+import { changeAvatar, changeUserData } from '../../services/Users.service.ts'
 import { ChangeProfile, UserResponse } from '../../types/types.ts'
 import { connect, MapStateToProps } from '../../utils/connect.ts'
 import { getModel } from '../../utils/LogFormFields/index.ts'
@@ -237,7 +237,8 @@ class Profile extends Block<ProfileProps> {
 
 		const popup = new Popup({
 			title: 'Загрузите файл',
-			clickButton: e => { e.preventDefault(); this.setProps({ popup: false }) }
+			clickButton: e => this.onSaveImage(e),
+			name: 'avatar'
 		})
 
 		this.children = {
@@ -307,8 +308,14 @@ class Profile extends Block<ProfileProps> {
 		})
 	}
 
-	onImageChange(): void {
+	onImageChange(): void {		
 		this.setProps({ popup: true })
+	}
+
+	onSaveImage(e: Event) {
+		e.preventDefault()
+		console.log(new FormData(e.target.form))
+		changeAvatar(e.target.form)
 	}
 
 	render(): string {

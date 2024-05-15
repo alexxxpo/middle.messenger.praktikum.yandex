@@ -83,3 +83,41 @@ export const searchUsersByLogin = async (userData) => {
     }
 
 }
+
+export const changeAvatar = async (userData) => {
+    store.set({ isLoading: true });
+    try {
+        const data = await usersApi.changeAvatar(userData);
+        const { response, status } = data
+        switch (status) {
+            case 200:
+                store.set({ usersSearch: JSON.parse(response) })
+                break;
+            case 400:
+                store.set({ usersSearchError: JSON.parse(response) })
+                break;
+            case 401:
+                store.set({ usersSearchError: "Пользователь не авторизован" })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Login)
+                break;
+            case 500:
+                store.set({ usersSearchError: "Ошибка на сервере" })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Error)
+                break;
+            default:
+                store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Login)
+                break;
+        }
+
+    } catch (error) {
+        console.error(error)
+        store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
+    } finally {
+        store.set({ isLoading: false });
+    }
+
+}

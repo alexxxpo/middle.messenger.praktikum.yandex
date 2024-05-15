@@ -10,16 +10,18 @@ export interface PopupProps {
   errorLoad?: boolean
   notSelected?: boolean
   clickButton?: EventListenerOrEventListenerObject
+  name: string
 }
 
 export default class Popup extends Block<PopupType> {
   constructor(props: PopupProps) {
+    const clickEvent = props.clickButton || (() => {})
     super({
       ...props,
       buttonChange: new Button({
         type: 'primary',
         label: 'Поменять',
-        events: { click: [props.clickButton = () => { }] || [() => { }] }
+        events: { click: [clickEvent] }
       })
     })
   }
@@ -30,7 +32,7 @@ export default class Popup extends Block<PopupType> {
             <form class="popup__form">
                 <h3 class="popup__form_title">{{title}}</h3>
                 <div class="popup__form_inner">
-                    <label><input type="file" name={{name}} id=""></label>
+                    <label><input type="file" name="{{name}}" accept="image/png, image/jpeg, image/JPG, image/GIF, image/WebP" id=""></label>
                 </div>
                 <div class="popup__form_button">
                     {{{ buttonChange }}}
