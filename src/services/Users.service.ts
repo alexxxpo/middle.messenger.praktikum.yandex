@@ -1,81 +1,85 @@
 import UsersApi from "../api/Users.api";
+import Router from "../core/Router";
+import Store from "../core/Store";
 import { Routes } from "../main";
+import { ChangeProfile } from "../types/types";
 
+const store = Store
+const router = Router
 const usersApi = new UsersApi();
 
-export const changeUserData = async (userData) => {
-    window.store.set({ isLoading: true });
+export const changeUserData = async (model: ChangeProfile) => {
+    console.log(model);
+    
+    store.set({ isLoading: true });
     try {
-        const data = await usersApi.changeUserData(userData);
-        const { response, status } = data
+        const { response, status } = await usersApi.changeUserData(model);
         switch (status) {
             case 200:
-                console.log(data)
-                window.store.set({ currentUser: JSON.parse(response) })
+                store.set({ currentUser: JSON.parse(response) })
                 break;
             case 400:
-                window.store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ changeUserDataError: JSON.parse(response) })
                 break;
             case 401:
-                window.store.set({ changeUserDataError: "Пользователь не авторизован" })
-                window.store.set({ currentUser: null })
-                window.router.go(Routes.Login)
+                store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ currentUser: null })
+                router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ changeUserDataError: "Ошибка на сервере" })
-                window.store.set({ currentUser: null })
-                window.router.go(Routes.Error)
+                store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ currentUser: null })
+                router.go(Routes.Error)
                 break;
             default:
-                window.store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
-                window.store.set({ currentUser: null })
-                window.router.go(Routes.Login)
+                store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
+                store.set({ currentUser: null })
+                router.go(Routes.Login)
                 break;
         }
-
     } catch (error) {
         console.error(error)
-        window.store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
+        store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
     } finally {
-        window.store.set({ isLoading: false });
+        store.set({ isLoading: false });
     }
 
 }
 
 export const searchUsersByLogin = async (userData) => {
-    window.store.set({ isLoading: true });
+    store.set({ isLoading: true });
     try {
         const data = await usersApi.searchUsersByLogin(userData);
         const { response, status } = data
         switch (status) {
             case 200:
-                window.store.set({ usersSearch: JSON.parse(response) })
+                store.set({ usersSearch: JSON.parse(response) })
                 break;
             case 400:
-                window.store.set({ usersSearchError: JSON.parse(response) })
+                store.set({ usersSearchError: JSON.parse(response) })
                 break;
             case 401:
-                window.store.set({ usersSearchError: "Пользователь не авторизован" })
-                window.store.set({ usersSearch: [] })
-                window.router.go(Routes.Login)
+                store.set({ usersSearchError: "Пользователь не авторизован" })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ usersSearchError: "Ошибка на сервере" })
-                window.store.set({ usersSearch: [] })
-                window.router.go(Routes.Error)
+                store.set({ usersSearchError: "Ошибка на сервере" })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Error)
                 break;
             default:
-                window.store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
-                window.store.set({ usersSearch: [] })
-                window.router.go(Routes.Login)
+                store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
+                store.set({ usersSearch: [] })
+                router.go(Routes.Login)
                 break;
         }
 
     } catch (error) {
         console.error(error)
-        window.store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
+        store.set({ usersSearchError: { reason: "Неизвестная ошибка" } })
     } finally {
-        window.store.set({ isLoading: false });
+        store.set({ isLoading: false });
     }
 
 }

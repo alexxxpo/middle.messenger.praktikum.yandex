@@ -31,6 +31,7 @@ export interface INextState {
   getUserError?: HttpErrorType | null;
   logoutError?: HttpErrorType | null;
   getChatsError?: HttpErrorType | null;
+  changeUserDataError?: HttpErrorType | null;
 }
 
 const defaultState: IState = {

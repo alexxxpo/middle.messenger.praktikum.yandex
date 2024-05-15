@@ -1,7 +1,17 @@
 import { conditions, validate } from "../validations/index.ts"
 
-export function serializeForm(formNode: HTMLFormElement): Record<string, string | boolean>[] {
-  if (formNode === null) return
+type Fields = {
+  name: string;
+  value: string;
+  valid: boolean
+}
+
+type Model = {
+  [x: string]: string
+}
+
+export function serializeForm(formNode: HTMLFormElement): Fields[] {
+  if (formNode === null) return []
   const elements = Array.from(formNode.elements) as HTMLInputElement[]
   const data = Array.from(elements)
     .filter((item) => item.name !== '')
@@ -50,11 +60,11 @@ export function getModel(e: Event): Record<string, string> {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form
-  let raw: Record<string, string | boolean>[]
-  if (form !== null) raw = serializeForm(form)
-  const fields = raw.reduce((acc, item) => {
+  let fields: Fields[] = []
+  if (form !== null) fields = serializeForm(form)
+  const model = fields.reduce((acc, item) => {
     acc[item.name] = item.value
     return acc
-  }, {})
-  return fields
+  }, {} as Model)
+  return model
 }

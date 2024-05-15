@@ -20,8 +20,8 @@ class LoginPage extends Block {
 
   init(): void {
     const getUserInfo = async () => {
-      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (this.props.currentUser !== null) router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+      if (this.props.currentUser === null) await me()               // Если нет данных о пользователе, то делаем запрос
+      if (this.props.currentUser !== null) router.go(Routes.Chats)  // Если данные есть, то переходим в чаты
     }
     getUserInfo()
 
@@ -95,6 +95,13 @@ class LoginPage extends Block {
       buttonOut
     }
 
+  }
+
+  componentDidUpdate(oldProps: { [x: string]: any }, newProps: { [x: string]: any }): boolean {
+    if(oldProps.currentUser !== newProps.currentUser && newProps.currentUser !== null) {
+      router.go(Routes.Chats)
+    }
+    return true
   }
 
   render(): string {

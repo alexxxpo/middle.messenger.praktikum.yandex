@@ -82,7 +82,6 @@ export const me = async () => {
             case 200:
                 store.set({ currentUser: JSON.parse(response) })
                 store.set({ getUserError: null })
-                router.go(Routes.Chats)
                 break;
             case 400:
                 store.set({ getUserError: JSON.parse(response) })
@@ -104,7 +103,6 @@ export const me = async () => {
         store.set({ getUserError: { reason: "Неизвестная ошибка" } });
     } finally {
         store.set({ isLoading: false });
-        console.log(store)
     }
 }
 

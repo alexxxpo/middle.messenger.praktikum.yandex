@@ -1,15 +1,13 @@
 import { Block } from '../../core/index.ts'
 import { Button } from '../../components/index.ts'
+import { EventsType } from '../../types/types.ts';
 
-interface BackButtonProps {
-  className?: string
+type BackButtonProps = {
+  className?: string;
+  events?: EventsType;
 }
 
-interface BackButtonType extends BackButtonProps {
-  button: Button
-}
-
-export default class BackButton extends Block<BackButtonType> {
+export default class BackButton extends Block<BackButtonProps> {
   constructor (props: BackButtonProps) {
     super({
       ...props,

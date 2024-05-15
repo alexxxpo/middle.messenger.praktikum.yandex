@@ -16,12 +16,7 @@ export interface PFieldProps {
   errorText?: string
 }
 
-interface PFieldType extends PFieldProps {
-  Input: PFieldInput
-  errorLine: ErrorLine
-}
-
-export default class PField extends Block<PFieldType> {
+export default class PField extends Block<PFieldProps> {
   constructor(props: PFieldProps) {
     super({
       ...props,
@@ -42,10 +37,12 @@ export default class PField extends Block<PFieldType> {
   init() {
     this.children.Input.setProps({
       events: {
+        ...this.props.events,
         change: [
-          (e) => {
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
             this.setProps({
-              value: e.target.value
+              value: target.value
             })
           }
         ]

@@ -5,7 +5,7 @@ import { Block } from "../core";
 import { Constructable } from "../types/types";
 
 export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
-  return function (Component: Constructable<Block<Record<string, unknown>>>) {
+  return function (Component: Constructable<Block>) {
     return class extends Component {
       private onChangeStoreCallback: () => void;
       constructor(props: Record<string, unknown>) {

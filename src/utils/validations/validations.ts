@@ -1,6 +1,6 @@
 import type Block from '../../core/Block.ts'
 
-export function InputValidation (this: Block<Record<string, unknown>>, event: Event, input: Block<Record<string, unknown>>, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
+export function InputValidation (this: Block, event: Event, input: Block, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
   const el = event.target as HTMLInputElement
   const inputValue = el.value
   let valid = validate(inputValue, ...conditions)
@@ -9,6 +9,8 @@ export function InputValidation (this: Block<Record<string, unknown>>, event: Ev
 }
 
 export function validate(str: string, ...conditions: RegExp[]): boolean {
+  console.log('validate', str);
+  
   let valid = true
   conditions.forEach(condition => {
     if (condition.test(str) === false) {
