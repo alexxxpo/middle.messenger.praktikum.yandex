@@ -1,38 +1,41 @@
 import { Block } from '../../core/index.ts'
 import { setActiveChat } from '../../services/Chats.service.ts'
-import { EventsType } from '../../types/types.ts'
-import { connect } from '../../utils/connect.ts'
+import { ChatsResponse } from '../../types/types.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
 
-export interface ChatListItemProps {
-  active?: boolean
-  name?: string
-  time?: string
-  my?: boolean
-  messages?: string[]
-  messageCount?: number
-  events?: EventsType
+type ChatListItemProps = {
+  activeChat: ChatsResponse
 }
 
-class ChatListItem extends Block<ChatListItemProps> {
-  constructor(props: ChatListItemProps) {
+class ChatListItem extends Block {
+  constructor(props: ChatsResponse) {
     super({
       ...props,
       events: {
         click: [() => {
-          const card = {
-            title: props.title,
-            avatar: props.avatar,
-            id: props.id
-          }
-          setActiveChat(card)
+          setActiveChat({...props})
         }]
       }
     })
   }
 
+  componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
+    if(oldProps.activeChat !== newProps.activeChat) {
+      if(newProps.activeChat.id === this.props.id) {
+        this.active = true
+      } else {
+        this.active = false
+      }
+      return true
+    }
+    return false
+  }
+
+  active: boolean = false
+
   render(): string {
     return `
-        <div class="chatListItem" ${this.props.active === true ? 'active' : ''}>
+        <div class="chatListItem" ${this.active === true ? 'active' : ''}>
             <div class="chatListItem__wrapper">
                 <div class="chatListItem__img">
                     <img src="${this.props.avatar}" alt="avatar"/>
@@ -60,6 +63,6 @@ class ChatListItem extends Block<ChatListItemProps> {
   }
 }
 
-const mapStateToProps = ({ currentUser }) => ({ currentUser })
+const mapStateToProps: MapStateToProps = ({ currentUser, activeChat }) => ({ currentUser, activeChat })
 
 export default connect(mapStateToProps)(ChatListItem)

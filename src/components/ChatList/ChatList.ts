@@ -1,16 +1,9 @@
 import { Block } from '../../core/index.ts'
-import { type ChatListItemProps } from '../ChatListItem/ChatListItem.ts'
-import { connect } from '../../utils/connect.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
 
-export interface ChatListProps extends ChatListItemProps {
-  chatItems: ChatListItemProps[]
-}
 
-interface ChatListType extends ChatListProps {
-}
-
-class ChatList extends Block<ChatListType> {
-  constructor(props: ChatListProps) {
+class ChatList extends Block {
+  constructor(props: Record<string, unknown>) {
     super({
       ...props
     })
@@ -35,6 +28,6 @@ class ChatList extends Block<ChatListType> {
   }
 }
 
-const mapStateToProps = ({ isLoading }) => ({ isLoading })
+const mapStateToProps: MapStateToProps = ({ isLoading }) => ({ isLoading })
 
 export default connect(mapStateToProps)(ChatList)
