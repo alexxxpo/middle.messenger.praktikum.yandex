@@ -23,11 +23,6 @@ export interface PagesList {
 
 export type Constructable<T = any> = new (...args: any[]) => T;
 
-export interface ILogin {
-  login: string;
-  password: string;
-}
-
 export type UserResponse = {
   id: number;
   first_name: string;
@@ -39,14 +34,41 @@ export type UserResponse = {
   email: string;
 }
 
+export type CreateChat = {
+  title: string;
+}
+
 export type ChatsResponse = {
-  id: number
-  title: string
-  avatar: string
-  unread_count: number
+  id: number;
+  title: string;
+  avatar: string;
+  unread_count: number;
   last_message: {
-    user: UserResponse
-    time: string
-    content: string
+    user: UserResponse;
+    time: string;
+    content: string;
   }
+}
+
+export type AddUserToChat = {
+  users: number[];
+  chatId: number;
+}
+
+export type Login = {
+  login: string;
+  password: string;
+}
+
+export type CreateUser = {
+  first_name: string;
+  second_name: string;
+  login: string;
+  email: string;
+  password: string;
+  phone: string;
+}
+
+export type CreateUserResponse = {
+  id: number;
 }

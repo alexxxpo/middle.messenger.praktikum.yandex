@@ -1,6 +1,6 @@
 import { Block } from "../../core";
 
-interface PropsType {
+interface PropsType extends Record<string, unknown> {
     type?: string
     name: string
     className?: string

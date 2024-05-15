@@ -48,3 +48,5 @@ export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
     }
   }
 }
+
+export type MapStateToProps = (state: IState) => IState

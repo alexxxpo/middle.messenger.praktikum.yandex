@@ -46,7 +46,7 @@ export function logFields(e: Event): void {
   if (form !== null) serializeForm(form)
 }
 
-export function getModel(e) {
+export function getModel(e: Event): Record<string, string> {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form
@@ -56,5 +56,5 @@ export function getModel(e) {
     acc[item.name] = item.value
     return acc
   }, {})
-  return JSON.stringify(fields)
+  return fields
 }

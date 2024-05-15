@@ -19,13 +19,12 @@ type OptionsGeneral = {
     data?: Document | XMLHttpRequestBodyInit | null | undefined
     headers?: Record<string, string>
     timeout?: number
-    mode?: string
     withCredentials?: boolean
 }
 
 type OptionsType = Omit<OptionsGeneral, 'method'>
 
-type HTTPMethod = (url: string, options: OptionsType) => Promise<unknown>
+type HTTPMethod = (url: string, options: OptionsType) => Promise<XMLHttpRequest>
 
 export default class HTTPTransport {
     private _baseUrl: string
@@ -55,10 +54,10 @@ export default class HTTPTransport {
         return this.request(this._baseUrl + url, { ...options, method: METHOD.PATCH });
     }
 
-    request = (url: string, options: OptionsGeneral) => {
+    request = (url: string, options: OptionsGeneral): Promise<XMLHttpRequest>  => {
         const { method, data, headers = {}, timeout = 5000, withCredentials = false } = options;
 
-        return new Promise((resolve, reject) => {
+        return new Promise<XMLHttpRequest>((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(method, url);
             xhr.withCredentials = withCredentials

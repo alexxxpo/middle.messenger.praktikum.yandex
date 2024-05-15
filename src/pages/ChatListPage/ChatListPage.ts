@@ -6,23 +6,28 @@ import { createChat, loadChats } from '../../services/Chats.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
+import { IState } from '../../core/Store.ts'
+import Router from '../../core/Router.ts'
+import { ChatsResponse, CreateChat } from '../../types/types.ts'
 
-class ChatListPage extends Block<Record<string, unknown>> {
+const router = Router
+
+interface ChatListPageType extends Record<string, unknown> {
+  chats: ChatsResponse[]
+}
+
+class ChatListPage extends Block<ChatListPageType> {
 
   init() {
     const getUserInfo = async () => {
-      if (window.store.state.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
-      if (window.store.state.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
+      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
     }
     getUserInfo()
 
     // Handlers
-    const addChat = (e) => {
-      createChat(JSON.parse(getModel(e)))
-    }
-
-    const addUser = (e) => {
-      createChat(JSON.parse(getModel(e)))
+    const addChat = (e: Event) => {
+      createChat(getModel(e) as CreateChat)
     }
     
     // Children
@@ -35,7 +40,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
 
     const chatList = new ChatList({ 
       chats: this.mapChatsToComponents(this.props.chats) || [],  
-      showEmpty: this.props.chats.length === 0
+      showEmpty: this.props.chats
     })
 
     const profileButton = new Button({
@@ -43,7 +48,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
       className: 'profileButton',
       label: 'Профиль',
       events: {
-        click: [() => {window.router.go(Routes.Profile)}]
+        click: [() => {router.go(Routes.Profile)}]
       }
     })
 
@@ -53,7 +58,8 @@ class ChatListPage extends Block<Record<string, unknown>> {
 
     const messageInput = new MessageInput({
       name: 'message',
-      className: 'chatListPage__messageInput'
+      className: 'chatListPage__messageInput',
+      type: 'text'
     })
 
     const sendButton = new Button({
@@ -76,7 +82,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
     }
   }
 
-  componentDidUpdate(oldProps, newProps) {
+  componentDidUpdate(oldProps: ChatListPageType, newProps: ChatListPageType) {
     if (oldProps.chats !== newProps.chats) {
       this.children.chatList.setProps({
         chats: this.mapChatsToComponents(newProps.chats) || [],
@@ -86,7 +92,7 @@ class ChatListPage extends Block<Record<string, unknown>> {
     return true
   }
 
-  mapChatsToComponents(chats) {
+  mapChatsToComponents(chats: ChatsResponse[]) {
     return chats?.map((chat) => new ChatListItem({ ...chat }))
   }
 
@@ -150,6 +156,6 @@ class ChatListPage extends Block<Record<string, unknown>> {
   }
 }
 
-const mapStateToProps = ({ chats, currentUser, activeChat }) => ({ chats, currentUser, activeChat })
+const mapStateToProps: (state: IState) => IState = ({ chats, currentUser, activeChat }) => ({ chats, currentUser, activeChat })
 
 export default connect(mapStateToProps)(ChatListPage)

@@ -1,12 +1,12 @@
-import HTTPTransport from "../core/HTTPTransport";
-import { ILogin } from "../types/types";
+import HTTPTransport from "../core/HTTPTransport.ts";
+import { CreateUser, Login } from "../types/types.ts";
 
 const authApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth');
 
 export default class AuthApi {
-    async create(data) {
+    async create(data: CreateUser) {
         return authApi.post('/signup', {
-            data,
+            data: JSON.stringify(data),
             withCredentials: true,
             headers: {
                 "Content-Type": "application/json"
@@ -14,7 +14,7 @@ export default class AuthApi {
         })
     }
 
-    async login(data: ILogin) {
+    async login(data: Login) {
         return authApi.post('/signin', { 
             data: JSON.stringify(data), 
             headers: { "Content-Type": "application/json" },
@@ -30,7 +30,6 @@ export default class AuthApi {
 
     async logout() {
         return authApi.post('/logout', {
-            mode: 'cors',
             withCredentials: true,
         })
     }

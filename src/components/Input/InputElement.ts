@@ -3,7 +3,7 @@ import { type EventsType } from '../../types/types.ts'
 import ErrorLine from './ErrorLine.ts'
 import Input from './Input.ts'
 
-interface InputElementProps {
+interface InputElementProps extends Record<string, unknown> {
   errorText?: string
   events?: EventsType
   label?: string

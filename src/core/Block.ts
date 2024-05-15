@@ -1,13 +1,12 @@
 import { EventBus } from './index.ts'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { BackButton, ErrorComp, PField, PImage, Popup, Search, Button, Input, ErrorLine, ChatList, ChatListItem } from '../components/index.ts'
 import { EventsType } from '../types/types.ts'
 
-type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
-type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | typeof ChatList | typeof ChatListItem | ErrorComp | PField | PImage | Search>
+type PropsType = Record<string, any>
+type ChildrenType = Record<string, Block>
 
-export default class Block<T extends Record<string, any>> {
+export default class Block<P extends PropsType = PropsType, C extends ChildrenType = ChildrenType> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -15,8 +14,8 @@ export default class Block<T extends Record<string, any>> {
     FLOW_RENDER: 'flow:render'
   }
 
-  children: ChildrenType
-  props: PropsType
+  children: C
+  props: P
   eventBus: () => EventBus
   private _element: HTMLElement | null = null
   _id: string = nanoid(6)
@@ -28,18 +27,20 @@ export default class Block<T extends Record<string, any>> {
      * @returns {void}
      */
 
-  constructor(propsWithChildren: T) {
+  constructor(propsWithChildren: P | C) {
     const eventBus = new EventBus()
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
 
-    this.props = this._makePropsProxy({ ...props })
+    this.props = this._makePropsProxy({ ...props }) as P
 
-    this.children = children
+    this.children = children as C
 
     this.eventBus = () => eventBus
 
     this._registerEvents(eventBus)
+
+    this._id = nanoid(6)
 
     eventBus.emit(Block.EVENTS.INIT)
   }
@@ -83,7 +84,7 @@ export default class Block<T extends Record<string, any>> {
   }
 
   private _render(): void {
-    const propsAndStubs = { ...this.props }
+    const propsAndStubs = { ...this.props } as Record<string, unknown>
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`
@@ -91,15 +92,15 @@ export default class Block<T extends Record<string, any>> {
 
     const fragment = this._createDocumentElement('template') as HTMLTemplateElement
 
-    const childrenProps: ChildrenType[] = [];
+    const childrenProps: Block[] = [];
+
     Object.entries(propsAndStubs).forEach(([key, value]) => {
       if (Array.isArray(value)) {
-        propsAndStubs[key] = value.map((item) => {
+        propsAndStubs[key] = value.map((item: Block) => {
           if (item) {
-            childrenProps.push(item as ChildrenType)
+            childrenProps.push(item)
             return `<div data-id="${item._id}"></div>`
           }
-
           return item;
         }).join('')
       }
@@ -108,21 +109,10 @@ export default class Block<T extends Record<string, any>> {
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs)
     const newElement: HTMLElement | null = fragment.content.firstElementChild as HTMLElement
 
-    // Object.values(this.children).forEach(child => {
-    //   const stub = fragment.content.querySelector(`[data-id="${child._id}"]`) as HTMLElement
-
-    //   stub?.replaceWith(child.getContent() as Node)
-    // })
-
     [...Object.values(this.children), ...childrenProps].forEach(child => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
-
-      stub?.replaceWith(child.getContent());
+      stub?.replaceWith(child.getContent() || '');
     });
-
-    // if (this._element !== null && newElement !== null) {
-    //   this._element.replaceWith(newElement)
-    // }
 
     if (this._element) {
       newElement.style.display = this._element.style.display
@@ -194,9 +184,9 @@ export default class Block<T extends Record<string, any>> {
     return true
   }
 
-  _getChildrenAndProps(propsAndChildren: T): { children: ChildrenType, props: PropsType } {
-    const children: ChildrenType = {}
-    const props: PropsType = {}
+  private _getChildrenAndProps(propsAndChildren: C | P): {children: Record<string, Block>, props: Record<string, unknown>} {
+    const children: Record<string, Block> = {}
+    const props: Record<string, unknown> = {}
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {

@@ -1,120 +1,123 @@
 import ChatsApi from "../api/Chats.api";
+import Router from "../core/Router";
+import Store from "../core/Store";
 import { Routes } from "../main";
+import { AddUserToChat, ChatsResponse, CreateChat } from "../types/types";
 
+const router = Router;
+const store = Store;
 const chatsApi = new ChatsApi();
 
 export const loadChats = async () => {
-    window.store.set({ isLoading: true });
+    store.set({ isLoading: true });
     try {
         const data = await chatsApi.getChats();
         const { response, status } = data
         switch (status) {
             case 200:
-                window.store.set({ chats: JSON.parse(response) })
-                window.store.set({ getChatsError: null })
+                store.set({ chats: JSON.parse(response) })
+                store.set({ getChatsError: null })
                 break;
             case 401:
-                window.store.set({ getChatsError: "Пользователь не авторизован" })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Login)
+                store.set({ getChatsError: JSON.parse(response) })
+                store.set({ chats: [] })
+                router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ getChatsError: "Ошибка на сервере" })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Error)
+                store.set({ getChatsError: JSON.parse(response) })
+                store.set({ chats: [] })
                 break;
             default:
-                window.store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Login)
+                store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
+                store.set({ chats: [] })
                 break;
         }
 
     } catch (error) {
         console.error(error)
-        window.store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
+        store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
     } finally {
-        window.store.set({ isLoading: false });
+        store.set({ isLoading: false });
     }
 
 }
 
-export const createChat = async (title: string) => {
-    window.store.set({ isLoading: true });
+export const createChat = async (title: CreateChat) => {
+    store.set({ isLoading: true });
     try {
         const data = await chatsApi.createChat(title);
         const { response, status } = data
         switch (status) {
             case 200:
                 loadChats()
-                window.store.set({ createChatsError: null })
+                store.set({ createChatsError: null })
                 break;
             case 400:
                 loadChats()
-                window.store.set({ createChatsError: JSON.parse(response) })
+                store.set({ createChatsError: JSON.parse(response) })
                 break;
             case 401:
-                window.store.set({ createChatsError: "Пользователь не авторизован" })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Login)
+                store.set({ createChatsError: "Пользователь не авторизован" })
+                store.set({ chats: [] })
+                router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ createChatsError: "Ошибка на сервере" })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Error)
+                store.set({ createChatsError: "Ошибка на сервере" })
+                store.set({ chats: [] })
+                router.go(Routes.Error)
                 break;
             default:
-                window.store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
-                window.store.set({ chats: [] })
-                window.router.go(Routes.Login)
+                store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
+                store.set({ chats: [] })
+                router.go(Routes.Login)
                 break;
         }
 
     } catch (error) {
         console.error(error)
-        window.store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
+        store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
     } finally {
-        window.store.set({ isLoading: false });
+        store.set({ isLoading: false });
     }
 
 }
 
-export const addUserToChat = async (userData) => {
-    window.store.set({ isLoading: true });
+export const addUserToChat = async (userData: AddUserToChat) => {
+    store.set({ isLoading: true });
     try {
         const data = await chatsApi.addUserToChat(userData);
         const { response, status } = data
         switch (status) {
             case 200:
-                window.store.set({ addUserToChatError: null })
+                store.set({ addUserToChatError: null })
                 break;
             case 400:
                 loadChats()
-                window.store.set({ addUserToChatError: JSON.parse(response) })
+                store.set({ addUserToChatError: JSON.parse(response) })
                 break;
             case 401:
-                window.store.set({ addUserToChatError: "Пользователь не авторизован" })
-                window.router.go(Routes.Login)
+                store.set({ addUserToChatError: "Пользователь не авторизован" })
+                router.go(Routes.Login)
                 break;
             case 500:
-                window.store.set({ addUserToChatsError: "Ошибка на сервере" })
-                window.router.go(Routes.Error)
+                store.set({ addUserToChatsError: "Ошибка на сервере" })
+                router.go(Routes.Error)
                 break;
             default:
-                window.store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
-                window.router.go(Routes.Login)
+                store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
+                router.go(Routes.Login)
                 break;
         }
 
     } catch (error) {
         console.error(error)
-        window.store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
+        store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
     } finally {
-        window.store.set({ isLoading: false });
+        store.set({ isLoading: false });
     }
 
 }
 
-export const setActiveChat = (activeChat) => {
-    window.store.set({activeChat});
+export const setActiveChat = (activeChat: ChatsResponse) => {
+    store.set({activeChat});
 }

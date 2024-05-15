@@ -5,26 +5,32 @@ export enum StoreEvents {
   Updated = 'Updated'
 }
 
-type HttpErrorType = {
-  reason: string
+export type HttpErrorType = {
+  reason: string;
+  status?: number;
 }
 
 export interface IState {
-  isLoading: boolean;
-  loginError: HttpErrorType | null;
-  chats: ChatsResponse[];
-  currentUser: UserResponse | null;
-  usersSearch: UserResponse[];
-  activeChat: ChatsResponse | null;
-}
-
-export interface INextState {
   isLoading?: boolean;
   loginError?: HttpErrorType | null;
   chats?: ChatsResponse[];
   currentUser?: UserResponse | null;
   usersSearch?: UserResponse[];
   activeChat?: ChatsResponse | null;
+}
+
+export interface INextState {
+  [x: string]: any;
+  isLoading?: boolean;
+  chats?: ChatsResponse[];
+  currentUser?: UserResponse | null;
+  usersSearch?: UserResponse[];
+  activeChat?: ChatsResponse | null;
+  loginError?: HttpErrorType | null;
+  createUserError?: HttpErrorType | null;
+  getUserError?: HttpErrorType | null;
+  logoutError?: HttpErrorType | null;
+  getChatsError?: HttpErrorType | null;
 }
 
 const defaultState: IState = {

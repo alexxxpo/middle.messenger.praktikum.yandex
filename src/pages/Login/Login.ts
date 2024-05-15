@@ -4,14 +4,14 @@ import { Block } from '../../core/index.ts'
 import { getModel } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
 import { login, me, logout } from '../../services/Auth.service.ts'
-import { connect } from '../../utils/connect.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
+import { Login } from '../../types/types.ts'
 
 const router = Router
 
-type LoginType = Record<string, Input | Button>
 
-class LoginPage extends Block<LoginType> {
+class LoginPage extends Block {
   constructor(props = {}) {
     super({
       ...props
@@ -38,7 +38,7 @@ class LoginPage extends Block<LoginType> {
       events: {
         blur: [
           e => { 
-            onChangeInput(e, this.children.inputLogin as Input, 'Некорректное значение', ...conditions.login) 
+            onChangeInput(e, this.children.inputLogin, 'Некорректное значение', ...conditions.login) 
           },
         ]
       }
@@ -50,7 +50,7 @@ class LoginPage extends Block<LoginType> {
       events: { 
         blur: [
           e => { 
-            onChangeInput(e, this.children.inputPass as Input, 'Некорректное значение', ...conditions.password) 
+            onChangeInput(e, this.children.inputPass, 'Некорректное значение', ...conditions.password) 
           },
         ] 
       }
@@ -61,7 +61,7 @@ class LoginPage extends Block<LoginType> {
       type: 'primary', 
       events: { 
         click: [
-          e => login(getModel(e))
+          e => login(getModel(e) as Login)
         ] 
       } 
     })
@@ -125,6 +125,6 @@ class LoginPage extends Block<LoginType> {
   }
 }
 
-const mapStateToProps = ({ isLoading, currentUser }) => ({ isLoading, currentUser })
+const mapStateToProps: MapStateToProps = ({ isLoading, currentUser }) => ({ isLoading, currentUser })
 
 export default connect(mapStateToProps)(LoginPage)
