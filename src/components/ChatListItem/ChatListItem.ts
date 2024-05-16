@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { setActiveChat } from '../../services/Chats.service.ts'
+import { getActiveChatUsers, setActiveChat } from '../../services/Chats.service.ts'
 import { ChatsResponse } from '../../types/types.ts'
 import { MapStateToProps, connect } from '../../utils/connect.ts'
 
@@ -14,6 +14,7 @@ class ChatListItem extends Block {
       events: {
         click: [() => {
           setActiveChat({...props})
+          getActiveChatUsers(props.id)
         }]
       }
     })

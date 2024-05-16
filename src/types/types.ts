@@ -19,15 +19,6 @@ export interface PagesList {
 
 export type Constructable<T = any> = new (...args: any[]) => T;
 
-export type ChangeProfile = {
-	first_name: string;
-	second_name: string;
-	display_name: string;
-	login: string;
-	email: string;
-	phone: string;
-}
-
 export type UserResponse = {
 	id: number;
 	first_name: string;
@@ -59,7 +50,17 @@ export type ChatsResponse = {
 	}
 }
 
-export type AddUserToChat = {
+export type ChatUserResponse = {
+	id: number;
+	first_name: string;
+	second_name: string;
+	display_name: string;
+	login: string;
+	avatar: string;
+	role: string;
+  }
+
+export type UsersRequest = {
 	users: number[];
 	chatId: number;
 }
@@ -81,3 +82,22 @@ export type CreateUser = {
 export type CreateUserResponse = {
 	id: number;
 }
+
+export type FindUserRequest = {
+	login: string
+}
+
+export type UserUpdateRequest = {
+	first_name: string;
+	second_name: string;
+	display_name: string;
+	login: string;
+	email: string;
+	phone: string;
+}
+
+export type ChangePasswordRequest = {
+	oldPassword: string;
+	newPassword: string;
+  }
+  

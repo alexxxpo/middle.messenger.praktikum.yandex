@@ -1,4 +1,4 @@
-import { ChatsResponse, UserResponse } from '../types/types.ts';
+import { ChatUserResponse, ChatsResponse, UserResponse } from '../types/types.ts';
 import EventBus from './EventBus';
 
 export enum StoreEvents {
@@ -17,6 +17,7 @@ export interface IState {
   currentUser?: UserResponse | null;
   usersSearch?: UserResponse[];
   activeChat?: ChatsResponse | null;
+  activeChatUsers?: ChatUserResponse[];
 }
 
 export interface INextState {
@@ -26,6 +27,7 @@ export interface INextState {
   currentUser?: UserResponse | null;
   usersSearch?: UserResponse[];
   activeChat?: ChatsResponse | null;
+  activeChatUsers?: ChatUserResponse[];
   loginError?: HttpErrorType | null;
   createUserError?: HttpErrorType | null;
   getUserError?: HttpErrorType | null;
@@ -33,6 +35,9 @@ export interface INextState {
   getChatsError?: HttpErrorType | null;
   changeUserDataError?: HttpErrorType | null;
   deleteChatError?: HttpErrorType | null;
+  changeAvatarError?: HttpErrorType | null;
+  getActiveChatUsersError?: HttpErrorType | null;
+  changePasswordError?: HttpErrorType | null;
 }
 
 const defaultState: IState = {
@@ -42,6 +47,7 @@ const defaultState: IState = {
   currentUser: null,
   usersSearch: [],
   activeChat: null,
+  activeChatUsers: [],
 }
 
 

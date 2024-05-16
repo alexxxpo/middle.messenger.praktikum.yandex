@@ -2,7 +2,7 @@ import ChatsApi from "../api/Chats.api";
 import Router from "../core/Router";
 import Store from "../core/Store";
 import { Routes } from "../main";
-import { AddUserToChat, ChatsResponse, CreateChat, CreateChatResponse } from "../types/types";
+import { UsersRequest, ChatsResponse, CreateChat, CreateChatResponse } from "../types/types";
 
 const router = Router;
 const store = Store;
@@ -82,7 +82,7 @@ export const createChat = async (title: CreateChat) => {
 
 }
 
-export const addUserToChat = async (userData: AddUserToChat) => {
+export const addUserToChat = async (userData: UsersRequest) => {
 	store.set({ isLoading: true });
 	try {
 		const data = await chatsApi.addUserToChat(userData);
@@ -112,6 +112,42 @@ export const addUserToChat = async (userData: AddUserToChat) => {
 	} catch (error) {
 		console.error(error)
 		store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
+	} finally {
+		store.set({ isLoading: false });
+	}
+
+}
+
+export const deleteUserFromChat = async (userData: UsersRequest) => {
+	store.set({ isLoading: true });
+	try {
+		const data = await chatsApi.deleteUserFromChat(userData);
+		const { response, status } = data
+		switch (status) {
+			case 200:
+				store.set({ deleteUserFromChatError: null })
+				break;
+			case 400:
+				loadChats()
+				store.set({ deleteUserFromChatError: JSON.parse(response) })
+				break;
+			case 401:
+				store.set({ deleteUserFromChatError: "Пользователь не авторизован" })
+				router.go(Routes.Login)
+				break;
+			case 500:
+				store.set({ deleteUserFromChatError: "Ошибка на сервере" })
+				router.go(Routes.Error)
+				break;
+			default:
+				store.set({ deleteUserFromChatError: { reason: "Неизвестная ошибка" } })
+				router.go(Routes.Login)
+				break;
+		}
+
+	} catch (error) {
+		console.error(error)
+		store.set({ deleteUserFromChatError: { reason: "Неизвестная ошибка" } })
 	} finally {
 		store.set({ isLoading: false });
 	}
@@ -157,7 +193,51 @@ export const deleteChat = async (model: CreateChatResponse) => {
 
 	} catch (error) {
 		console.error(error)
-		store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
+		store.set({ deleteChatError: { reason: "Неизвестная ошибка" } })
+	} finally {
+		store.set({ isLoading: false });
+	}
+}
+
+export const getActiveChatUsers = async (id: number) => {
+	store.set({ isLoading: true });
+	try {
+		const data = await chatsApi.getActiveChatUsers(id);
+		const { response, status } = data
+		switch (status) {
+			case 200:
+				store.set({activeChatUsers: JSON.parse(response)})
+				store.set({getActiveChatUsersError: null})
+				await loadChats()
+				break;
+			case 400:
+				store.set({activeChatUsers: []})
+				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				break;
+			case 401:
+				store.set({activeChatUsers: []})
+				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				router.go(Routes.Login)
+				break;
+			case 404:
+				store.set({activeChatUsers: []})
+				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				router.go(Routes.Error)
+				break;
+			case 500:
+				store.set({activeChatUsers: []})
+				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				router.go(Routes.Error)
+				break;
+			default:
+				store.set({ getActiveChatUsersError: { reason: "Неизвестная ошибка" } })
+				router.go(Routes.Login)
+				break;
+		}
+
+	} catch (error) {
+		console.error(error)
+		store.set({ getActiveChatUsersError: { reason: "Неизвестная ошибка" } })
 	} finally {
 		store.set({ isLoading: false });
 	}

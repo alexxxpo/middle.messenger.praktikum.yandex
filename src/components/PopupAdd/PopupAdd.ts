@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { connect } from '../../utils/connect.ts';
+import { MapStateToProps, connect } from '../../utils/connect.ts';
 import { Button, Input, UsersSearchList } from '../index.ts'
 
 interface PopupType {
@@ -8,29 +8,33 @@ interface PopupType {
 
 export interface PopupProps {
   title?: string
+  buttonLabel?: string
   name: string
   errorLoad?: boolean
   notSelected?: boolean
   clickButton?: EventListenerOrEventListenerObject
   changeInput?: EventListenerOrEventListenerObject
+  listClick?: EventListenerOrEventListenerObject
 }
 
 class Popup extends Block<PopupType> {
   constructor(props: PopupProps) {
+    const clickEvetListener = props.clickButton || (() => {})
+    const changeEvetListener = props.changeInput || (() => {})
     super({
       ...props,
       buttonChange: new Button({
         type: 'primary',
-        label: 'Добавить',
+        label: props.buttonLabel || 'Добавить',
         events: { 
-          click: [props.clickButton] || [] 
+          click: [clickEvetListener]
         }
       }),
       input: new Input({
         name: props.name,
         type: 'text',
         events: {
-          change: [props.changeInput] || []
+          change: [changeEvetListener] || []
         }
       }),
       usersSearchList: new UsersSearchList({
@@ -59,6 +63,6 @@ class Popup extends Block<PopupType> {
   }
 }
 
-const mapStateToProps = ({isLoading}) => ({isLoading})
+const mapStateToProps: MapStateToProps = ({isLoading}) => ({isLoading})
 
 export default connect(mapStateToProps)(Popup)

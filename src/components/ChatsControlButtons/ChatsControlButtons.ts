@@ -1,7 +1,7 @@
 import { Block } from "../../core";
-import { addUserToChat, deleteChat } from "../../services/Chats.service";
+import { addUserToChat, deleteChat, deleteUserFromChat } from "../../services/Chats.service";
 import { searchUsersByLogin } from "../../services/Users.service";
-import { ChatsResponse, CreateChatResponse, UserResponse } from "../../types/types";
+import { ChatsResponse, CreateChatResponse, FindUserRequest, UserResponse } from "../../types/types";
 import { getModel } from "../../utils/LogFormFields";
 import { MapStateToProps, connect } from "../../utils/connect";
 import { ButtonAddUser } from "../ButtonAddUser";
@@ -12,7 +12,8 @@ type ChatsControlButtonsProps = {
 	usersSearch: UserResponse[];
 	activeChat: ChatsResponse | null;
 	isLoading: boolean;
-	showPopup: boolean;
+	showPopupAdd: boolean;
+	showPopupDelete: boolean;
 	selectedUser: UserResponse;
 }
 
@@ -30,14 +31,14 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
 		// Handlers
 		const closePopup = (e: Event) => {
 			e.stopPropagation()
-			if (e.target === this.children.popupAddUser.getElement()) {
-				this.setProps({ showPopup: false })
+			if (e.target === this.children.popupAddUser.getElement() || e.target === this.children.popupDeleteUser.getElement()) {
+				this.setProps({ showPopupAdd: false, showPopupDelete: false })
 			}
 		}
 		const closePopupBind = closePopup.bind(this)
 
 		const searchUser = (e: Event) => {
-			searchUsersByLogin(getModel(e))
+			searchUsersByLogin(getModel(e) as FindUserRequest)
 		}
 
 		const addUser = async (e: Event) => {
@@ -56,6 +57,33 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
 				}
 				if(model.chatId !== undefined) {
 					await addUserToChat({
+						users: [
+							this.props.selectedUser?.id
+						],
+						chatId: this.props.activeChat?.id || 0
+					})
+				}
+				this.setProps({ showPopup: false })
+			}
+
+		}
+
+		const deleteUser = async (e: Event) => {
+			e.preventDefault()
+			const model = getModel(e)
+			const selectedUser = this.props.usersSearch.filter(i => i.login === model.login)[0] || {}
+			this.setProps({
+				selectedUser
+			})
+			if (this.props.selectedUser.id !== undefined) {
+				const model = {
+					users: [
+						this.props.selectedUser?.id
+					],
+					chatId: this.props.activeChat?.id
+				}
+				if(model.chatId !== undefined) {
+					await deleteUserFromChat({
 						users: [
 							this.props.selectedUser?.id
 						],
@@ -93,7 +121,7 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
 			events: {
 				click: [
 					() => {
-						this.setProps({ showPopup: true })
+						this.setProps({ showPopupAdd: true })
 					}
 				]
 			}
@@ -113,7 +141,28 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
 		})
 
 		const buttonDeleteUser = new ButtonDeleteUser({
-			title: 'Удалить пользователя'
+			title: 'Удалить пользователя',
+			events: {
+				click: [
+					() => {
+						this.setProps({ showPopupDelete: true })
+					}
+				]
+			}
+		})
+
+		const popupDeleteUser = new PopupAdd({
+			title: 'Удалить пользователя',
+			name: 'login',
+			clickButton: deleteUser,
+			changeInput: searchUser,
+			listClick: selectUser,
+			events: {
+				click: [
+					closePopupBind
+				]
+			},
+			buttonLabel: 'Удалить',
 		})
 
 		const buttonDeleteChat = new ButtonDeleteUser({
@@ -130,7 +179,8 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
 			buttonAddUser,
 			buttonDeleteUser,
 			popupAddUser,
-			buttonDeleteChat
+			buttonDeleteChat,
+			popupDeleteUser
 		}
 	}
 
@@ -140,8 +190,11 @@ class ChatsControlButtons extends Block<ChatsControlButtonsProps> {
                 {{{buttonAddUser}}}
                 {{{buttonDeleteUser}}}
 				{{{buttonDeleteChat}}}
-                {{#if showPopup}}
+                {{#if showPopupAdd}}
                     {{{popupAddUser}}}
+                {{/if}}
+				{{#if showPopupDelete}}
+                    {{{popupDeleteUser}}}
                 {{/if}}
             </div>
         `

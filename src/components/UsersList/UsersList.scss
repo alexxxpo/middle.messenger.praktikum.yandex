@@ -1,0 +1,42 @@
+.usersList {
+    list-style: none;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
+
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &::-webkit-scrollbar-track {
+        display: none;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        display: none;
+    }
+
+
+    li {
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #efefef;
+        color: var(--text-color);
+    }
+
+    &__container {
+        padding: 15px;
+        width: 310px;
+        background: #fff;
+        border-left: 1px solid #efefef;
+
+        h4 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #efefef;
+            text-align: center;
+            font-size: 18px;
+        }
+    }
+}

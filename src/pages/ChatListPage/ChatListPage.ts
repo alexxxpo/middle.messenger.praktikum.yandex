@@ -1,4 +1,4 @@
-import { Button, ButtonAddUser, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel } from '../../components/index.ts'
+import { Button, ButtonAddUser, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel, UsersList } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
 import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
@@ -6,7 +6,7 @@ import { createChat, loadChats } from '../../services/Chats.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
-import { IState } from '../../core/Store.ts'
+import Store, { IState } from '../../core/Store.ts'
 import Router from '../../core/Router.ts'
 import { ChatsResponse, CreateChat, UserResponse } from '../../types/types.ts'
 
@@ -22,6 +22,8 @@ type ChatListPageProps = {
 class ChatListPage extends Block<ChatListPageProps> {
 
 	init() {
+		console.log('init chatListPage', Store);
+		
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
 			if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
@@ -95,6 +97,10 @@ class ChatListPage extends Block<ChatListPageProps> {
 			}
 		})
 
+		const usersList = new UsersList({
+			className: 'messagesList__usersList'
+		})
+
 		this.children = {
 			...this.children,
 			messageInput,
@@ -104,7 +110,8 @@ class ChatListPage extends Block<ChatListPageProps> {
 			search,
 			topPanel,
 			popupAddChat,
-			addChatButton
+			addChatButton,
+			usersList
 		}
 	}
 
@@ -125,6 +132,8 @@ class ChatListPage extends Block<ChatListPageProps> {
 
 
 	render(): string {
+		console.log('rerender chatlistpage');
+		
 		return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
@@ -148,32 +157,36 @@ class ChatListPage extends Block<ChatListPageProps> {
                     <div class="chatListPage__chatInfo">
                       {{{topPanel}}}
                     </div>
-                    <ul class="messagesList">
-                        <li class="messagesList__item date">
-                            <div class="date">19 июня</div>
-                        </li>
-                        <li class="messagesList__item text">
-                            <div class="message">
-                                <p class="message_text">
-                                    Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
+					<div class="messagesList__container">
+						<ul class="messagesList">
+							<li class="messagesList__item date">
+								<div class="date">19 июня</div>
+							</li>
+							<li class="messagesList__item text">
+								<div class="message">
+									<p class="message_text">
+										Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.
 
-                                    Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.
-                                </p>
-                            </div>
-                        </li>
-                        <li class="messagesList__item img">
-                            <div class="message">
-                                <img class="message_img" src="${img}" alt="Изображение сообщения" />
-                            </div>
-                        </li>
-                        <li class="messagesList__item text self">
-                            <div class="message myMessage">
-                                <p class="message_text">
-                                    Круто!
-                                </p>
-                            </div>
-                        </li>
-                    </ul>
+										Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.
+									</p>
+								</div>
+							</li>
+							<li class="messagesList__item img">
+								<div class="message">
+									<img class="message_img" src="${img}" alt="Изображение сообщения" />
+								</div>
+							</li>
+							<li class="messagesList__item text self">
+								<div class="message myMessage">
+									<p class="message_text">
+										Круто!
+									</p>
+								</div>
+							</li>
+						</ul>
+						{{{usersList}}}
+						</ul>
+					</div>
                     <form class="chatListPage__sendForm">
                         {{{messageInput}}}
                         {{{sendButton}}}

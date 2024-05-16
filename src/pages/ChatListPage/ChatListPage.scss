@@ -44,12 +44,20 @@
         }
     }
 
+    
     .messagesList {
+        list-style: none;
         height: 100%;
         display: flex;
         flex-flow: column nowrap;
-        list-style: none;
         gap: 10px;
+        flex: 1;
+        
+        &__container {
+            width: 100%;
+            display: flex;
+            flex-flow: row nowrap;
+        }
 
         &__item {
             padding: 11px;

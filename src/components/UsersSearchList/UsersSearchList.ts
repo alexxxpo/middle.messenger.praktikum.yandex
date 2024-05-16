@@ -1,9 +1,10 @@
 import { Block } from '../../core/index.ts'
-import { connect } from '../../utils/connect.ts'
+import { UserResponse } from '../../types/types.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
 
 
-class UsersSearchList extends Block<Record<string, string>> {
-  constructor(props) {
+class UsersSearchList extends Block {
+  constructor(props: Record<string, unknown>) {
     super({
       ...props
     })
@@ -21,7 +22,7 @@ class UsersSearchList extends Block<Record<string, string>> {
   }
 
   render(): string {
-    const list = this.props.usersSearch.map(item => `<li>${item.login}</li>`).join('')
+    const list: string = this.props.usersSearch.map((item: UserResponse) => `<li>${item.login}</li>`).join('')
 
     if(this.props.isLoading) return `
     <div class="usersSearchList__container">
@@ -43,6 +44,6 @@ class UsersSearchList extends Block<Record<string, string>> {
   }
 }
 
-const mapStateToProps = ({usersSearch, isLoading}) => ({usersSearch, isLoading})
+const mapStateToProps: MapStateToProps = ({usersSearch, isLoading}) => ({usersSearch, isLoading})
 
 export default connect(mapStateToProps)(UsersSearchList)

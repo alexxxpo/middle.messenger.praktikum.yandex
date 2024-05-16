@@ -4,11 +4,12 @@ import { type PopupProps } from '../../components/Popup/Popup.ts'
 import { Block } from '../../core/index.ts'
 import Router from '../../core/Router.ts'
 import { logout, me } from '../../services/Auth.service.ts'
-import { changeAvatar, changeUserData } from '../../services/Users.service.ts'
-import { ChangeProfile, UserResponse } from '../../types/types.ts'
+import { changeAvatar, changePassword, changeUserData } from '../../services/Users.service.ts'
+import { UserResponse, UserUpdateRequest } from '../../types/types.ts'
 import { connect, MapStateToProps } from '../../utils/connect.ts'
 import { getModel } from '../../utils/LogFormFields/index.ts'
 import { InputValidation, conditions } from '../../utils/validations/index.ts'
+import img from '../../assets/images/Union.png'
 
 interface ProfileProps {
 	popupProps: PopupProps;
@@ -17,7 +18,7 @@ interface ProfileProps {
 	editData: boolean;
 	currentUser: UserResponse | null;
 	isLoading: boolean;
-	popup: boolean;
+	showPopup: boolean;
 }
 
 const router = Router
@@ -39,6 +40,11 @@ class Profile extends Block<ProfileProps> {
 			this.children.secondName.setProps({ value: newProps.currentUser?.second_name })
 			this.children.phone.setProps({ value: newProps.currentUser?.phone })
 			this.children.displayName.setProps({ value: newProps.currentUser?.display_name })
+			this.children.pImage.setProps({
+				avatar: this.props.currentUser?.avatar === null ?
+					img :
+					'https://ya-praktikum.tech/api/v2/resources/' + this.props.currentUser?.avatar
+			})
 			return true
 		}
 		return false
@@ -56,6 +62,8 @@ class Profile extends Block<ProfileProps> {
 		const onChangePasswordBind = this.onChangePassword.bind(this)
 		const onImageChangeBind = this.onImageChange.bind(this)
 		const onChangeInput = InputValidation.bind(this)
+		const onSaveImageBind = this.onSaveImage.bind(this)
+		const onClosePopupBind = this.onClosePopup.bind(this)
 
 		// Children profile
 		const email = new PField({
@@ -66,8 +74,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'email',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.email as Input, 'Некорректный формат email', ...conditions.email) 
+					e => {
+						onChangeInput(e, this.children.email as Input, 'Некорректный формат email', ...conditions.email)
 					}
 				]
 			}
@@ -80,8 +88,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'login',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.login as Input, 'Может содеражать цифры, но не состоять из них', ...conditions.login) 
+					e => {
+						onChangeInput(e, this.children.login as Input, 'Может содеражать цифры, но не состоять из них', ...conditions.login)
 					}
 				]
 			}
@@ -94,8 +102,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'first_name',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.firstName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names) 
+					e => {
+						onChangeInput(e, this.children.firstName as Input, 'Имя должно начинаться с заглавной буквы', ...conditions.names)
 					}
 				]
 			}
@@ -108,8 +116,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'second_name',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.secondName, 'Фамилия должна начинаться с заглавной буквы', ...conditions.names) 
+					e => {
+						onChangeInput(e, this.children.secondName, 'Фамилия должна начинаться с заглавной буквы', ...conditions.names)
 					}
 				]
 			}
@@ -136,8 +144,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'phone',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.phone as Input, 'Телефон может содержать только цифры и может начинаться с +', ...conditions.phone) 
+					e => {
+						onChangeInput(e, this.children.phone as Input, 'Телефон может содержать только цифры и может начинаться с +', ...conditions.phone)
 					}
 				]
 			}
@@ -151,8 +159,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'old_password',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.oldPasword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) 
+					e => {
+						onChangeInput(e, this.children.oldPasword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password)
 					}
 				]
 			}
@@ -164,8 +172,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'new_password',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.newPassword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) 
+					e => {
+						onChangeInput(e, this.children.newPassword as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password)
 					}
 				]
 			}
@@ -177,8 +185,8 @@ class Profile extends Block<ProfileProps> {
 			name: 'new_password',
 			events: {
 				blur: [
-					e => { 
-						onChangeInput(e, this.children.newPasswordAgain as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password) 
+					e => {
+						onChangeInput(e, this.children.newPasswordAgain as Input, 'Пароль должен содержать строчные и заглавные буквы и цифры', ...conditions.password)
 					}
 				]
 			}
@@ -213,11 +221,22 @@ class Profile extends Block<ProfileProps> {
 		})
 
 		// button save
-		const buttonSave = new Button({
+		const buttonSaveData = new Button({
 			type: 'primary',
 			label: 'Сохранить',
 			events: {
-				click: [(e) => { changeUserData({ ...getModel(e) as ChangeProfile }) }, onSaveDataBind]
+				click: [(e) => { changeUserData({ ...getModel(e) as UserUpdateRequest }) }, onSaveDataBind]
+			}
+		})
+
+		const buttonSavePassword = new Button({
+			type: 'primary',
+			label: 'Сохранить',
+			events: {
+				click: [(e) => { 
+					const model = getModel(e)
+					changePassword({ oldPassword: model.old_password, newPassword: model.new_password })
+				 }, onSaveDataBind]
 			}
 		})
 
@@ -232,13 +251,19 @@ class Profile extends Block<ProfileProps> {
 			className: 'profilePage__PImage',
 			events: {
 				click: [onImageChangeBind]
-			}
+			},
+			avatar: this.props.currentUser?.avatar === null ? img : 'https://ya-praktikum.tech/api/v2/resources/' + this.props.currentUser?.avatar
 		})
 
 		const popup = new Popup({
 			title: 'Загрузите файл',
-			clickButton: e => this.onSaveImage(e),
-			name: 'avatar'
+			clickButton: onSaveImageBind,
+			name: 'avatar',
+			events: {
+				click: [
+					onClosePopupBind
+				]
+			}
 		})
 
 		this.children = {
@@ -255,7 +280,8 @@ class Profile extends Block<ProfileProps> {
 			buttonChangePassword,
 			buttonChangeData,
 			buttonExit,
-			buttonSave,
+			buttonSaveData,
+			buttonSavePassword,
 			backButton,
 			pImage,
 			popup
@@ -308,14 +334,25 @@ class Profile extends Block<ProfileProps> {
 		})
 	}
 
-	onImageChange(): void {		
-		this.setProps({ popup: true })
+	onImageChange(): void {
+		this.setProps({ showPopup: true })
 	}
 
 	onSaveImage(e: Event) {
 		e.preventDefault()
-		console.log(new FormData(e.target.form))
-		changeAvatar(e.target.form)
+		const target = e.target as HTMLButtonElement
+		const form = target.form as HTMLFormElement
+		this.setProps({ showPopup: false })
+		changeAvatar(form)
+	}
+
+	onClosePopup(e: Event) {
+		e.stopPropagation()
+		console.log(e.target, this.children.popup.getElement());
+
+		if (e.target === this.children.popup.getElement()) {
+			this.setProps({ showPopup: false })
+		}
 	}
 
 	render(): string {
@@ -352,12 +389,19 @@ class Profile extends Block<ProfileProps> {
                     </div>`
 				: ''}
 
-                    ${this.props.editPassword === true || this.props.editData === true
+                    ${this.props.editPassword === true
 				? `<div class="profilePage__buttons">
                         <div class="pField profilePage__saveButtonField">
-                            {{{buttonSave}}}
+                            {{{buttonSavePassword}}}
                         </div>
                     </div>`
+				: this.props.editData === true 
+				? `<div class="profilePage__buttons">
+						<div class="pField profilePage__saveButtonField">
+							{{{buttonSaveData}}}
+						</div>
+					</div>`
+
 				: `<div class="profilePage__buttons">
                         <div class="pField profilePage__buttonField">
                             {{{ buttonChangeData }}}
@@ -370,7 +414,7 @@ class Profile extends Block<ProfileProps> {
                         </div>
                     </div>`}
                 </form>
-                ${this.props.popup === true ? '{{{popup}}}' : ''}    
+                ${this.props.showPopup === true ? '{{{popup}}}' : ''}    
             </div>
         </main>
         `
