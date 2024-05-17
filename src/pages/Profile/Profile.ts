@@ -51,6 +51,7 @@ class Profile extends Block<ProfileProps> {
 	}
 
 	init(): void {
+		console.log('init profile Page');
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
 		}

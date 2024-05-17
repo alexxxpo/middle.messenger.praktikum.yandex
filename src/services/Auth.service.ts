@@ -77,6 +77,8 @@ export const me = async () => {
     store.set({ isLoading: true });
     try {
         const data = await authApi.me();
+        console.log('me()');
+        
         const { response, status } = data
         switch (status) {
             case 200:

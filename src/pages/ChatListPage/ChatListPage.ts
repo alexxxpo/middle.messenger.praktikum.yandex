@@ -1,15 +1,14 @@
-import { Button, ButtonAddUser, ChatList, ChatListItem, MessageInput, PopupAdd, Search, TopPanel, UsersList } from '../../components/index.ts'
+import { Button, ButtonAddUser, ChatList, MessageInput, PopupAdd, Search, TopPanel, UsersList } from '../../components/index.ts'
 import { Block } from '../../core/index.ts'
 import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
-import { createChat, getToken, loadChats } from '../../services/Chats.service.ts'
+import { createChat, loadChats } from '../../services/Chats.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
-import Store, { IState } from '../../core/Store.ts'
+import  { IState } from '../../core/Store.ts'
 import Router from '../../core/Router.ts'
 import { ChatsResponse, CreateChat, UserResponse } from '../../types/types.ts'
-import { connectChat } from '../../services/Message.service.ts'
 
 const router = Router
 
@@ -24,6 +23,8 @@ type ChatListPageProps = {
 class ChatListPage extends Block<ChatListPageProps> {
 
 	init() {
+		console.log('init chatListPage');
+		
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
 			if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
@@ -57,10 +58,7 @@ class ChatListPage extends Block<ChatListPageProps> {
 			}
 		})
 
-		const chatList = new ChatList({
-			chats: this.mapChatsToComponents(this.props.chats) || [],
-			showEmpty: this.props.chats
-		})
+		const chatList = new ChatList({})
 
 		const profileButton = new Button({
 			type: 'link',
@@ -116,31 +114,27 @@ class ChatListPage extends Block<ChatListPageProps> {
 	}
 
 	componentDidUpdate(oldProps: ChatListPageProps, newProps: ChatListPageProps) {
-		if (oldProps.chats !== newProps.chats) {
-			this.children.chatList.setProps({
-				chats: this.mapChatsToComponents(newProps.chats) || [],
-				showEmpty: newProps.chats.length === 0
-			})
+		if(oldProps.currentUser !== newProps.currentUser) {
+			return true
+		}
+		if(oldProps.showPopup !== newProps.showPopup) {
 			return true
 		}
 		if(oldProps.activeChat !== newProps.activeChat) {
-			getToken(newProps.activeChat?.id)
 			return true
 		}
+
 		return false
 	}
 
-	mapChatsToComponents(chats: ChatsResponse[]) {
-		return chats?.map((chat) => new ChatListItem({ ...chat }))
-	}
-
-
-
 	render(): string {
+		console.log('render chatlist page');
+		
 		return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
                 <div class="chatListPage__profileButton">
+					${this.props.currentUser?.display_name ? this.props.currentUser?.display_name : this.props.currentUser?.login }
                     {{{ profileButton }}}
                 </div>
                 <div class="chatListPage__search">
@@ -202,6 +196,6 @@ class ChatListPage extends Block<ChatListPageProps> {
 	}
 }
 
-const mapStateToProps: (state: IState) => IState = ({ chats, currentUser, activeChat, token }) => ({ chats, currentUser, activeChat, token })
+const mapStateToProps: (state: IState) => IState = ({ currentUser, activeChat }) => ({ currentUser, activeChat })
 
 export default connect(mapStateToProps)(ChatListPage)

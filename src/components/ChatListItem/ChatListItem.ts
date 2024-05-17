@@ -4,39 +4,41 @@ import { ChatsResponse } from '../../types/types.ts'
 import { MapStateToProps, connect } from '../../utils/connect.ts'
 
 type ChatListItemProps = {
-  activeChat: ChatsResponse
+	activeChat: ChatsResponse
 }
 
 class ChatListItem extends Block {
-  constructor(props: ChatsResponse) {
-    super({
-      ...props,
-      events: {
-        click: [() => {
-          setActiveChat({...props})
-          getActiveChatUsers(props.id)
-        }]
-      }
-    })
-  }
+	constructor(props: ChatsResponse) {
+		super({
+			...props,
+			events: {
+				click: [() => {
+					setActiveChat({ ...props })
+					getActiveChatUsers(props.id)
+				}]
+			}
+		})
+	}
 
-  componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
-    if(oldProps.activeChat !== newProps.activeChat) {
-      if(newProps.activeChat.id === this.props.id) {
-        this.active = true
-      } else {
-        this.active = false
-      }
-      return true
-    }
-    return false
-  }
+	componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
+		if (oldProps.activeChat !== newProps.activeChat) {
+			if (newProps.activeChat.id === this.props.id) {
+				this.setProps({active: 'active'})
+			} else {
+				this.setProps({active: ''})
+			}
+			return true
+		}
+		return false
+	}
 
-  active: boolean = false
+	active: boolean = false
 
-  render(): string {
-    return `
-        <div class="chatListItem" ${this.active === true ? 'active' : ''}>
+	render(): string {
+		console.log('render chatlist item');
+		
+		return `
+        <div class="chatListItem" {{active}}>
             <div class="chatListItem__wrapper">
                 <div class="chatListItem__img">
                     <img src="${this.props.avatar}" alt="avatar"/>
@@ -51,8 +53,7 @@ class ChatListItem extends Block {
                     <div class="chatListItem__meta">
                         <div class="lastMessage">
                             <p>
-                                ${this.props.currentUser?.id === this.props.created_by ? '<span>Вы:</span>' : ''}
-                                {{message}}
+                                ${this.props.currentUser?.id === this.props.last_message?.user.id ? '<span>Вы:</span>' : ''}
                             </p>
                         </div>
                         <div class="chatListItem__messageCount" ${this.props.unread_count as number > 0 ? 'show' : ''}>{{unread_count}}</div>
@@ -61,7 +62,7 @@ class ChatListItem extends Block {
             </div>
         </div>        
         `
-  }
+	}
 }
 
 const mapStateToProps: MapStateToProps = ({ currentUser, activeChat }) => ({ currentUser, activeChat })

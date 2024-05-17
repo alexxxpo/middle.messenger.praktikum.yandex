@@ -12,6 +12,8 @@ export const loadChats = async () => {
 	store.set({ isLoading: true });
 	try {
 		const data = await chatsApi.getChats();
+		console.log('getChats()');
+		
 		const { response, status } = data
 		switch (status) {
 			case 200:
@@ -150,6 +152,8 @@ export const deleteUserFromChat = async (userData: UsersRequest) => {
 }
 
 export const setActiveChat = (activeChat: ChatsResponse) => {
+	console.log('setActiveChat()');
+	
 	store.set({ activeChat });
 }
 
@@ -202,7 +206,6 @@ export const getActiveChatUsers = async (id: number) => {
 			case 200:
 				store.set({ activeChatUsers: JSON.parse(response) })
 				store.set({ getActiveChatUsersError: null })
-				await loadChats()
 				break;
 			case 400:
 				store.set({ activeChatUsers: [] })

@@ -20,6 +20,7 @@ class Registration extends Block<RegType> {
 	}
 
 	init(): void {
+		console.log('init chatListPage');
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me()               // Если нет данных о пользователе, то делаем запрос
 			if (this.props.currentUser !== null) router.go(Routes.Chats)  // Если данные есть, то переходим в чаты

@@ -1,5 +1,4 @@
 import MessageApi from "../api/Message.api";
-import Router from "../core/Router";
 import Store from "../core/Store";
 
 const store = Store
