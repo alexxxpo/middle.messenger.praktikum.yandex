@@ -11,17 +11,7 @@ class UsersList extends Block {
   }
 
   render(): string {
-    console.log(this.props);
-    
     const list: string = this.props.activeChatUsers?.map((item: UserResponse) => `<li>${item.display_name ? item.display_name : item.login}</li>`).join('')
-
-    if(this.props.isLoading) return `
-    <div class="usersList__container {{className}}">
-      <ul class="usersList">
-        Загрузка пользователей...
-      </ul>
-    </div>
-    `
 
     if(!list) return `<div></div>`
 
@@ -36,6 +26,6 @@ class UsersList extends Block {
   }
 }
 
-const mapStateToProps: MapStateToProps = ({activeChatUsers, isLoading}) => ({activeChatUsers, isLoading})
+const mapStateToProps: MapStateToProps = ({activeChatUsers}) => ({activeChatUsers})
 
 export default connect(mapStateToProps)(UsersList)

@@ -29,7 +29,6 @@ export const loadChats = async () => {
 				break;
 			default:
 				store.set({ getChatsError: { reason: "Неизвестная ошибка" } })
-				store.set({ chats: [] })
 				break;
 		}
 
@@ -68,8 +67,6 @@ export const createChat = async (title: CreateChat) => {
 				break;
 			default:
 				store.set({ createChatsError: { reason: "Неизвестная ошибка" } })
-				store.set({ chats: [] })
-				router.go(Routes.Login)
 				break;
 		}
 
@@ -105,7 +102,6 @@ export const addUserToChat = async (userData: UsersRequest) => {
 				break;
 			default:
 				store.set({ addUserToChatError: { reason: "Неизвестная ошибка" } })
-				router.go(Routes.Login)
 				break;
 		}
 
@@ -141,7 +137,6 @@ export const deleteUserFromChat = async (userData: UsersRequest) => {
 				break;
 			default:
 				store.set({ deleteUserFromChatError: { reason: "Неизвестная ошибка" } })
-				router.go(Routes.Login)
 				break;
 		}
 
@@ -166,7 +161,7 @@ export const deleteChat = async (model: CreateChatResponse) => {
 		switch (status) {
 			case 200:
 				store.set({ deleteChatError: null })
-				store.set({activeChat: null})
+				store.set({ activeChat: null })
 				await loadChats()
 				break;
 			case 400:
@@ -187,7 +182,6 @@ export const deleteChat = async (model: CreateChatResponse) => {
 				break;
 			default:
 				store.set({ deleteChatError: { reason: "Неизвестная ошибка" } })
-				router.go(Routes.Login)
 				break;
 		}
 
@@ -206,32 +200,31 @@ export const getActiveChatUsers = async (id: number) => {
 		const { response, status } = data
 		switch (status) {
 			case 200:
-				store.set({activeChatUsers: JSON.parse(response)})
-				store.set({getActiveChatUsersError: null})
+				store.set({ activeChatUsers: JSON.parse(response) })
+				store.set({ getActiveChatUsersError: null })
 				await loadChats()
 				break;
 			case 400:
-				store.set({activeChatUsers: []})
+				store.set({ activeChatUsers: [] })
 				store.set({ getActiveChatUsersError: JSON.parse(response) })
 				break;
 			case 401:
-				store.set({activeChatUsers: []})
+				store.set({ activeChatUsers: [] })
 				store.set({ getActiveChatUsersError: JSON.parse(response) })
 				router.go(Routes.Login)
 				break;
 			case 404:
-				store.set({activeChatUsers: []})
+				store.set({ activeChatUsers: [] })
 				store.set({ getActiveChatUsersError: JSON.parse(response) })
 				router.go(Routes.Error)
 				break;
 			case 500:
-				store.set({activeChatUsers: []})
+				store.set({ activeChatUsers: [] })
 				store.set({ getActiveChatUsersError: JSON.parse(response) })
 				router.go(Routes.Error)
 				break;
 			default:
 				store.set({ getActiveChatUsersError: { reason: "Неизвестная ошибка" } })
-				router.go(Routes.Login)
 				break;
 		}
 
@@ -240,5 +233,36 @@ export const getActiveChatUsers = async (id: number) => {
 		store.set({ getActiveChatUsersError: { reason: "Неизвестная ошибка" } })
 	} finally {
 		store.set({ isLoading: false });
+	}
+}
+
+export const getToken = async (id: number) => {
+	try {
+		const data = await chatsApi.getToken(id)
+		const { response, status } = data
+		switch (status) {
+			case 200:
+				store.set({ token: JSON.parse(response) })
+				store.set({ getTokenError: null })
+				await loadChats()
+				break;
+			case 401:
+				store.set({ token: undefined })
+				store.set({ getTokenError: JSON.parse(response) })
+				router.go(Routes.Login)
+				break;
+			case 500:
+				store.set({ token: undefined })
+				store.set({ getTokenError: JSON.parse(response) })
+				router.go(Routes.Error)
+				break;
+			default:
+				store.set({ getTokenError: { reason: "Неизвестная ошибка" } })
+				break;
+		}
+
+	} catch (e) {
+		store.set({ getTokenError: { reason: "Неизвестная ошибка" } })
+		console.error(e);
 	}
 }

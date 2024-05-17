@@ -38,6 +38,15 @@ export default class ChatsApi {
         })
     }
 
+    async getToken(id: number) {
+        return await chatsApi.post(`/token/${id}`, {
+            withCredentials: true,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+    }
+
     async deleteChat(model: CreateChatResponse) {
         return await chatsApi.delete('/', {
             withCredentials: true,
@@ -47,6 +56,7 @@ export default class ChatsApi {
             }
         })
     }
+
     async getActiveChatUsers(id: number) {
         return await chatsApi.get(`/${id}/users`, {
             withCredentials: true

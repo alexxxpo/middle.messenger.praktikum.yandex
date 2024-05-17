@@ -18,6 +18,7 @@ export interface IState {
   usersSearch?: UserResponse[];
   activeChat?: ChatsResponse | null;
   activeChatUsers?: ChatUserResponse[];
+  token?: string;
 }
 
 export interface INextState {
@@ -28,6 +29,7 @@ export interface INextState {
   usersSearch?: UserResponse[];
   activeChat?: ChatsResponse | null;
   activeChatUsers?: ChatUserResponse[];
+  token?: string;
   loginError?: HttpErrorType | null;
   createUserError?: HttpErrorType | null;
   getUserError?: HttpErrorType | null;

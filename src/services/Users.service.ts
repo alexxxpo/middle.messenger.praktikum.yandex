@@ -9,8 +9,6 @@ const router = Router
 const usersApi = new UsersApi();
 
 export const changeUserData = async (model: UserUpdateRequest) => {
-    console.log(model);
-    
     store.set({ isLoading: true });
     try {
         const { response, status } = await usersApi.changeUserData(model);
@@ -46,8 +44,6 @@ export const changeUserData = async (model: UserUpdateRequest) => {
 }
 
 export const changePassword = async (model: ChangePasswordRequest) => {
-    console.log(model);
-    
     store.set({ isLoading: true });
     try {
         const { response, status } = await usersApi.changePassword(model);

@@ -2,13 +2,14 @@ import { Button, ButtonAddUser, ChatList, ChatListItem, MessageInput, PopupAdd, 
 import { Block } from '../../core/index.ts'
 import { getModel, logFields } from '../../utils/LogFormFields/LogFormFields.ts'
 import { me } from '../../services/Auth.service.ts'
-import { createChat, loadChats } from '../../services/Chats.service.ts'
+import { createChat, getToken, loadChats } from '../../services/Chats.service.ts'
 import img from '../../assets/images/chatMessage.jpg'
 import { connect } from '../../utils/connect.ts'
 import { Routes } from '../../main.ts'
 import Store, { IState } from '../../core/Store.ts'
 import Router from '../../core/Router.ts'
 import { ChatsResponse, CreateChat, UserResponse } from '../../types/types.ts'
+import { connectChat } from '../../services/Message.service.ts'
 
 const router = Router
 
@@ -17,13 +18,12 @@ type ChatListPageProps = {
 	currentUser: UserResponse;
 	activeChat: ChatsResponse;
 	showPopup: boolean;
+	token?: string;
 }
 
 class ChatListPage extends Block<ChatListPageProps> {
 
 	init() {
-		console.log('init chatListPage', Store);
-		
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
 			if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
@@ -121,8 +121,13 @@ class ChatListPage extends Block<ChatListPageProps> {
 				chats: this.mapChatsToComponents(newProps.chats) || [],
 				showEmpty: newProps.chats.length === 0
 			})
+			return true
 		}
-		return true
+		if(oldProps.activeChat !== newProps.activeChat) {
+			getToken(newProps.activeChat?.id)
+			return true
+		}
+		return false
 	}
 
 	mapChatsToComponents(chats: ChatsResponse[]) {
@@ -132,8 +137,6 @@ class ChatListPage extends Block<ChatListPageProps> {
 
 
 	render(): string {
-		console.log('rerender chatlistpage');
-		
 		return `
         <main class="page chatListPage">
             <div class="chatListPage__sideBar">
@@ -199,6 +202,6 @@ class ChatListPage extends Block<ChatListPageProps> {
 	}
 }
 
-const mapStateToProps: (state: IState) => IState = ({ chats, currentUser, activeChat }) => ({ chats, currentUser, activeChat })
+const mapStateToProps: (state: IState) => IState = ({ chats, currentUser, activeChat, token }) => ({ chats, currentUser, activeChat, token })
 
 export default connect(mapStateToProps)(ChatListPage)
