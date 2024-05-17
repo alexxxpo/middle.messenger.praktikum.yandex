@@ -239,15 +239,14 @@ export const getActiveChatUsers = async (id: number) => {
 	}
 }
 
-export const getToken = async (id: number) => {
+export const getToken = async (chatId: number) => {
 	try {
-		const data = await chatsApi.getToken(id)
+		const data = await chatsApi.getToken(chatId)
 		const { response, status } = data
 		switch (status) {
 			case 200:
 				store.set({ token: JSON.parse(response) })
 				store.set({ getTokenError: null })
-				await loadChats()
 				break;
 			case 401:
 				store.set({ token: undefined })

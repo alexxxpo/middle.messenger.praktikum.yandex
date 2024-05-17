@@ -1,5 +1,6 @@
 import { Block } from '../../core/index.ts'
-import { getActiveChatUsers, setActiveChat } from '../../services/Chats.service.ts'
+import { getActiveChatUsers, getToken, setActiveChat } from '../../services/Chats.service.ts'
+import { connectChat } from '../../services/Message.service.ts'
 import { ChatsResponse } from '../../types/types.ts'
 import { MapStateToProps, connect } from '../../utils/connect.ts'
 
@@ -15,6 +16,7 @@ class ChatListItem extends Block {
 				click: [() => {
 					setActiveChat({ ...props })
 					getActiveChatUsers(props.id)
+					getToken(props.id)
 				}]
 			}
 		})
@@ -23,11 +25,16 @@ class ChatListItem extends Block {
 	componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
 		if (oldProps.activeChat !== newProps.activeChat) {
 			if (newProps.activeChat.id === this.props.id) {
-				this.setProps({active: 'active'})
+				this.setProps({ active: 'active' })
 			} else {
-				this.setProps({active: ''})
+				this.setProps({ active: '' })
 			}
 			return true
+		}
+		if (oldProps.token !== newProps.token && newProps.token !== undefined && newProps.activeChat.id === this.props.id) {
+			console.log('props', newProps);
+			
+			connectChat(this.props.currentUser.id, this.props.id, newProps.token.token)
 		}
 		return false
 	}
@@ -36,7 +43,7 @@ class ChatListItem extends Block {
 
 	render(): string {
 		console.log('render chatlist item');
-		
+
 		return `
         <div class="chatListItem" {{active}}>
             <div class="chatListItem__wrapper">
@@ -65,6 +72,6 @@ class ChatListItem extends Block {
 	}
 }
 
-const mapStateToProps: MapStateToProps = ({ currentUser, activeChat }) => ({ currentUser, activeChat })
+const mapStateToProps: MapStateToProps = ({ currentUser, activeChat, token }) => ({ currentUser, activeChat, token })
 
 export default connect(mapStateToProps)(ChatListItem)
