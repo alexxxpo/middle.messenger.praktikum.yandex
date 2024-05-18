@@ -7,7 +7,7 @@
         height: 100vh;
         flex: 0 0 auto;
         background: #fbfbfb;
-        border-right: 1px solid #eaeaea;    
+        border-right: 1px solid #eaeaea;
     }
 
     &_addChatButton {
@@ -16,8 +16,9 @@
         bottom: 20px;
     }
 
-    &__profileButton{
+    &__profileButton {
         padding-right: 10px;
+
         .profileButton {
             color: #999;
             text-align: right;
@@ -26,9 +27,10 @@
     }
 
     &__search {
-        
+
         max-width: 310px;
     }
+
     &__messageArea {
         padding: 0 20px;
         width: 100%;
@@ -44,7 +46,7 @@
         }
     }
 
-    
+
     .messagesList {
         list-style: none;
         height: 100%;
@@ -52,11 +54,30 @@
         flex-flow: column nowrap;
         gap: 10px;
         flex: 1;
-        
+
+
+
+
         &__container {
             width: 100%;
             display: flex;
             flex-flow: row nowrap;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            scrollbar-color: transparent transparent;
+
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            &::-webkit-scrollbar-track {
+                display: none;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                display: none;
+            }
         }
 
         &__item {
@@ -83,7 +104,7 @@
             border-radius: 5px 5px 0 5px;
 
         }
-        
+
     }
 
     &__chatInfo {

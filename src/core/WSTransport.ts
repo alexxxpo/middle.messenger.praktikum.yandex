@@ -1,3 +1,4 @@
+import { ChatMessageType, OldMessageType } from "../types/types"
 import EventBus from "./EventBus"
 
 enum WSTransportEvents {
@@ -39,7 +40,7 @@ export class WSTransport extends EventBus {
 			})
 		})
 	}
-	public send(data: string | number | object) {
+	public send(data: ChatMessageType) {
 		if(!this.socket) {
 			throw new Error('Socket is not connected')
 		}
@@ -48,6 +49,7 @@ export class WSTransport extends EventBus {
 
 	public close() {
 		this.socket?.close()
+		this.socket = undefined
 	}
 
 	private subscribe(socket: WebSocket) {
@@ -66,7 +68,7 @@ export class WSTransport extends EventBus {
 			this.emit(WSTransportEvents.Close)
 		})
 		socket.addEventListener('error', (e) => {
-			console.log('Ошибка', e.message)
+			console.log('Ошибка', e)
 			this.emit(WSTransportEvents.Error, e)
 		})
 		socket.addEventListener('message', (message) => {

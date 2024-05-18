@@ -247,7 +247,7 @@ export const getToken = async (chatId: number) => {
 			case 200:
 				store.set({ token: JSON.parse(response) })
 				store.set({ getTokenError: null })
-				break;
+				return JSON.parse(response)
 			case 401:
 				store.set({ token: undefined })
 				store.set({ getTokenError: JSON.parse(response) })

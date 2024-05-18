@@ -12,9 +12,7 @@ class ChatList extends Block {
 	}
 
 	componentDidUpdate(oldProps: { [x: string]: any }, newProps: { [x: string]: any }): boolean {
-		console.log('cdu chat list');
-
-		if(oldProps.chats !== newProps.chats) {
+		if (oldProps.chats !== newProps.chats) {
 			this.setProps({
 				chatListItems: newProps.chats?.map((chat) => new ChatListItem({ ...chat })) || []
 			})
@@ -28,8 +26,6 @@ class ChatList extends Block {
 	}
 
 	render(): string {
-		console.log('render chat list');
-		
 		return `
         {{#if isLoading}}
             <span>Загрузка списка чатов</span>

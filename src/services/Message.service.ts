@@ -1,18 +1,68 @@
-import MessageApi from "../api/Message.api";
 import Store from "../core/Store";
+import { WSTransport } from "../core/WSTransport";
+import { ChatMessageType, OldMessageType } from "../types/types";
+import { getToken } from "./Chats.service";
 
 const store = Store
-const messageApi = new MessageApi()
 
-export const connectChat = async (uid: number, chatId: number, token: string) => {
-    
-    store.set({ isLoading: true });
-    try {
-        await messageApi.connect(uid, chatId, token)
-    } catch (error) {
-        console.error(error)
-        store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
-    } finally {
-        store.set({ isLoading: false });
-    }
+export class MessageService {
+	socket = new WSTransport('wss://ya-praktikum.tech/ws/chats')
+	connectChat = async (uid: number, chatId: number) => {
+		try {
+			//Получаем токен
+			const { token } = await getToken(chatId)
+			//Подключаемся к чату
+			await this.socket.connect(uid, chatId, token)
+
+			const { sockets } = store.getState()
+			sockets?.push({
+				chatId,
+				socket: this.socket
+			})
+			store.set({
+				sockets
+			})
+
+			this.socket.on('message', (data) => {
+				//Получаем сообщения текущего чата
+				const { messages = [] } = store.getState()
+
+				//Если массив, то обновляем список сообщений
+				if (Array.isArray(data)) store.set({ messages: messages.reverse().concat(data.reverse()) })
+
+				//Если не массив, то добавляем в список новое сообщение
+				if (!Array.isArray(data)) {
+					store.set({ messages: [...messages, {...data, chat_id: chatId}] })
+				}
+				console.log(store.getState());
+			})
+
+		} catch (error) {
+			console.error(error)
+		}
+	}
+
+	send = async (message: ChatMessageType | OldMessageType) => {
+		this.socket.send(message)
+	}
+
+	getOld = async (offset = 0) => {
+		this.send({
+			type: "get old",
+			content: offset.toString()
+		})
+	}
+
+	disconnectChat = () => {
+		try {
+			this.socket.close()
+		} catch (error) {
+			console.error(error)
+			store.set({ changeUserDataError: { reason: "Неизвестная ошибка" } })
+		}
+	}
+
+	clearMessageList() {
+		store.set({ messages: [] })
+	}
 }

@@ -1,4 +1,4 @@
-import { ChatUserResponse, ChatsResponse, UserResponse } from '../types/types.ts';
+import { ChatUserResponse, ChatsResponse, Message, SocketType, UserResponse } from '../types/types.ts';
 import EventBus from './EventBus';
 
 export enum StoreEvents {
@@ -19,6 +19,8 @@ export interface IState {
   activeChat?: ChatsResponse | null;
   activeChatUsers?: ChatUserResponse[];
   token?: string;
+  sockets?: SocketType[];
+  messages?: Message[],
 }
 
 export interface INextState {
@@ -30,6 +32,8 @@ export interface INextState {
   activeChat?: ChatsResponse | null;
   activeChatUsers?: ChatUserResponse[];
   token?: string;
+  sockets?: SocketType[];
+  messages?: Message[],
   loginError?: HttpErrorType | null;
   createUserError?: HttpErrorType | null;
   getUserError?: HttpErrorType | null;
@@ -50,6 +54,8 @@ const defaultState: IState = {
   usersSearch: [],
   activeChat: null,
   activeChatUsers: [],
+  sockets: [],
+  messages: [],
 }
 
 

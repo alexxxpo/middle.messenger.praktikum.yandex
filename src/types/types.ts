@@ -1,3 +1,5 @@
+import { WSTransport } from "../core/WSTransport"
+
 export type EventsType = Record<string, EventListenerOrEventListenerObject[]>
 
 export interface CommonBlockProps {
@@ -58,7 +60,7 @@ export type ChatUserResponse = {
 	login: string;
 	avatar: string;
 	role: string;
-  }
+}
 
 export type UsersRequest = {
 	users: number[];
@@ -99,5 +101,29 @@ export type UserUpdateRequest = {
 export type ChangePasswordRequest = {
 	oldPassword: string;
 	newPassword: string;
+}
+
+export type Token = {
+	token?: string;
+}
+
+export type ChatMessageType = {
+	content: string;
+	type: "message" | "get old";
+}
+
+export type SocketType = {
+	chatId: number,
+	socket: WSTransport
+}
+
+export type Message = {
+	id: number;
+	user_id: number;
+	chat_id: number;
+	type: string;
+	time: string;
+	content: string;
+	is_read: boolean;
+	file?: any;
   }
-  
