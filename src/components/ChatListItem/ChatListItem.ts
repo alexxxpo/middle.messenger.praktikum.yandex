@@ -9,6 +9,7 @@ type ChatListItemProps = {
 }
 
 class ChatListItem extends Block {
+	socket?: MessageService
 	constructor(props: ChatsResponse) {
 		super({
 			...props,
@@ -30,10 +31,10 @@ class ChatListItem extends Block {
 		if (oldProps.activeChat !== newProps.activeChat) {
 			if (newProps.activeChat.id === this.props.id) {
 				this.setProps({ active: 'active' })
-				this.socket.getOld()
+				this.socket?.getOld()
 			} else {
 				this.setProps({ active: '' })
-				this.socket.clearMessageList()
+				this.socket?.clearMessageList()
 			}
 			return true
 		}

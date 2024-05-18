@@ -1,6 +1,6 @@
 import Store from "../core/Store";
 import { WSTransport } from "../core/WSTransport";
-import { ChatMessageType, OldMessageType } from "../types/types";
+import { ChatMessageType, Message } from "../types/types";
 import { getToken } from "./Chats.service";
 
 const store = Store
@@ -23,7 +23,7 @@ export class MessageService {
 				sockets
 			})
 
-			this.socket.on('message', (data) => {
+			this.socket.on('message', (data: Message) => {
 				//Получаем сообщения текущего чата
 				const { messages = [] } = store.getState()
 
@@ -42,7 +42,7 @@ export class MessageService {
 		}
 	}
 
-	send = async (message: ChatMessageType | OldMessageType) => {
+	send = async (message: ChatMessageType) => {
 		this.socket.send(message)
 	}
 

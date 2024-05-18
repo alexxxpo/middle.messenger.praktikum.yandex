@@ -1,4 +1,4 @@
-import { ChatMessageType, OldMessageType } from "../types/types"
+import { ChatMessageType } from "../types/types"
 import EventBus from "./EventBus"
 
 enum WSTransportEvents {

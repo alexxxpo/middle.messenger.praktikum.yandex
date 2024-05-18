@@ -1,3 +1,4 @@
+import { Constructable } from "../types/types";
 import Block from "./Block";
 import Route from "./Route";
 
@@ -6,6 +7,7 @@ class Router {
     history: History = window.history;
     private _currentRoute: Route | null = null;
     private _rootQuery: string = '';
+    private static __instance: Router;
 
     constructor(rootQuery: string) {
         if (Router.__instance) {
@@ -20,7 +22,7 @@ class Router {
         Router.__instance = this;
     }
 
-    use(pathname: string, block: Block<Record<string, unknown>>) {
+    use(pathname: string, block: Constructable<Block<Record<string, unknown>>>) {
         const route = new Route(pathname, block, { rootQuery: this._rootQuery });
 
         this.routes.push(route);
@@ -48,7 +50,7 @@ class Router {
         }
 
         this._currentRoute = route;
-        route.render(route, pathname);
+        route.render();
     }
 
     go(pathname: string) {

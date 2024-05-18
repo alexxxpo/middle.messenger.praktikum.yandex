@@ -1,13 +1,17 @@
 import { Constructable } from "../types/types";
 import Block from "./Block";
 
+type RouteProps = {
+  rootQuery: string
+}
+
 export default class Route<T = Record<string, unknown>> {
   private _pathname: string
   private _blockClass: Constructable<Block<Record<string, unknown>>>
   private _block: Block<Record<string, unknown>> | null
-  private _props: T
+  private _props: T & RouteProps
 
-  constructor(pathname: string, view: Constructable<Block<Record<string, unknown>>>, props: T) {
+  constructor(pathname: string, view: Constructable<Block<Record<string, unknown>>>, props: T & RouteProps) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;
@@ -31,9 +35,9 @@ export default class Route<T = Record<string, unknown>> {
     return pathname === this._pathname;
   }
 
-  _renderDom(query, block) {
+  private _renderDom(query: string, block: Block) {
     const root = document.querySelector(query);
-    root.append(block.getContent());
+    root?.append(block.getContent() as Node);
   }
 
   render(): void {

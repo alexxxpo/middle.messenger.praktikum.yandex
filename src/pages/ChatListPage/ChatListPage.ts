@@ -49,7 +49,7 @@ class ChatListPage extends Block<ChatListPageProps> {
 			e.preventDefault()
 			const model = getModel(e)
 			const target = e.target as HTMLButtonElement
-			const input = target.form.children[0]
+			const input = target.form?.children[0] as HTMLInputElement
 			input.value = ''
 
 			const message: ChatMessageType = {
@@ -144,7 +144,7 @@ class ChatListPage extends Block<ChatListPageProps> {
 		if (oldProps.activeChat !== newProps.activeChat) {
 			return true
 		}
-		if (oldProps.messages.length !== newProps.messages.length) {
+		if (oldProps.messages?.length !== newProps.messages?.length) {
 
 			return true
 		}

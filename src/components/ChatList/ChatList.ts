@@ -14,7 +14,7 @@ class ChatList extends Block {
 	componentDidUpdate(oldProps: { [x: string]: any }, newProps: { [x: string]: any }): boolean {
 		if (oldProps.chats !== newProps.chats) {
 			this.setProps({
-				chatListItems: newProps.chats?.map((chat) => new ChatListItem({ ...chat })) || []
+				chatListItems: newProps.chats?.map((chat: ChatsResponse) => new ChatListItem({ ...chat })) || []
 			})
 			return true
 		}

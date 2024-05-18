@@ -108,8 +108,8 @@ export type Token = {
 }
 
 export type ChatMessageType = {
-	content: string;
-	type: "message" | "get old";
+	content?: string;
+	type: "message" | "get old" | 'ping';
 }
 
 export type SocketType = {

@@ -4,7 +4,7 @@ import Store from "../core/Store";
 import { Block } from "../core";
 import { Constructable } from "../types/types";
 
-export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
+export function connect(mapStateToProps: (state: IState) => IState, dispatch?: Record<string, any>) {
   return function (Component: Constructable<Block>) {
     return class extends Component {
       private onChangeStoreCallback: () => void;
@@ -15,9 +15,9 @@ export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
 
         super({ ...props, ...state });
 
-        const dispatchHandler = {};
+        const dispatchHandler: Record<string, any> = {};
         Object.entries(dispatch || {}).forEach(([key, handler]) => {
-          dispatchHandler[key] = (...args) => handler(Store.set.bind(Store), ...args)
+          dispatchHandler[key] = (...args: any[]) => handler(Store.set.bind(Store), ...args)
         })
 
         this.setProps({ ...dispatchHandler });
@@ -41,10 +41,10 @@ export function connect(mapStateToProps: (state: IState) => IState, dispatch?) {
       }
 
 
-      componentWillUnmount() {
-        super.componentWillUnmount();
-        Store.off(StoreEvents.Updated, this.onChangeStoreCallback);
-      }
+      // componentWillUnmount() {
+      //   super.componentWillUnmount();
+      //   Store.off(StoreEvents.Updated, this.onChangeStoreCallback);
+      // }
     }
   }
 }
