@@ -30,11 +30,14 @@ class Router {
         return this;
     }
 
-    start() {
-        window.onpopstate = ((event: PopStateEvent) => {
+    start = () => {
+        const listener = ((event: PopStateEvent) => {
+            console.log('popstate');            
             const target = event.currentTarget as Window
             this._onRoute(target.location.pathname);
-        }).bind(this);
+        }).bind(this)
+        
+        window.addEventListener('popstate', listener);
 
         this._onRoute(window.location.pathname);
     }
@@ -68,6 +71,8 @@ class Router {
 
     getRoute(pathname: string) {
         const route = this.routes.find(route => route.match(pathname));
+        console.log('getRoute', route);
+        
         if (!route) {
             return this.routes.find(route => route.match('*'))
         }

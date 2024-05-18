@@ -4,12 +4,12 @@ import * as Components from './components/index.ts'
 import * as Pages from './pages/index.ts'
 import Router from './core/Router.ts'
 
-export enum Routes {
-    Login = '/',
-    Registration = '/sign-up',
-    Profile = '/settings',
-    Chats = '/messenger',
-    Error = '*'
+export const Routes = {
+    Login: '/',
+    Registration: '/sign-up',
+    Profile: '/settings',
+    Chats: '/messenger',
+    Error: '*'
 }
 
 
