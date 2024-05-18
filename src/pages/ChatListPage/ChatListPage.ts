@@ -23,8 +23,6 @@ type ChatListPageProps = {
 class ChatListPage extends Block<ChatListPageProps> {
 
 	init() {
-		console.log('init chatListPage');
-
 		const getUserInfo = async () => {
 			if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
 			if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
@@ -145,7 +143,7 @@ class ChatListPage extends Block<ChatListPageProps> {
 			return true
 		}
 		if (oldProps.messages?.length !== newProps.messages?.length) {
-
+			this.getElement()?.querySelector('#last')?.scrollIntoView()
 			return true
 		}
 		return false
@@ -153,18 +151,17 @@ class ChatListPage extends Block<ChatListPageProps> {
 
 
 	render(): string {
-		console.log('render chatlist page');
-
 		const messages = this.props.messages?.map(message => {
 			return `<li class="messagesList__item text ${message.user_id === this.props.currentUser.id ? 'self' : ''} " >
 						<div class="message" >
-							<p class="message_text " > ${message.content} ${message.time} </p>
+							<p class="message_text " > ${message.content}</p>
 						</div>
 					</li>`
 		}).join('')
 
 		return `
-        <main class="page chatListPage">
+        <div class="page chatListPage">
+
             <div class="chatListPage__sideBar">
                 <div class="chatListPage__profileButton">
 					${this.props.currentUser?.display_name ? this.props.currentUser?.display_name : this.props.currentUser?.login}
@@ -180,6 +177,7 @@ class ChatListPage extends Block<ChatListPageProps> {
                     {{{addChatButton}}}
                 </div>
             </div>
+
             <div class="chatListPage__messageArea">
                     ${!this.props.activeChat ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
 				:
@@ -187,15 +185,18 @@ class ChatListPage extends Block<ChatListPageProps> {
                     <div class="chatListPage__chatInfo">
                       {{{topPanel}}}
                     </div>
-					<div class="messagesList__container">
-						<ul class="messagesList">
-							<li class="messagesList__item date">
-								<div class="date">19 июня</div>
-							</li>
-							${messages}
-						</ul>
+
+					<div class="messageArea__container">
+
+						<div class="messagesList__container">
+							<ul class="messagesList">								
+								${messages}
+								<li id="last"></li>
+							</ul>
+						</div>
+
 						{{{usersList}}}
-						</ul>
+
 					</div>
                     <form class="chatListPage__sendForm">
                         {{{messageInput}}}
@@ -204,7 +205,7 @@ class ChatListPage extends Block<ChatListPageProps> {
                     `}
             </div>
 			${this.props.showPopup === true ? `{{{popupAddChat}}}` : ``}
-        </main>
+        </div>
         `
 	}
 }

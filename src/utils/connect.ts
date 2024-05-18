@@ -16,6 +16,7 @@ export function connect(mapStateToProps: (state: IState) => IState, dispatch?: R
         super({ ...props, ...state });
 
         const dispatchHandler: Record<string, any> = {};
+
         Object.entries(dispatch || {}).forEach(([key, handler]) => {
           dispatchHandler[key] = (...args: any[]) => handler(Store.set.bind(Store), ...args)
         })

@@ -13,7 +13,7 @@ export class WSTransport extends EventBus {
 
 	private socket?: WebSocket
 	private pingInterval?: ReturnType<typeof setInterval>
-	private readonly pingIntervalTime = 30000
+	private readonly pingIntervalTime = 1000*60*2
 	private url: string
 
 	constructor(url: string) {
@@ -33,7 +33,7 @@ export class WSTransport extends EventBus {
 
 
 		return new Promise((resolve, reject) => {
-			this.on(WSTransportEvents.Error, reject);
+			this.on(WSTransportEvents.Error, reject)
 			this.on(WSTransportEvents.Connected, () => {
 				this.off(WSTransportEvents.Error, reject)
 				resolve()
@@ -41,7 +41,7 @@ export class WSTransport extends EventBus {
 		})
 	}
 	public send(data: ChatMessageType) {
-		if(!this.socket) {
+		if (!this.socket) {
 			throw new Error('Socket is not connected')
 		}
 		this.socket.send(JSON.stringify(data))
@@ -60,11 +60,11 @@ export class WSTransport extends EventBus {
 		socket.addEventListener('close', (event) => {
 			if (event.wasClean) {
 				console.log('Соединение закрыто чисто');
-			  } else {
+			} else {
 				console.log('Обрыв соединения');
-			  }
-			
-			  console.log(`Код: ${event.code} | Причина: ${event.reason}`);
+			}
+
+			console.log(`Код: ${event.code} | Причина: ${event.reason}`);
 			this.emit(WSTransportEvents.Close)
 		})
 		socket.addEventListener('error', (e) => {
@@ -74,13 +74,13 @@ export class WSTransport extends EventBus {
 		socket.addEventListener('message', (message) => {
 			try {
 				const data = JSON.parse(message.data)
-				console.log('Получены данные', data);
-				if(['pong', 'user connected'].includes(data?.type)) {
+				// console.log('Получены данные', data);
+				if (['pong', 'user connected'].includes(data?.type)) {
 					return
 				}
 				this.emit(WSTransportEvents.Message, data)
-			} catch(e) {
-				console.error(e);				
+			} catch (e) {
+				console.error(e);
 			}
 		})
 	}

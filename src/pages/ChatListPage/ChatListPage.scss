@@ -34,7 +34,7 @@
     &__messageArea {
         padding: 0 20px;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -46,37 +46,43 @@
         }
     }
 
+    .messageArea__container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-flow: row nowrap;
+        overflow: hidden;
+    }
+
 
     .messagesList {
         list-style: none;
-        height: 100%;
         display: flex;
         flex-flow: column nowrap;
         gap: 10px;
-        flex: 1;
-
-
-
 
         &__container {
-            width: 100%;
-            display: flex;
-            flex-flow: row nowrap;
+            flex: 1;
+            max-height: 100%;
             overflow-y: scroll;
-            scrollbar-width: none;
-            scrollbar-color: transparent transparent;
+            scrollbar-width: 6px;
+            scrollbar-color: #efefef #ccc;
 
 
             &::-webkit-scrollbar {
-                display: none;
+                width: 6px;
+                background: #efefef;
             }
 
             &::-webkit-scrollbar-track {
-                display: none;
+                width: 6px;
+                background: #efefef;
             }
 
             &::-webkit-scrollbar-thumb {
-                display: none;
+                width: 6px;
+                background: #ccc;
+                border-radius: 3px;
             }
         }
 

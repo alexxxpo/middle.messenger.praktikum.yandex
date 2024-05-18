@@ -34,7 +34,6 @@ export class MessageService {
 				if (!Array.isArray(data)) {
 					store.set({ messages: [...messages, {...data, chat_id: chatId}] })
 				}
-				console.log(store.getState());
 			})
 
 		} catch (error) {

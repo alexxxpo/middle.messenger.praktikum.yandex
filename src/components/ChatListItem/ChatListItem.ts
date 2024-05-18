@@ -23,18 +23,19 @@ class ChatListItem extends Block {
 	}
 
 	init() {
-		this.socket = new MessageService
-		this.socket.connectChat(this.props.currentUser.id, this.props.id)		
+		this.setProps({socket: new MessageService()})
+		this.props.socket.connectChat(this.props.currentUser.id, this.props.id)		
 	}
 
 	componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
+		
 		if (oldProps.activeChat !== newProps.activeChat) {
 			if (newProps.activeChat.id === this.props.id) {
 				this.setProps({ active: 'active' })
-				this.socket?.getOld()
+				this.props.socket?.getOld()
 			} else {
 				this.setProps({ active: '' })
-				this.socket?.clearMessageList()
+				this.props.socket?.clearMessageList()
 			}
 			return true
 		}
@@ -44,8 +45,6 @@ class ChatListItem extends Block {
 	active: boolean = false
 
 	render(): string {
-		console.log('render chatlist item');
-
 		return `
         <div class="chatListItem" {{active}}>
             <div class="chatListItem__wrapper">

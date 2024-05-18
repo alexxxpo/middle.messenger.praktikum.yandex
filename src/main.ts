@@ -12,12 +12,12 @@ export enum Routes {
     Error = '*'
 }
 
+
 Object.entries(Components).forEach(([name, comp]) => { Handlebars.registerPartial(name, comp.toString()) })
 
 const router = Router
 
-router
-    .use(Routes.Login, Pages.Login)
+router.use(Routes.Login, Pages.Login)
     .use(Routes.Registration, Pages.Registration)
     .use(Routes.Profile, Pages.Profile)
     .use(Routes.Chats, Pages.ChatListPage)

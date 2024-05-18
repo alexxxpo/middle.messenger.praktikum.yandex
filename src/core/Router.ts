@@ -24,7 +24,7 @@ class Router {
 
     use(pathname: string, block: Constructable<Block<Record<string, unknown>>>) {
         const route = new Route(pathname, block, { rootQuery: this._rootQuery });
-
+        
         this.routes.push(route);
 
         return this;

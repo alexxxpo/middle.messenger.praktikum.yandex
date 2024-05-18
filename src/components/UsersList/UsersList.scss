@@ -1,21 +1,6 @@
 .usersList {
     list-style: none;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    scrollbar-color: transparent transparent;
-
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    &::-webkit-scrollbar-track {
-        display: none;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        display: none;
-    }
+    
 
 
     li {
@@ -30,6 +15,26 @@
         width: 310px;
         background: #fff;
         border-left: 1px solid #efefef;
+        overflow-y: scroll;
+    scrollbar-width: 6px;
+    scrollbar-color: #efefef #ccc;
+
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        background: #efefef;
+    }
+
+    &::-webkit-scrollbar-track {
+        width: 6px;
+        background: #efefef;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        width: 6px;
+        background: #ccc;
+        border-radius: 3px;
+    }
 
         h4 {
             margin-bottom: 20px;
