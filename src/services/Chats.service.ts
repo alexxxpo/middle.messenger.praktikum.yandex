@@ -13,18 +13,19 @@ export const loadChats = async () => {
 	try {
 		const data = await chatsApi.getChats();
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
-				store.set({ chats: JSON.parse(response) })
+				store.set({ chats: responseParse })
 				store.set({ getChatsError: null })
 				break;
 			case 401:
-				store.set({ getChatsError: JSON.parse(response) })
+				store.set({ getChatsError: responseParse })
 				store.set({ chats: [] })
 				router.go(Routes.Login)
 				break;
 			case 500:
-				store.set({ getChatsError: JSON.parse(response) })
+				store.set({ getChatsError: responseParse })
 				store.set({ chats: [] })
 				break;
 			default:
@@ -46,6 +47,7 @@ export const createChat = async (title: CreateChat) => {
 	try {
 		const data = await chatsApi.createChat(title);
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
 				loadChats()
@@ -53,15 +55,15 @@ export const createChat = async (title: CreateChat) => {
 				break;
 			case 400:
 				loadChats()
-				store.set({ createChatsError: JSON.parse(response) })
+				store.set({ createChatsError: responseParse })
 				break;
 			case 401:
-				store.set({ createChatsError: "Пользователь не авторизован" })
+				store.set({ createChatsError: responseParse })
 				store.set({ chats: [] })
 				router.go(Routes.Login)
 				break;
 			case 500:
-				store.set({ createChatsError: "Ошибка на сервере" })
+				store.set({ createChatsError: responseParse })
 				store.set({ chats: [] })
 				router.go(Routes.Error)
 				break;
@@ -84,20 +86,21 @@ export const addUserToChat = async (userData: UsersRequest) => {
 	try {
 		const data = await chatsApi.addUserToChat(userData);
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
 				store.set({ addUserToChatError: null })
 				break;
 			case 400:
 				loadChats()
-				store.set({ addUserToChatError: JSON.parse(response) })
+				store.set({ addUserToChatError: responseParse })
 				break;
 			case 401:
-				store.set({ addUserToChatError: "Пользователь не авторизован" })
+				store.set({ addUserToChatError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 500:
-				store.set({ addUserToChatsError: "Ошибка на сервере" })
+				store.set({ addUserToChatsError: responseParse })
 				router.go(Routes.Error)
 				break;
 			default:
@@ -119,20 +122,21 @@ export const deleteUserFromChat = async (userData: UsersRequest) => {
 	try {
 		const data = await chatsApi.deleteUserFromChat(userData);
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
 				store.set({ deleteUserFromChatError: null })
 				break;
 			case 400:
 				loadChats()
-				store.set({ deleteUserFromChatError: JSON.parse(response) })
+				store.set({ deleteUserFromChatError: responseParse })
 				break;
 			case 401:
-				store.set({ deleteUserFromChatError: "Пользователь не авторизован" })
+				store.set({ deleteUserFromChatError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 500:
-				store.set({ deleteUserFromChatError: "Ошибка на сервере" })
+				store.set({ deleteUserFromChatError: responseParse })
 				router.go(Routes.Error)
 				break;
 			default:
@@ -158,6 +162,7 @@ export const deleteChat = async (model: CreateChatResponse) => {
 	try {
 		const data = await chatsApi.deleteChat(model);
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
 				store.set({ deleteChatError: null })
@@ -166,18 +171,18 @@ export const deleteChat = async (model: CreateChatResponse) => {
 				break;
 			case 400:
 				loadChats()
-				store.set({ deleteChatError: JSON.parse(response) })
+				store.set({ deleteChatError: responseParse })
 				break;
 			case 401:
-				store.set({ deleteChatError: JSON.parse(response) })
+				store.set({ deleteChatError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 403:
-				store.set({ deleteChatError: JSON.parse(response) })
+				store.set({ deleteChatError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 500:
-				store.set({ deleteChatError: JSON.parse(response) })
+				store.set({ deleteChatError: responseParse })
 				router.go(Routes.Error)
 				break;
 			default:
@@ -198,28 +203,29 @@ export const getActiveChatUsers = async (id: number) => {
 	try {
 		const data = await chatsApi.getActiveChatUsers(id);
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
-				store.set({ activeChatUsers: JSON.parse(response) })
+				store.set({ activeChatUsers: responseParse })
 				store.set({ getActiveChatUsersError: null })
 				break;
 			case 400:
 				store.set({ activeChatUsers: [] })
-				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				store.set({ getActiveChatUsersError: responseParse })
 				break;
 			case 401:
 				store.set({ activeChatUsers: [] })
-				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				store.set({ getActiveChatUsersError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 404:
 				store.set({ activeChatUsers: [] })
-				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				store.set({ getActiveChatUsersError: responseParse })
 				router.go(Routes.Error)
 				break;
 			case 500:
 				store.set({ activeChatUsers: [] })
-				store.set({ getActiveChatUsersError: JSON.parse(response) })
+				store.set({ getActiveChatUsersError: responseParse })
 				router.go(Routes.Error)
 				break;
 			default:
@@ -239,19 +245,20 @@ export const getToken = async (chatId: number) => {
 	try {
 		const data = await chatsApi.getToken(chatId)
 		const { response, status } = data
+		const responseParse = JSON.parse(response)
 		switch (status) {
 			case 200:
-				store.set({ token: JSON.parse(response) })
+				store.set({ token: responseParse })
 				store.set({ getTokenError: null })
 				return JSON.parse(response)
 			case 401:
 				store.set({ token: undefined })
-				store.set({ getTokenError: JSON.parse(response) })
+				store.set({ getTokenError: responseParse })
 				router.go(Routes.Login)
 				break;
 			case 500:
 				store.set({ token: undefined })
-				store.set({ getTokenError: JSON.parse(response) })
+				store.set({ getTokenError: responseParse })
 				router.go(Routes.Error)
 				break;
 			default:

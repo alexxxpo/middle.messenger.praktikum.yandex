@@ -12,20 +12,21 @@ export const changeUserData = async (model: UserUpdateRequest) => {
     store.set({ isLoading: true });
     try {
         const { response, status } = await usersApi.changeUserData(model);
+        const responseParse = JSON.parse(response)
         switch (status) {
             case 200:
-                store.set({ currentUser: JSON.parse(response) })
+                store.set({ currentUser: responseParse })
                 break;
             case 400:
-                store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ changeUserDataError: responseParse })
                 break;
             case 401:
-                store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ changeUserDataError: responseParse })
                 store.set({ currentUser: null })
                 router.go(Routes.Login)
                 break;
             case 500:
-                store.set({ changeUserDataError: JSON.parse(response) })
+                store.set({ changeUserDataError: responseParse })
                 store.set({ currentUser: null })
                 router.go(Routes.Error)
                 break;
@@ -47,20 +48,21 @@ export const changePassword = async (model: ChangePasswordRequest) => {
     store.set({ isLoading: true });
     try {
         const { response, status } = await usersApi.changePassword(model);
+        const responseParse = JSON.parse(response)
         switch (status) {
             case 200:
                 store.set({ changePasswordError: null })
                 break;
             case 400:
-                store.set({ changePasswordError: JSON.parse(response) })
+                store.set({ changePasswordError: responseParse })
                 break;
             case 401:
-                store.set({ changePasswordError: JSON.parse(response) })
+                store.set({ changePasswordError: responseParse })
                 store.set({ currentUser: null })
                 router.go(Routes.Login)
                 break;
             case 500:
-                store.set({ changePasswordError: JSON.parse(response) })
+                store.set({ changePasswordError: responseParse })
                 store.set({ currentUser: null })
                 router.go(Routes.Error)
                 break;
@@ -83,20 +85,21 @@ export const searchUsersByLogin = async (userData: FindUserRequest) => {
     try {
         const data = await usersApi.searchUsersByLogin(userData);
         const { response, status } = data
+        const responseParse = JSON.parse(response)
         switch (status) {
             case 200:
-                store.set({ usersSearch: JSON.parse(response) })
+                store.set({ usersSearch: responseParse })
                 break;
             case 400:
-                store.set({ usersSearchError: JSON.parse(response) })
+                store.set({ usersSearchError: responseParse })
                 break;
             case 401:
-                store.set({ usersSearchError: "Пользователь не авторизован" })
+                store.set({ usersSearchError: responseParse })
                 store.set({ usersSearch: [] })
                 router.go(Routes.Login)
                 break;
             case 500:
-                store.set({ usersSearchError: "Ошибка на сервере" })
+                store.set({ usersSearchError: responseParse })
                 store.set({ usersSearch: [] })
                 router.go(Routes.Error)
                 break;
@@ -121,20 +124,21 @@ export const changeAvatar = async (userData: HTMLFormElement) => {
     try {
         const data = await usersApi.changeAvatar(userData);
         const { response, status } = data
+        const responseParse = JSON.parse(response)
         switch (status) {
             case 200:
-                store.set({ currentUser: JSON.parse(response) })
-                store.set({ changeAvatarError: JSON.parse(response) })
+                store.set({ currentUser: responseParse })
+                store.set({ changeAvatarError: null })
                 break;
             case 400:
-                store.set({ usersSearchError: JSON.parse(response) })
+                store.set({ changeAvatarError: responseParse })
                 break;
             case 401:
-                store.set({ changeAvatarError: JSON.parse(response) })
+                store.set({ changeAvatarError: responseParse })
                 router.go(Routes.Login)
                 break;
             case 500:
-                store.set({ changeAvatarError: JSON.parse(response) })
+                store.set({ changeAvatarError: responseParse })
                 router.go(Routes.Error)
                 break;
             default:

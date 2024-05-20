@@ -1,7 +1,11 @@
+import { BASE_URL } from "../const/const";
 import HTTPTransport from "../core/HTTPTransport";
 import { ChangePasswordRequest, FindUserRequest, UserUpdateRequest } from "../types/types";
 
-const usersApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/user');
+const usersApi = new HTTPTransport({
+    baseUrl: BASE_URL,
+    url: '/user'
+});
 
 export default class UsersApi {
 	async changeUserData(data: UserUpdateRequest) {

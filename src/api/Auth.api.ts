@@ -1,7 +1,11 @@
+import { BASE_URL } from "../const/const.ts";
 import HTTPTransport from "../core/HTTPTransport.ts";
 import { CreateUser, Login } from "../types/types.ts";
 
-const authApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/auth');
+const authApi = new HTTPTransport({
+    baseUrl: BASE_URL,
+    url: '/auth'
+})
 
 export default class AuthApi {
     async create(data: CreateUser) {

@@ -13,10 +13,10 @@ export class WSTransport extends EventBus {
 
 	private socket?: WebSocket
 	private pingInterval?: ReturnType<typeof setInterval>
-	private readonly pingIntervalTime = 1000*60*2
+	private readonly pingIntervalTime = 1000 * 60 * 2
 	private url: string
 
-	constructor(url: string) {
+	constructor(url: string = 'wss://ya-praktikum.tech/ws/chats') {
 		super()
 		this.url = url
 	}
@@ -44,7 +44,7 @@ export class WSTransport extends EventBus {
 		if (!this.socket) {
 			throw new Error('Socket is not connected')
 		}
-		this.socket.send(JSON.stringify(data))
+		if (data.content?.length) this.socket.send(JSON.stringify(data))
 	}
 
 	public close() {

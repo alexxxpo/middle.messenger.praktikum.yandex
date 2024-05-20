@@ -22,7 +22,7 @@ class UsersSearchList extends Block {
   }
 
   render(): string {
-    const list: string = this.props.usersSearch.map((item: UserResponse) => `<li>${item.login}</li>`).join('')
+    const list: string = this.props.usersSearch.length ? this.props.usersSearch.map((item: UserResponse) => `<li>${item.login}</li>`).join('') : '<li>Пользователи не найдены</li>'
 
     if(this.props.isLoading) return `
     <div class="usersSearchList__container">

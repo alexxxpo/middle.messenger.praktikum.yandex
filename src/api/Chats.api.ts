@@ -1,7 +1,11 @@
+import { BASE_URL } from "../const/const";
 import HTTPTransport from "../core/HTTPTransport";
 import { UsersRequest, CreateChat, CreateChatResponse } from "../types/types";
 
-const chatsApi = new HTTPTransport('https://ya-praktikum.tech/api/v2/chats');
+const chatsApi = new HTTPTransport({
+    baseUrl: BASE_URL,
+    url: '/chats'
+});
 
 export default class ChatsApi {
     async getChats() {

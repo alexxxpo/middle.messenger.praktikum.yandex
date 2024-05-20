@@ -23,14 +23,19 @@ type OptionsGeneral = {
 }
 
 type OptionsType = Omit<OptionsGeneral, 'method'>
+type ConstructorOptionsType = {
+    baseUrl?: string;
+    url?: string;
+}
+
 
 type HTTPMethod = (url: string, options: OptionsType) => Promise<XMLHttpRequest>
 
 export default class HTTPTransport {
     private _baseUrl: string
 
-    constructor(baseUrl: string = '') {
-        this._baseUrl = baseUrl
+    constructor({ baseUrl = 'https://ya-praktikum.tech/api/v2', url = '' }: ConstructorOptionsType) {
+        this._baseUrl = baseUrl.concat(url)
     }
 
     get: HTTPMethod = (url, options) => {
@@ -54,7 +59,7 @@ export default class HTTPTransport {
         return this.request(this._baseUrl + url, { ...options, method: METHOD.PATCH });
     }
 
-    request = (url: string, options: OptionsGeneral): Promise<XMLHttpRequest>  => {
+    request = (url: string, options: OptionsGeneral): Promise<XMLHttpRequest> => {
         const { method, data, headers = {}, timeout = 5000, withCredentials = false } = options;
 
         return new Promise<XMLHttpRequest>((resolve, reject) => {
