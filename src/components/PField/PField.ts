@@ -1,5 +1,5 @@
 import { Block } from '../../core/index.ts'
-import { type EventsType } from '../../types/index.ts'
+import { type EventsType } from '../../types/types.ts'
 import ErrorLine from '../Input/ErrorLine.ts'
 import PFieldInput from './PFieldInput.ts'
 
@@ -16,12 +16,7 @@ export interface PFieldProps {
   errorText?: string
 }
 
-interface PFieldType extends PFieldProps {
-  Input: PFieldInput
-  errorLine: ErrorLine
-}
-
-export default class PField extends Block<PFieldType> {
+export default class PField extends Block<PFieldProps> {
   constructor(props: PFieldProps) {
     super({
       ...props,
@@ -36,6 +31,22 @@ export default class PField extends Block<PFieldType> {
       errorLine: new ErrorLine({
         errorText: props.errorText || ''
       })
+    })
+  }
+
+  init() {
+    this.children.Input.setProps({
+      events: {
+        ...this.props.events,
+        change: [
+          (e: Event) => {
+            const target = e.target as HTMLInputElement
+            this.setProps({
+              value: target.value
+            })
+          }
+        ]
+      }
     })
   }
 
@@ -58,6 +69,10 @@ export default class PField extends Block<PFieldType> {
       this.children.errorLine.setProps({
         errorText: this.props.errorText
       })
+    }
+
+    if(newProps.value !== oldProps.value) {
+      this.children.Input.setProps({value: newProps.value})
     }
     return true
   }

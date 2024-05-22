@@ -1,0 +1,47 @@
+.usersList {
+    list-style: none;
+    
+
+
+    li {
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #efefef;
+        color: var(--text-color);
+    }
+
+    &__container {
+        padding: 15px;
+        width: 310px;
+        background: #fff;
+        border-left: 1px solid #efefef;
+        overflow-y: scroll;
+    scrollbar-width: 6px;
+    scrollbar-color: #ccc;
+
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        background: #efefef;
+    }
+
+    &::-webkit-scrollbar-track {
+        width: 6px;
+        background: #efefef;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        width: 6px;
+        background: #ccc;
+        border-radius: 3px;
+    }
+
+        h4 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #efefef;
+            text-align: center;
+            font-size: 18px;
+        }
+    }
+}

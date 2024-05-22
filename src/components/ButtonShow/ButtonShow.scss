@@ -1,0 +1,19 @@
+.buttonShow {
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: column nowrap;
+    gap: 3px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    cursor: pointer;
+
+    .buttonShow__dot {
+        width: 3px;
+        height: 3px;
+        background: #3369f3;
+        border-radius: 50%;
+    }
+}

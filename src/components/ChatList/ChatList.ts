@@ -1,35 +1,49 @@
-import {Block} from '../../core/index.ts'
-import { ChatListItem } from '../ChatListItem/index.ts'
-import { type ChatListItemProps } from '../ChatListItem/ChatListItem.ts'
+import { Block } from '../../core/index.ts'
+import { ChatsResponse } from '../../types/types.ts'
+import { MapStateToProps, connect } from '../../utils/connect.ts'
+import ChatListItem from '../ChatListItem/ChatListItem.ts'
 
-export interface ChatListProps extends ChatListItemProps {
-  chatItems: ChatListItemProps[]
+
+class ChatList extends Block {
+	constructor(props: Record<string, unknown>) {
+		super({
+			...props
+		})
+	}
+
+	componentDidUpdate(oldProps: { [x: string]: any }, newProps: { [x: string]: any }): boolean {
+		if (oldProps.chats !== newProps.chats) {
+			this.setProps({
+				chatListItems: newProps.chats?.map((chat: ChatsResponse) => new ChatListItem({ ...chat })) || []
+			})
+			return true
+		}
+		return false
+	}
+
+	mapChatsToComponents(chats: ChatsResponse[]) {
+		return chats?.map((chat) => new ChatListItem({ ...chat }))
+	}
+
+	render(): string {
+		return `
+        {{#if isLoading}}
+            <span>Загрузка списка чатов</span>
+        {{else}}
+            {{#if showEmpty}}
+                <span>Нет чатов</span>
+            {{else}}
+                <div class="chatList">
+                    <ul>
+                        {{{chatListItems}}}
+                    </ul>
+                </div>
+            {{/if}}
+        {{/if}}
+    `
+	}
 }
 
-interface ChatListType extends ChatListProps {
-  chatListItemsKeys: string[]
-}
+const mapStateToProps: MapStateToProps = ({ chats }) => ({ chats })
 
-export default class ChatList extends Block<ChatListType> {
-  constructor (props: ChatListProps) {
-    const chatList = props.chatItems.reduce((list: Record<string, ChatListItem> = {}, chatData) => {
-      const component: ChatListItem = new ChatListItem(chatData)
-      list[component._id] = component
-      return list
-    }, {})
-
-    super({
-      ...props,
-      chatListItemsKeys: Object.keys(chatList),
-      ...chatList
-    })
-  }
-
-  render (): string {
-    return `
-            <div class="chatList">
-                ${Array.isArray(this.props.chatListItemsKeys) ? this.props.chatListItemsKeys.map((key) => `{{{ ${key} }}}`).join(' ') : ''}
-            </div>
-        `
-  }
-}
+export default connect(mapStateToProps)(ChatList)

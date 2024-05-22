@@ -5,7 +5,7 @@ type ListenersType = Record<string, CBT[]>
 export default class EventBus {
   listeners: ListenersType = {}
 
-  on (event: string, callback: () => void): void {
+  on (event: string, callback: (data?: any) => void): void {
     if (!Array.isArray(this.listeners[event])) {
       this.listeners[event] = []
     }

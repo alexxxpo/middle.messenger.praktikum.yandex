@@ -1,7 +1,6 @@
-import { type Input } from '../../components'
-import type Block from '../../core/Block'
+import type Block from '../../core/Block.ts'
 
-export function InputValidation (this: Block<Record<string, unknown>>, event: Event, input: Input, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
+export function InputValidation (this: Block, event: Event, input: Block, errorText: string = 'Некорректное значение', ...conditions: RegExp[]): void {
   const el = event.target as HTMLInputElement
   const inputValue = el.value
   let valid = validate(inputValue, ...conditions)

@@ -6,10 +6,16 @@
     width: 130px;
     height: 130px;
     border-radius: 50%;
-    background: #efefef url('../../assets/images/Union.png');
     background-position: center;
     background-repeat: no-repeat;
     margin: 0 auto;
+    overflow: hidden;
+    
+    
+    img {
+        display: block;
+        width: 100%;
+    }
 }
 
 .pImage_hovered {
@@ -33,4 +39,6 @@
     line-height: 14px;
     font-weight: 500;
     cursor: pointer;
+
+    
 }

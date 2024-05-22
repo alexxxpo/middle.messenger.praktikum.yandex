@@ -1,13 +1,12 @@
-import {EventBus} from './index.ts'
+import { EventBus } from './index.ts'
 import { nanoid } from 'nanoid'
 import Handlebars from 'handlebars'
-import { BackButton, ChatList, ChatListItem, ErrorComp, PField, PImage, Popup, Search, type Button, type Input, ErrorLine } from '../components/index.ts'
-import { EventsType } from '../types/index.ts'
+import { EventsType } from '../types/types.ts'
 
-type PropsType = Record<string, string | string[] | number | boolean | ((...args: unknown[]) => unknown) | unknown | EventsType>
-type ChildrenType = Record<string, Button | Input | ErrorLine | Popup | BackButton | ChatList | ChatListItem | ErrorComp | PField | PImage | Search>
+type PropsType = Record<string, any>
+type ChildrenType = Record<string, Block>
 
-export default class Block<T extends Record<string, any> > {
+export default class Block<P extends PropsType = PropsType, C extends ChildrenType = ChildrenType> {
   static EVENTS = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -15,8 +14,8 @@ export default class Block<T extends Record<string, any> > {
     FLOW_RENDER: 'flow:render'
   }
 
-  children: ChildrenType
-  props: PropsType
+  children: C
+  props: P
   eventBus: () => EventBus
   private _element: HTMLElement | null = null
   _id: string = nanoid(6)
@@ -28,67 +27,64 @@ export default class Block<T extends Record<string, any> > {
      * @returns {void}
      */
 
-  constructor (propsWithChildren: T) {
+  constructor(propsWithChildren: P | C) {
     const eventBus = new EventBus()
 
     const { props, children } = this._getChildrenAndProps(propsWithChildren)
 
-    // const makePropsProxy = this._makePropsProxy.bind(this)
+    this.props = this._makePropsProxy({ ...props }) as P
 
-    this.props = this._makePropsProxy({ ...props })
-
-    this.children = children
+    this.children = children as C
 
     this.eventBus = () => eventBus
 
     this._registerEvents(eventBus)
 
+    this._id = nanoid(6)
+
     eventBus.emit(Block.EVENTS.INIT)
   }
 
-  private _makePropsProxy (props: PropsType): PropsType {
+  private _makePropsProxy(props: PropsType): PropsType {
     const self = this
 
     return new Proxy(props, {
-      get (target, prop) {
+      get(target, prop) {
         const value = target[prop as string]
         return typeof value === 'function' ? value.bind(target) : value
       },
-      set (target, prop, value) {
+      set(target, prop, value) {
         const oldTarget = { ...target }
         target[prop as string] = value
-
-        // Запускаем обновление компоненты
-        // Плохой cloneDeep, в следующей итерации нужно заставлять добавлять cloneDeep им самим
 
         self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target)
         return true
       },
-      deleteProperty () {
+      deleteProperty() {
         throw new Error('Нет доступа')
       }
     })
   }
 
-  private _registerEvents (eventBus: EventBus): void {
+  private _registerEvents(eventBus: EventBus): void {
     eventBus.on(Block.EVENTS.INIT, this._init.bind(this))
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this))
     eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this))
   }
 
-  private _init (): void {
+  private _init(): void {
     this.init()
 
     this.eventBus().emit(Block.EVENTS.FLOW_RENDER)
   }
 
-  init (): void {
+  init(): void {
 
   }
 
-  private _render (): void {
-    const propsAndStubs = { ...this.props }
+  private _render(): void {
+    const propsAndStubs = { ...this.props } as Record<string, unknown>
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndStubs[key] = `<div data-id="${child._id}"></div>`
@@ -96,17 +92,31 @@ export default class Block<T extends Record<string, any> > {
 
     const fragment = this._createDocumentElement('template') as HTMLTemplateElement
 
+    const childrenProps: Block[] = [];
+
+    Object.entries(propsAndStubs).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        propsAndStubs[key] = value.map((item: Block) => {
+          if (item) {
+            childrenProps.push(item)
+            return `<div data-id="${item._id}"></div>`
+          }
+          return item;
+        }).join('')
+      }
+    });
+
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs)
     const newElement: HTMLElement | null = fragment.content.firstElementChild as HTMLElement
 
-    Object.values(this.children).forEach(child => {
-      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`) as HTMLElement
+    [...Object.values(this.children), ...childrenProps].forEach(child => {
+      const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
+      stub?.replaceWith(child.getContent() || '');
+    });
 
-      stub?.replaceWith(child.getContent() as Node)
-    })
-
-    if (this._element !== null && newElement !== null) {
-      this._element.replaceWith(newElement)
+    if (this._element) {
+      newElement.style.display = this._element.style.display
+      this._element.replaceWith(newElement);
     }
 
     this._element = newElement
@@ -114,17 +124,18 @@ export default class Block<T extends Record<string, any> > {
     this._addEvents()
   }
 
-  render (): string {
+
+  render(): string {
     return ''
   }
 
-  private _createDocumentElement (tagName: string): HTMLElement {
+  private _createDocumentElement(tagName: string): HTMLElement {
     // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
     return document.createElement(tagName)
   }
 
-  private _addEvents (): void {
-    const { events } = this.props as Record<string,EventsType>
+  private _addEvents(): void {
+    const { events } = this.props as Record<string, EventsType>
     if (events !== null && events !== undefined) {
       Object.keys(events).forEach(eventName => {
         if (Array.isArray(events[eventName])) events[eventName].forEach((event: EventListenerOrEventListenerObject) => this._element?.addEventListener(eventName, event))
@@ -133,7 +144,7 @@ export default class Block<T extends Record<string, any> > {
   }
 
   private _removeEvents(): void {
-    const { events } = this.props as Record<string,EventsType>
+    const { events } = this.props as Record<string, EventsType>
     if (events !== null && events !== undefined) {
       Object.keys(events).forEach(eventName => {
         if (Array.isArray(events[eventName])) events[eventName].forEach((event: EventListenerOrEventListenerObject) => this._element?.removeEventListener(eventName, event))
@@ -141,7 +152,7 @@ export default class Block<T extends Record<string, any> > {
     }
   }
 
-  private _componentDidMount (): void {
+  private _componentDidMount(): void {
     this.componentDidMount()
 
     // console.log('CDM')
@@ -151,13 +162,13 @@ export default class Block<T extends Record<string, any> > {
     })
   }
 
-  componentDidMount (oldProps: PropsType = {}): void { oldProps }
+  componentDidMount(oldProps: PropsType = {}): void { oldProps }
 
-  dispatchComponentDidMount (): void {
+  dispatchComponentDidMount(): void {
     this.eventBus().emit(Block.EVENTS.FLOW_CDM)
   }
 
-  _componentDidUpdate (oldProps = {}, newProps = {}): void {
+  _componentDidUpdate(oldProps: PropsType = {}, newProps: PropsType = {}): void {
     // console.log('CDU')
     this._removeEvents()
     const response = this.componentDidUpdate(oldProps, newProps)
@@ -167,15 +178,15 @@ export default class Block<T extends Record<string, any> > {
     this._render()
   }
 
-  componentDidUpdate (oldProps: PropsType, newProps: PropsType): boolean {
+  componentDidUpdate(oldProps: PropsType, newProps: PropsType): boolean {
     oldProps
     newProps
     return true
   }
 
-  _getChildrenAndProps (propsAndChildren: T): { children: ChildrenType, props: PropsType } {
-    const children: ChildrenType = {}
-    const props: PropsType = {}
+  private _getChildrenAndProps(propsAndChildren: C | P): {children: Record<string, Block>, props: Record<string, unknown>} {
+    const children: Record<string, Block> = {}
+    const props: Record<string, unknown> = {}
 
     Object.entries(propsAndChildren).forEach(([key, value]) => {
       if (value instanceof Block) {
@@ -196,20 +207,29 @@ export default class Block<T extends Record<string, any> > {
     Object.assign(this.props, nextProps)
   }
 
-  get element (): HTMLElement | null {
+  getElement(): HTMLElement | null {
     return this._element
   }
 
-  getContent (): HTMLElement | null {
-    return this.element
+  getContent(): HTMLElement | null {
+    if (this._element?.parentNode?.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+      setTimeout(() => {
+        if (
+          this._element?.parentNode?.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+        ) {
+          this.dispatchComponentDidMount();
+        }
+      }, 100);
+    }
+    return this._element
   }
 
-  show (): void {
+  show(): void {
     const element = this.getContent()
-    if (element !== null) element.style.display = 'block'
+    if (element !== null) element.removeAttribute('style')
   }
 
-  hide (): void {
+  hide(): void {
     const element = this.getContent()
     if (element !== null) element.style.display = 'none'
   }
