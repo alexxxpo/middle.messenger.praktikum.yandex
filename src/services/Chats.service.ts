@@ -250,7 +250,7 @@ export const getToken = async (chatId: number) => {
 			case 200:
 				store.set({ token: responseParse })
 				store.set({ getTokenError: null })
-				return JSON.parse(response)
+				return responseParse
 			case 401:
 				store.set({ token: undefined })
 				store.set({ getTokenError: responseParse })
@@ -268,6 +268,33 @@ export const getToken = async (chatId: number) => {
 
 	} catch (e) {
 		store.set({ getTokenError: { reason: "Неизвестная ошибка" } })
+		console.error(e);
+	}
+}
+
+export const changeChatImage = async (chatData: HTMLFormElement, chatId: number | undefined) => {
+	try {
+		const data = await chatsApi.changeChatImage(chatData, chatId)
+		const { response, status } = data
+		const responseParse = JSON.parse(response)
+		switch (status) {
+			case 200:
+				return responseParse
+			case 401:
+				store.set({ changeChatImageError: responseParse })
+				router.go(Routes.Login)
+				break;
+			case 500:
+				store.set({ changeChatImageError: responseParse })
+				router.go(Routes.Error)
+				break;
+			default:
+				store.set({ changeChatImageError: { reason: "Неизвестная ошибка" } })
+				break;
+		}
+
+	} catch (e) {
+		store.set({ changeChatImageError: { reason: "Неизвестная ошибка" } })
 		console.error(e);
 	}
 }

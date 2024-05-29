@@ -27,7 +27,7 @@ class TopPanel extends Block {
                     <div class="topPanel__avatar_container">
                         <img 
                             class="topPanel__avatar" 
-                            src="{{avatar}} ${this.props.activeChat?.avatar || ''} " 
+                            src=" ${'https://ya-praktikum.tech/api/v2/resources/' + this.props.activeChat?.avatar || ''} " 
                         />
                     </div>
 

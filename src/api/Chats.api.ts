@@ -66,5 +66,14 @@ export default class ChatsApi {
             withCredentials: true
         })
     }
+
+    async changeChatImage(form: HTMLFormElement, chatId: number | undefined) {
+        const data = new FormData(form)
+        if(chatId !== undefined) data.append('chatId', chatId.toString())
+        return await chatsApi.put('/avatar', {
+            withCredentials: true,
+            data
+        })
+    }
 }
 

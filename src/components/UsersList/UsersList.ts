@@ -11,8 +11,9 @@ class UsersList extends Block {
   }
 
   render(): string {
+    
     const list: string = this.props.activeChatUsers?.map((item: UserResponse) => `<li>${item.display_name ? item.display_name : item.login}</li>`).join('')
-
+    
     if(!list) return `<div></div>`
 
     return `

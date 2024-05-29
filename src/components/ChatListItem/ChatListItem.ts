@@ -3,9 +3,11 @@ import { getActiveChatUsers, setActiveChat } from '../../services/Chats.service.
 import { MessageService } from '../../services/Message.service.ts'
 import { ChatsResponse } from '../../types/types.ts'
 import { MapStateToProps, connect } from '../../utils/connect.ts'
+import img from '../../assets/images/Union.png'
 
 type ChatListItemProps = {
 	activeChat: ChatsResponse
+	active: string
 }
 
 class ChatListItem extends Block {
@@ -33,7 +35,7 @@ class ChatListItem extends Block {
 			if (newProps.activeChat.id === this.props.id) {
 				this.setProps({ active: 'active' })
 				this.props.socket?.getOld()
-			} else {
+			} else if (newProps.activeChat.id !== this.props.id && oldProps.active === 'active') {
 				this.setProps({ active: '' })
 				this.props.socket?.clearMessageList()
 			}
@@ -49,7 +51,7 @@ class ChatListItem extends Block {
         <div class="chatListItem" {{active}}>
             <div class="chatListItem__wrapper">
                 <div class="chatListItem__img">
-                    <img src="${this.props.avatar}" alt="avatar"/>
+                    <img src="${this.props.avatar ? 'https://ya-praktikum.tech/api/v2/resources/' + this.props.avatar : img}" alt="avatar"/>
                 </div>
                 <div class="chatListItem__body">
                     <div class="chatListItem__info">

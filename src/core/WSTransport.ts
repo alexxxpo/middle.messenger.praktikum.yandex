@@ -13,7 +13,7 @@ export class WSTransport extends EventBus {
 
 	private socket?: WebSocket
 	private pingInterval?: ReturnType<typeof setInterval>
-	private readonly pingIntervalTime = 1000 * 60 * 2
+	private readonly pingIntervalTime = 30000
 	private url: string
 
 	constructor(url: string = 'wss://ya-praktikum.tech/ws/chats') {
