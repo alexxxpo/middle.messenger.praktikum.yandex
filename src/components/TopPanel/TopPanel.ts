@@ -2,6 +2,7 @@ import { Block } from "../../core";
 import { ChatsResponse } from "../../types/types";
 import { MapStateToProps, connect } from "../../utils/connect";
 import { ChatControl } from "../ChatControl";
+import img from '../../assets/images/Union.png';
 
 type TopPanelProps = {
 	activeChat: ChatsResponse
@@ -27,7 +28,7 @@ class TopPanel extends Block {
                     <div class="topPanel__avatar_container">
                         <img 
                             class="topPanel__avatar" 
-                            src=" ${'https://ya-praktikum.tech/api/v2/resources/' + this.props.activeChat?.avatar || ''} " 
+                            src=" ${this.props.activeChat?.avatar ? 'https://ya-praktikum.tech/api/v2/resources/' + this.props.activeChat?.avatar : img} " 
                         />
                     </div>
 
