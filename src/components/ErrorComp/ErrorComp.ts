@@ -28,6 +28,7 @@ export default class ErrorComp extends Block<ErrorCompType> {
     })
     
   }
+  
 
   render(): string {
     return `
