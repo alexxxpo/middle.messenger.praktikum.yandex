@@ -1,4 +1,6 @@
+import Router from '../../core/Router.ts'
 import { Block } from '../../core/index.ts'
+import { Routes } from '../../main.ts'
 import { Button } from '../Button/index.ts'
 
 export interface ErrorPropsType {
@@ -16,9 +18,15 @@ export default class ErrorComp extends Block<ErrorCompType> {
       ...props,
       button: new Button({
         type: 'link',
-        label: 'Назад к чатам'
+        label: 'Назад к чатам',
+        events: {
+          click: [
+            () => Router.go(Routes.Login)
+          ]
+        }
       })
     })
+    
   }
 
   render(): string {

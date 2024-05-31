@@ -7,10 +7,14 @@ interface ErrorPageType {
 	errorComp: ErrorComp
 }
 
-class ErrorPage extends Block<ErrorPageType> {
+class ErrorPage500 extends Block<ErrorPageType> {
 	constructor(props: ErrorPropsType) {
 		super({
-			errorComp: new ErrorComp(props)
+			errorComp: new ErrorComp({
+				...props,
+				errNo: '500',
+				message: 'Уже фиксим...'
+			})
 		})
 	}
 
@@ -27,4 +31,4 @@ class ErrorPage extends Block<ErrorPageType> {
 
 const mapStateToProps: MapStateToProps = ({ }) => ({})
 
-export default connect(mapStateToProps)(ErrorPage)
+export default connect(mapStateToProps)(ErrorPage500)

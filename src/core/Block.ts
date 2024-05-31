@@ -107,7 +107,7 @@ export default class Block<P extends PropsType = PropsType, C extends ChildrenTy
     });
 
     fragment.innerHTML = Handlebars.compile(this.render())(propsAndStubs)
-    const newElement: HTMLElement | null = fragment.content.firstElementChild as HTMLElement
+    const newElement: HTMLElement = fragment.content.firstElementChild as HTMLElement
 
     [...Object.values(this.children), ...childrenProps].forEach(child => {
       const stub = fragment.content.querySelector(`[data-id="${child._id}"]`);
@@ -124,6 +124,7 @@ export default class Block<P extends PropsType = PropsType, C extends ChildrenTy
     this._addEvents()
   }
 
+  
 
   render(): string {
     return ''

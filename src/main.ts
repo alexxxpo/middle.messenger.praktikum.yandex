@@ -9,7 +9,8 @@ export const Routes = {
     Registration: '/sign-up',
     Profile: '/settings',
     Chats: '/messenger',
-    Error: '*'
+    Error500: '500',
+    Error: '*',
 }
 
 
@@ -21,5 +22,6 @@ router.use(Routes.Login, Pages.Login)
     .use(Routes.Registration, Pages.Registration)
     .use(Routes.Profile, Pages.Profile)
     .use(Routes.Chats, Pages.ChatListPage)
-    .use(Routes.Error, Pages.ErrorPage)
+    .use(Routes.Error500, Pages.ErrorPage500)
+    .use(Routes.Error, Pages.ErrorPage404)
     .start()
