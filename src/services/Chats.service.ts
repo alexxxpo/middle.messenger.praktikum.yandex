@@ -179,7 +179,6 @@ export const deleteChat = async (model: CreateChatResponse) => {
 				break;
 			case 403:
 				store.set({ deleteChatError: responseParse })
-				router.go(Routes.Login)
 				break;
 			case 500:
 				store.set({ deleteChatError: responseParse })
