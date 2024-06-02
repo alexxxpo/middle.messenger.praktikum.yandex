@@ -1,46 +1,44 @@
-import { IState, StoreEvents } from "../core/Store";
-import isEqual from './isEqual';
-import Store from "../core/Store";
-import { Block } from "../core";
-import { Constructable } from "../types/types";
+import Store, { type IState, StoreEvents } from '../core/Store'
+import isEqual from './isEqual'
 
-export function connect(mapStateToProps: (state: IState) => IState, dispatch?: Record<string, any>) {
+import { type Block } from '../core'
+import { type Constructable } from '../types/types'
+
+export function connect (mapStateToProps: (state: IState) => IState, dispatch?: Record<string, any>) {
   return function (Component: Constructable<Block>) {
     return class extends Component {
-      private onChangeStoreCallback: () => void;
-      constructor(props: Record<string, unknown>) {
-        const store = Store;
+      private readonly onChangeStoreCallback: () => void
+      constructor (props: Record<string, unknown>) {
+        const store = Store
         // сохраняем начальное состояние
-        let state = mapStateToProps(store.getState());
+        let state = mapStateToProps(store.getState())
 
-        super({ ...props, ...state });
+        super({ ...props, ...state })
 
-        const dispatchHandler: Record<string, any> = {};
+        const dispatchHandler: Record<string, any> = {}
 
-        Object.entries(dispatch || {}).forEach(([key, handler]) => {
+        Object.entries(dispatch ?? {}).forEach(([key, handler]) => {
           dispatchHandler[key] = (...args: any[]) => handler(Store.set.bind(Store), ...args)
         })
 
-        this.setProps({ ...dispatchHandler });
+        this.setProps({ ...dispatchHandler })
 
         this.onChangeStoreCallback = () => {
-
           // при обновлении получаем новое состояние
-          const newState = mapStateToProps(store.getState());
+          const newState = mapStateToProps(store.getState())
 
           // если что-то из используемых данных поменялось, обновляем компонент
           if (!isEqual(state, newState)) {
-            this.setProps({ ...newState });
+            this.setProps({ ...newState })
           }
 
           // не забываем сохранить новое состояние
-          state = newState;
+          state = newState
         }
 
         // подписываемся на событие
-        store.on(StoreEvents.Updated, this.onChangeStoreCallback);
+        store.on(StoreEvents.Updated, this.onChangeStoreCallback)
       }
-
 
       // componentWillUnmount() {
       //   super.componentWillUnmount();

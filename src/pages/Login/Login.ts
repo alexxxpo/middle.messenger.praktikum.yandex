@@ -1,95 +1,95 @@
-import { Button, Input } from "../../components/index.ts";
-import Router from "../../core/Router.ts";
-import { Block } from "../../core/index.ts";
-import { getModel } from "../../utils/LogFormFields/index.ts";
-import { InputValidation, conditions } from "../../utils/validations/index.ts";
-import { login, me, logout } from "../../services/Auth.service.ts";
-import { MapStateToProps, connect } from "../../utils/connect.ts";
-import { Routes } from "../../main.ts";
-import { Login } from "../../types/types.ts";
+import { Button, Input } from '../../components/index.ts'
+import Router from '../../core/Router.ts'
+import { Block } from '../../core/index.ts'
+import { getModel } from '../../utils/LogFormFields/index.ts'
+import { InputValidation, conditions } from '../../utils/validations/index.ts'
+import { login, me, logout } from '../../services/Auth.service.ts'
+import { type MapStateToProps, connect } from '../../utils/connect.ts'
+import { Routes } from '../../main.ts'
+import { type Login } from '../../types/types.ts'
 
-const router = Router;
+const router = Router
 
 class LoginPage extends Block {
-  constructor(props = {}) {
+  constructor (props = {}) {
     super({
-      ...props,
-    });
+      ...props
+    })
   }
 
-  init(): void {
-    console.log("init loginPage");
+  init () {
+    console.log('init loginPage')
 
     const getUserInfo = async () => {
-      if (this.props.currentUser === null) await me(); // Если нет данных о пользователе, то делаем запрос
-      if (this.props.currentUser !== null) router.go(Routes.Chats); // Если данные есть, то переходим в чаты
-    };
-    getUserInfo();
+      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      if (this.props.currentUser !== null) router.go(Routes.Chats) // Если данные есть, то переходим в чаты
+    }
+    getUserInfo()
 
     // Handlers
-    const onChangeInput = InputValidation.bind(this);
+    const onChangeInput = InputValidation.bind(this)
     const toRegPage = () => {
-      router.go("/sign-up");
-    };
+      router.go('/sign-up')
+    }
 
     // Children init
     const inputLogin = new Input({
-      label: "Введите логин",
-      name: "login",
+      label: 'Введите логин',
+      name: 'login',
       events: {
         blur: [
           (e) => {
             onChangeInput(
               e,
               this.children.inputLogin,
-              "Некорректное значение",
+              'Некорректное значение',
               ...conditions.login
-            );
-          },
-        ],
-      },
-    });
+            )
+          }
+        ]
+      }
+    })
 
     const inputPass = new Input({
-      label: "Введите пароль",
-      name: "password",
+      label: 'Введите пароль',
+      name: 'password',
       events: {
         blur: [
           (e) => {
             onChangeInput(
               e,
               this.children.inputPass,
-              "Некорректное значение",
+              'Некорректное значение',
               ...conditions.password
-            );
-          },
-        ],
-      },
-    });
+            )
+          }
+        ]
+      }
+    })
 
     const buttonLogin = new Button({
-      label: "Авторизироваться",
-      type: "primary",
+      label: 'Авторизироваться',
+      type: 'primary',
       events: {
-        click: [(e) => login(getModel(e) as Login)],
-      },
-    });
+        click: [async (e) => { await login(getModel(e) as Login) }]
+      }
+    })
 
     const buttonReg = new Button({
-      label: "Нет аккаунта?",
-      type: "link",
+      label: 'Нет аккаунта?',
+      type: 'link',
       events: {
-        click: [toRegPage],
-      },
-    });
+        click: [toRegPage]
+      }
+    })
 
     const buttonOut = new Button({
-      label: "Выйти",
-      type: "link",
+      label: 'Выйти',
+      type: 'link',
       events: {
-        click: [logout],
-      },
-    });
+        click: [logout]
+      }
+    })
 
     this.children = {
       ...this.children,
@@ -97,27 +97,27 @@ class LoginPage extends Block {
       inputPass,
       buttonLogin,
       buttonReg,
-      buttonOut,
-    };
+      buttonOut
+    }
   }
 
-  componentDidUpdate(
-    oldProps: { [x: string]: any },
-    newProps: { [x: string]: any }
+  componentDidUpdate (
+    oldProps: Record<string, any>,
+    newProps: Record<string, any>
   ): boolean {
-    console.log(oldProps, newProps);
-    
+    console.log(oldProps, newProps)
+
     if (
       oldProps.currentUser !== newProps.currentUser &&
       newProps.currentUser !== null
     ) {
-      router.go(Routes.Chats);
-      return true;
+      router.go(Routes.Chats)
+      return true
     }
-    return true;
+    return true
   }
 
-  render(): string {
+  render (): string {
     return `{{#if isLoading}}
                 <h2>Загрузка данных</h2>
             {{else}}
@@ -141,13 +141,13 @@ class LoginPage extends Block {
                     </div>
                 </div>
             {{/if}}
-        `;
+        `
   }
 }
 
 const mapStateToProps: MapStateToProps = ({ isLoading, currentUser }) => ({
   isLoading,
-  currentUser,
-});
+  currentUser
+})
 
-export default connect(mapStateToProps)(LoginPage);
+export default connect(mapStateToProps)(LoginPage)

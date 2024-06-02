@@ -1,16 +1,14 @@
-import { conditions, validate } from "../validations/index.ts"
+import { conditions, validate } from '../validations/index.ts'
 
-type Fields = {
-  name: string;
-  value: string;
+interface Fields {
+  name: string
+  value: string
   valid: boolean
 }
 
-type Model = {
-  [x: string]: string
-}
+type Model = Record<string, string>
 
-export function serializeForm(formNode: HTMLFormElement): Fields[] {
+export function serializeForm (formNode: HTMLFormElement): Fields[] {
   if (formNode === null) return []
   const elements = Array.from(formNode.elements) as HTMLInputElement[]
   const data = Array.from(elements)
@@ -21,50 +19,50 @@ export function serializeForm(formNode: HTMLFormElement): Fields[] {
       switch (name) {
         case 'login':
           valid = validate(value, ...conditions.login)
-          break;
+          break
         case 'password':
           valid = validate(value, ...conditions.password)
-          break;
+          break
         case 'email':
           valid = validate(value, ...conditions.email)
-          break;
+          break
         case 'first_name':
           valid = validate(value, ...conditions.names)
-          break;
+          break
         case 'second_name':
           valid = validate(value, ...conditions.names)
-          break;
+          break
         case 'display_name':
           valid = validate(value, ...conditions.names)
-          break;
+          break
         case 'phone':
           valid = validate(value, ...conditions.phone)
-          break;
+          break
         case 'message':
           valid = validate(value, /(.+)/)
-          break;
+          break
       }
       return { name, value, valid }
     })
   return data
 }
 
-export function logFields(e: Event): void {
+export function logFields (e: Event): void {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form
   if (form !== null) serializeForm(form)
 }
 
-export function getModel(e: Event): Record<string, string> {
+export function getModel (e: Event): Record<string, string> {
   e.preventDefault()
   const target = e.target as HTMLButtonElement
   const form = target.form
   let fields: Fields[] = []
   if (form !== null) fields = serializeForm(form)
-  const model = fields.reduce((acc, item) => {
+  const model = fields.reduce<Model>((acc, item) => {
     acc[item.name] = item.value
     return acc
-  }, {} as Model)
+  }, {})
   return model
 }

@@ -1,9 +1,9 @@
 import { Block } from '../../core/index.ts'
-import { MapStateToProps, connect } from '../../utils/connect.ts';
+import { type MapStateToProps, connect } from '../../utils/connect.ts'
 import { Button, Input, UsersSearchList } from '../index.ts'
 
 interface PopupType {
-  buttonChange?: Button;
+  buttonChange?: Button
 }
 
 export interface PopupProps {
@@ -18,15 +18,15 @@ export interface PopupProps {
 }
 
 class Popup extends Block<PopupType> {
-  constructor(props: PopupProps) {
-    const clickEvetListener = props.clickButton || (() => {})
-    const changeEvetListener = props.changeInput || (() => {})
+  constructor (props: PopupProps) {
+    const clickEvetListener = props.clickButton ?? (() => {})
+    const changeEvetListener = props.changeInput ?? (() => {})
     super({
       ...props,
       buttonChange: new Button({
         type: 'primary',
-        label: props.buttonLabel || 'Добавить',
-        events: { 
+        label: props.buttonLabel ?? 'Добавить',
+        events: {
           click: [clickEvetListener]
         }
       }),
@@ -34,7 +34,7 @@ class Popup extends Block<PopupType> {
         name: props.name,
         type: 'text',
         events: {
-          change: [changeEvetListener] || []
+          change: [changeEvetListener] ?? []
         }
       }),
       usersSearchList: new UsersSearchList({
@@ -43,8 +43,7 @@ class Popup extends Block<PopupType> {
     })
   }
 
-
-  render(): string {
+  render (): string {
     return `
         <div class="popup">
             <form class="popup__form">
@@ -63,6 +62,6 @@ class Popup extends Block<PopupType> {
   }
 }
 
-const mapStateToProps: MapStateToProps = ({isLoading}) => ({isLoading})
+const mapStateToProps: MapStateToProps = ({ isLoading }) => ({ isLoading })
 
 export default connect(mapStateToProps)(Popup)

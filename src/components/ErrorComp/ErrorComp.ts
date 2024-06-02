@@ -13,7 +13,7 @@ interface ErrorCompType extends ErrorPropsType {
 }
 
 export default class ErrorComp extends Block<ErrorCompType> {
-  constructor(props: ErrorPropsType) {
+  constructor (props: ErrorPropsType) {
     super({
       ...props,
       button: new Button({
@@ -21,16 +21,14 @@ export default class ErrorComp extends Block<ErrorCompType> {
         label: 'Назад к чатам',
         events: {
           click: [
-            () => Router.go(Routes.Login)
+            () => { Router.go(Routes.Login) }
           ]
         }
       })
     })
-    
   }
-  
 
-  render(): string {
+  render (): string {
     return `
         <div class="errorComp">
             <h1 class="errorComp__errNo">{{errNo}}</h1>

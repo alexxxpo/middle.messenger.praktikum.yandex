@@ -1,20 +1,20 @@
-import { Block } from "../../core";
-import { EventsType } from "../../types/types";
+import { Block } from '../../core'
+import { type EventsType } from '../../types/types'
 
-type ButtonDeleteUserProps = {
-    events?: EventsType;
-    title?: string;
+interface ButtonDeleteUserProps {
+  events?: EventsType
+  title?: string
 }
 
 class ButtonDeleteUser extends Block<ButtonDeleteUserProps> {
-    constructor(props: ButtonDeleteUserProps) {
-        super({
-            ...props
-        })
-    }
+  constructor (props: ButtonDeleteUserProps) {
+    super({
+      ...props
+    })
+  }
 
-    render(): string {
-        return `
+  render (): string {
+    return `
             <div class="buttonDeleteUser__container">
                 <div class="buttonDeleteUser {{className}}">
                     <span class="buttonDeleteUser__cross">
@@ -25,7 +25,7 @@ class ButtonDeleteUser extends Block<ButtonDeleteUserProps> {
                 {{title}}
             </div>
         `
-    }
+  }
 }
 
 export default ButtonDeleteUser

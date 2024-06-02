@@ -1,27 +1,28 @@
-import { Block } from "../../core";
-import { ChatsResponse } from "../../types/types";
-import { MapStateToProps, connect } from "../../utils/connect";
-import { ChatControl } from "../ChatControl";
-import img from '../../assets/images/Union.png';
+import { Block } from '../../core'
+import { type ChatsResponse } from '../../types/types'
+import { type MapStateToProps, connect } from '../../utils/connect'
+import { ChatControl } from '../ChatControl'
+import img from '../../assets/images/Union.png'
 
-type TopPanelProps = {
-	activeChat: ChatsResponse
+interface TopPanelProps {
+  activeChat: ChatsResponse
 }
 
 class TopPanel extends Block {
-	constructor(props: TopPanelProps) {
-		super({ ...props })
-	}
-	init() {
-		const chatControl = new ChatControl({})
-		this.children = {
-			...this.children,
-			chatControl
-		}
-	}
+  constructor (props: TopPanelProps) {
+    super({ ...props })
+  }
 
-	render(): string {
-		return `
+  init () {
+    const chatControl = new ChatControl({})
+    this.children = {
+      ...this.children,
+      chatControl
+    }
+  }
+
+  render (): string {
+    return `
             <div class="topPanel {{className}}">
                 <div class="topPanel__info">
 
@@ -41,7 +42,7 @@ class TopPanel extends Block {
                 {{{сhatsControlButtons}}}
             </div>
         `
-	}
+  }
 }
 
 const mapStateToProps: MapStateToProps = ({ isLoading, activeChat }) => ({ isLoading, activeChat })

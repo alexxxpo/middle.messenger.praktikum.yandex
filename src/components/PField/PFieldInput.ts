@@ -12,11 +12,11 @@ interface InputProps {
 }
 
 class PFieldInput extends Block<Record<string, unknown>> {
-  constructor(props: InputProps) {
+  constructor (props: InputProps) {
     super({ ...props })
   }
 
-  render(): string {
+  render (): string {
     return `
             <input
                 class="{{className}}"

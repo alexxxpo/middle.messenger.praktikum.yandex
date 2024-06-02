@@ -1,1 +1,4 @@
+#!/bin/bash
+npm run eslint
+npm run styleLint
 npm test

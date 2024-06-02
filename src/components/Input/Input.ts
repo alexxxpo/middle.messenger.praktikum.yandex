@@ -9,11 +9,11 @@ interface InputProps {
 }
 
 class Input extends Block<Record<string, unknown>> {
-  constructor(props: InputProps) {
+  constructor (props: InputProps) {
     super({ ...props })
   }
 
-  render(): string {
+  render (): string {
     return `
             <input
                 class="input__element"

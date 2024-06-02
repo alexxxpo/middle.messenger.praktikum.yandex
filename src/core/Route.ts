@@ -1,52 +1,52 @@
-import { Constructable } from "../types/types";
-import Block from "./Block";
+import { type Constructable } from '../types/types'
+import type Block from './Block'
 
-type RouteProps = {
+interface RouteProps {
   rootQuery: string
 }
 
 export default class Route<T = Record<string, unknown>> {
   private _pathname: string
-  private _blockClass: Constructable<Block<Record<string, unknown>>>
+  private readonly _blockClass: Constructable<Block<Record<string, unknown>>>
   private _block: Block<Record<string, unknown>> | null
-  private _props: T & RouteProps
+  private readonly _props: T & RouteProps
 
-  constructor(pathname: string, view: Constructable<Block<Record<string, unknown>>>, props: T & RouteProps) {
-    this._pathname = pathname;
-    this._blockClass = view;
-    this._block = null;
-    this._props = props;
+  constructor (pathname: string, view: Constructable<Block<Record<string, unknown>>>, props: T & RouteProps) {
+    this._pathname = pathname
+    this._blockClass = view
+    this._block = null
+    this._props = props
   }
 
-  navigate(pathname: string): void {
+  navigate (pathname: string): void {
     if (this.match(pathname)) {
-      this._pathname = pathname;
-      this.render();
+      this._pathname = pathname
+      this.render()
     }
   }
 
-  leave(): void {
+  leave (): void {
     if (this._block) {
-      this._block.hide();
+      this._block.hide()
     }
   }
 
-  match(pathname: string): boolean {
-    return pathname === this._pathname;
+  match (pathname: string): boolean {
+    return pathname === this._pathname
   }
 
-  private _renderDom(query: string, block: Block) {
-    const root = document.querySelector(query);
-    root?.append(block.getContent() as Node);
+  private _renderDom (query: string, block: Block) {
+    const root = document.querySelector(query)
+    root?.append(block.getContent() as Node)
   }
 
-  render(): void {
+  render (): void {
     if (!this._block) {
-      this._block = new this._blockClass({});
-      this._renderDom(this._props.rootQuery, this._block);
-      return;
+      this._block = new this._blockClass({})
+      this._renderDom(this._props.rootQuery, this._block)
+      return
     }
 
-    this._block.show();
+    this._block.show()
   }
 }

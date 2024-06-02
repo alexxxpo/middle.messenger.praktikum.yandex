@@ -6,131 +6,131 @@ import {
   PopupAdd,
   Search,
   TopPanel,
-  UsersList,
-} from "../../components/index.ts";
-import { Block } from "../../core/index.ts";
-import { getModel } from "../../utils/LogFormFields/LogFormFields.ts";
-import { me } from "../../services/Auth.service.ts";
-import { createChat, loadChats } from "../../services/Chats.service.ts";
-import { MapStateToProps, connect } from "../../utils/connect.ts";
-import { Routes } from "../../main.ts";
-import Router from "../../core/Router.ts";
+  UsersList
+} from '../../components/index.ts'
+import { Block } from '../../core/index.ts'
+import { getModel } from '../../utils/LogFormFields/LogFormFields.ts'
+import { me } from '../../services/Auth.service.ts'
+import { createChat, loadChats } from '../../services/Chats.service.ts'
+import { type MapStateToProps, connect } from '../../utils/connect.ts'
+import { Routes } from '../../main.ts'
+import Router from '../../core/Router.ts'
 import {
-  ChatMessageType,
-  ChatsResponse,
-  CreateChat,
-  Message,
-  SocketType,
-  UserResponse,
-} from "../../types/types.ts";
-import img from "../../assets/images/Union.png";
+  type ChatMessageType,
+  type ChatsResponse,
+  type CreateChat,
+  type Message,
+  type SocketType,
+  type UserResponse
+} from '../../types/types.ts'
+import img from '../../assets/images/Union.png'
 
-const router = Router;
+const router = Router
 
-type ChatListPageProps = {
-  chats: ChatsResponse[];
-  currentUser: UserResponse;
-  activeChat: ChatsResponse;
-  showPopup: boolean;
-  token?: string;
-  sockets?: SocketType[];
-  messages?: Message[];
-  activeChatUsers?: UserResponse[];
-};
+interface ChatListPageProps {
+  chats: ChatsResponse[]
+  currentUser: UserResponse
+  activeChat: ChatsResponse
+  showPopup: boolean
+  token?: string
+  sockets?: SocketType[]
+  messages?: Message[]
+  activeChatUsers?: UserResponse[]
+}
 
 class ChatListPage extends Block<ChatListPageProps> {
-  init() {
+  init () {
     const getUserInfo = async () => {
-      if (this.props.currentUser === null) await me(); // Если нет данных о пользователе, то делаем запрос
-      if (this.props.currentUser !== null) await loadChats(); // Если данные есть, то загружаем данные чатов
-    };
-    getUserInfo();
+      if (this.props.currentUser === null) await me() // Если нет данных о пользователе, то делаем запрос
+      if (this.props.currentUser !== null) await loadChats() // Если данные есть, то загружаем данные чатов
+    }
+    getUserInfo()
 
     // Handlers
     const addChat = (e: Event) => {
-      createChat(getModel(e) as CreateChat);
-      this.setProps({ showPopup: false });
-    };
+      createChat(getModel(e) as CreateChat)
+      this.setProps({ showPopup: false })
+    }
 
     const closePopup = (e: Event) => {
-      e.stopPropagation();
+      e.stopPropagation()
       if (e.target === this.children.popupAddChat.getElement()) {
-        this.setProps({ showPopup: false });
+        this.setProps({ showPopup: false })
       }
-    };
-    const closePopupBind = closePopup.bind(this);
+    }
+    const closePopupBind = closePopup.bind(this)
 
     const sendMessage = (e: Event) => {
-      e.preventDefault();
-      const model = getModel(e);
-      const target = e.target as HTMLButtonElement;
-      const input = target.form?.children[0] as HTMLInputElement;
-      input.value = "";
+      e.preventDefault()
+      const model = getModel(e)
+      const target = e.target as HTMLButtonElement
+      const input = target.form?.children[0] as HTMLInputElement
+      input.value = ''
 
       const message: ChatMessageType = {
-        type: "message",
-        content: model.message,
-      };
+        type: 'message',
+        content: model.message
+      }
 
       const socket = this.props.sockets?.filter(
         (s) => s.chatId === this.props.activeChat.id
-      )[0];
-      socket?.socket.send(message);
-    };
+      )[0]
+      socket?.socket.send(message)
+    }
 
     // Children
 
     const popupAddChat = new PopupAdd({
-      title: "Добавить чат",
+      title: 'Добавить чат',
       clickButton: addChat,
-      name: "title",
+      name: 'title',
       events: {
-        click: [closePopupBind],
-      },
-    });
+        click: [closePopupBind]
+      }
+    })
 
-    const chatList = new ChatList({});
+    const chatList = new ChatList({})
 
     const profileButton = new Button({
-      type: "link",
-      className: "profileButton",
-      label: "Профиль",
+      type: 'link',
+      className: 'profileButton',
+      label: 'Профиль',
       events: {
         click: [
           () => {
-            router.go(Routes.Profile);
-          },
-        ],
-      },
-    });
+            router.go(Routes.Profile)
+          }
+        ]
+      }
+    })
 
-    const search = new Search({});
+    const search = new Search({})
 
-    const topPanel = new TopPanel({ title: "Active chat" });
+    const topPanel = new TopPanel({ title: 'Active chat' })
 
     const messageInput = new MessageInput({
-      name: "message",
-      className: "chatListPage__messageInput",
-      type: "text",
-    });
+      name: 'message',
+      className: 'chatListPage__messageInput',
+      type: 'text'
+    })
 
     const sendButton = new Button({
-      type: "round",
-      label: "->",
+      type: 'round',
+      label: '->',
       events: {
-        click: [sendMessage],
-      },
-    });
+        click: [sendMessage]
+      }
+    })
 
     const addChatButton = new ButtonAddUser({
       events: {
-        click: [() => this.setProps({ showPopup: true })],
-      },
-    });
+        click: [() => { this.setProps({ showPopup: true }) }]
+      }
+    })
 
     const usersList = new UsersList({
-      className: "messagesList__usersList",
-    });
+      className: 'messagesList__usersList'
+    })
 
     this.children = {
       ...this.children,
@@ -142,44 +142,44 @@ class ChatListPage extends Block<ChatListPageProps> {
       topPanel,
       popupAddChat,
       addChatButton,
-      usersList,
-    };
+      usersList
+    }
   }
 
-  componentDidUpdate(oldProps: ChatListPageProps, newProps: ChatListPageProps) {
+  componentDidUpdate (oldProps: ChatListPageProps, newProps: ChatListPageProps) {
     if (oldProps.currentUser !== newProps.currentUser) {
       this.children.chatList.setProps({
-        currentUser: newProps.currentUser,
-      });
-      return true;
+        currentUser: newProps.currentUser
+      })
+      return true
     }
     if (oldProps.showPopup !== newProps.showPopup) {
-      return true;
+      return true
     }
     if (oldProps.activeChat !== newProps.activeChat) {
-      return true;
+      return true
     }
     if (oldProps.messages?.length !== newProps.messages?.length) {
-      this.getElement()?.querySelector("#last")?.scrollIntoView();
-      return true;
+      this.getElement()?.querySelector('#last')?.scrollIntoView()
+      return true
     }
     if (oldProps.activeChatUsers !== newProps.activeChatUsers) {
-      return true;
+      return true
     }
-    return false;
+    return false
   }
 
-  getMessages(): string {
+  getMessages (): string {
     return this.props.messages
       ?.map((message) => {
         return `<li class="messagesList__item text ${
-          message.user_id === this.props.currentUser.id ? "self" : ""
+          message.user_id === this.props.currentUser.id ? 'self' : ''
         } " >
 			<img src="${
         this.props.activeChatUsers?.filter(
           (user) => user.id === message?.user_id
         )[0]?.avatar
-          ? "https://ya-praktikum.tech/api/v2/resources/" +
+          ? 'https://ya-praktikum.tech/api/v2/resources/' +
             this.props.activeChatUsers?.filter(
               (user) => user.id === message?.user_id
             )[0]?.avatar
@@ -195,12 +195,12 @@ class ChatListPage extends Block<ChatListPageProps> {
 				</span>
 				<p class="message_text " > ${message.content}</p> 
 			</div>
-		</li>`;
+		</li>`
       })
-      .join("") || '';
+      .join('') ?? ''
   }
 
-  render(): string {
+  render (): string {
     const messages = this.getMessages()
 
     return `
@@ -229,7 +229,7 @@ class ChatListPage extends Block<ChatListPageProps> {
             <div class="chatListPage__messageArea">
                     ${
                       !this.props.activeChat
-                        ? `<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>`
+                        ? '<p class="infoMessage">Выберите чат, чтобы отправить сообщение</p>'
                         : `
                     <div class="chatListPage__chatInfo">
                       {{{topPanel}}}
@@ -254,9 +254,9 @@ class ChatListPage extends Block<ChatListPageProps> {
                     `
                     }
             </div>
-			${this.props.showPopup === true ? `{{{popupAddChat}}}` : ``}
+			${this.props.showPopup ? '{{{popupAddChat}}}' : ''}
         </div>
-        `;
+        `
   }
 }
 
@@ -265,7 +265,7 @@ const mapStateToProps: MapStateToProps = ({
   activeChat,
   sockets,
   messages,
-  activeChatUsers,
-}) => ({ currentUser, activeChat, sockets, messages, activeChatUsers });
+  activeChatUsers
+}) => ({ currentUser, activeChat, sockets, messages, activeChatUsers })
 
-export default connect(mapStateToProps)(ChatListPage);
+export default connect(mapStateToProps)(ChatListPage)

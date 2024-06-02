@@ -45,11 +45,5 @@
     "jsdom": "^24.1.0",
     "sinon": "^18.0.0",
     "ts-node": "^10.9.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all test lint:all",
-      "pre-push": "npm run other command"
-    }
   }
 }

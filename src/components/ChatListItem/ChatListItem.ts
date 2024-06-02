@@ -1,53 +1,52 @@
 import { Block } from '../../core/index.ts'
 import { getActiveChatUsers, setActiveChat } from '../../services/Chats.service.ts'
 import { MessageService } from '../../services/Message.service.ts'
-import { ChatsResponse } from '../../types/types.ts'
-import { MapStateToProps, connect } from '../../utils/connect.ts'
+import { type ChatsResponse } from '../../types/types.ts'
+import { type MapStateToProps, connect } from '../../utils/connect.ts'
 import img from '../../assets/images/Union.png'
 
-type ChatListItemProps = {
-	activeChat: ChatsResponse
-	active: string
+interface ChatListItemProps {
+  activeChat: ChatsResponse
+  active: string
 }
 
 class ChatListItem extends Block {
-	socket?: MessageService
-	constructor(props: ChatsResponse) {
-		super({
-			...props,
-			events: {
-				click: [() => {
-					setActiveChat({ ...props })
-					getActiveChatUsers(props.id)
-				}]
-			}
-		})
-	}
+  socket?: MessageService
+  constructor (props: ChatsResponse) {
+    super({
+      ...props,
+      events: {
+        click: [() => {
+          setActiveChat({ ...props })
+          getActiveChatUsers(props.id)
+        }]
+      }
+    })
+  }
 
-	init() {
-		this.setProps({socket: new MessageService()})
-		this.props.socket.connectChat(this.props.currentUser.id, this.props.id)		
-	}
+  init () {
+    this.setProps({ socket: new MessageService() })
+    this.props.socket.connectChat(this.props.currentUser.id, this.props.id)
+  }
 
-	componentDidUpdate(oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
-		
-		if (oldProps.activeChat !== newProps.activeChat) {
-			if (newProps.activeChat.id === this.props.id) {
-				this.setProps({ active: 'active' })
-				this.props.socket?.getOld()
-			} else if (newProps.activeChat.id !== this.props.id && oldProps.active === 'active') {
-				this.setProps({ active: '' })
-				this.props.socket?.clearMessageList()
-			}
-			return true
-		}
-		return false
-	}
+  componentDidUpdate (oldProps: ChatListItemProps, newProps: ChatListItemProps): boolean {
+    if (oldProps.activeChat !== newProps.activeChat) {
+      if (newProps.activeChat.id === this.props.id) {
+        this.setProps({ active: 'active' })
+        this.props.socket?.getOld()
+      } else if (newProps.activeChat.id !== this.props.id && oldProps.active === 'active') {
+        this.setProps({ active: '' })
+        this.props.socket?.clearMessageList()
+      }
+      return true
+    }
+    return false
+  }
 
-	active: boolean = false
+  active: boolean = false
 
-	render(): string {
-		return `
+  render (): string {
+    return `
         <div class="chatListItem" {{active}}>
             <div class="chatListItem__wrapper">
                 <div class="chatListItem__img">
@@ -72,7 +71,7 @@ class ChatListItem extends Block {
             </div>
         </div>        
         `
-	}
+  }
 }
 
 const mapStateToProps: MapStateToProps = ({ currentUser, activeChat }) => ({ currentUser, activeChat })

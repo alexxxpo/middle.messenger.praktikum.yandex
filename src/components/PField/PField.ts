@@ -17,11 +17,11 @@ export interface PFieldProps {
 }
 
 export default class PField extends Block<PFieldProps> {
-  constructor(props: PFieldProps) {
+  constructor (props: PFieldProps) {
     super({
       ...props,
       Input: new PFieldInput({
-        events: props.events || {},
+        events: props.events ?? {},
         name: props.name,
         className: 'pField__input',
         value: props.value,
@@ -29,12 +29,12 @@ export default class PField extends Block<PFieldProps> {
         type: props.type
       }),
       errorLine: new ErrorLine({
-        errorText: props.errorText || ''
+        errorText: props.errorText ?? ''
       })
     })
   }
 
-  init() {
+  init () {
     this.children.Input.setProps({
       events: {
         ...this.props.events,
@@ -50,34 +50,31 @@ export default class PField extends Block<PFieldProps> {
     })
   }
 
-  componentDidUpdate(oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
-
+  componentDidUpdate (oldProps: Record<string, string | number | boolean | string[]>, newProps: Record<string, string | number | boolean | string[]>): boolean {
     if (oldProps.disabled !== newProps.disabled) {
-
       this.children.Input.setProps({
-        disabled: this.props.disabled,
+        disabled: this.props.disabled
       })
     }
     if (oldProps.error !== newProps.error) {
-
       this.children.Input.setProps({
         error: this.props.error
       })
     }
 
-    if(newProps.error === true) {
+    if (newProps.error === true) {
       this.children.errorLine.setProps({
         errorText: this.props.errorText
       })
     }
 
-    if(newProps.value !== oldProps.value) {
-      this.children.Input.setProps({value: newProps.value})
+    if (newProps.value !== oldProps.value) {
+      this.children.Input.setProps({ value: newProps.value })
     }
     return true
   }
 
-  render(): string {
+  render (): string {
     return `
         <div class="pField__container ${this.props.error ? 'input__error' : ''}">
             <div class="pField ">
