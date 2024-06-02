@@ -1,98 +1,95 @@
-import { ChatMessageType } from "../types/types"
-import EventBus from "./EventBus"
+import { type ChatMessageType } from '../types/types'
+import EventBus from './EventBus'
 
 enum WSTransportEvents {
-	Error = 'error',
-	Connected = 'connected',
-	Close = 'close',
-	Message = 'message'
+  Error = 'error',
+  Connected = 'connected',
+  Close = 'close',
+  Message = 'message'
 }
 
-
 export class WSTransport extends EventBus {
+  private socket?: WebSocket
+  private pingInterval?: ReturnType<typeof setInterval>
+  private readonly pingIntervalTime = 30000
+  private readonly url: string
 
-	private socket?: WebSocket
-	private pingInterval?: ReturnType<typeof setInterval>
-	private readonly pingIntervalTime = 1000 * 60 * 2
-	private url: string
+  constructor (url: string = 'wss://ya-praktikum.tech/ws/chats') {
+    super()
+    this.url = url
+  }
 
-	constructor(url: string = 'wss://ya-praktikum.tech/ws/chats') {
-		super()
-		this.url = url
-	}
+  public async connect (uid: number, chatId: number, token: string): Promise<void> {
+    if (this.socket) {
+      throw new Error('The socket already connected')
+    }
 
-	public connect(uid: number, chatId: number, token: string): Promise<void> {
+    this.socket = new WebSocket(this.url + `/${uid}/${chatId}/${token}`)
+    this.subscribe(this.socket)
+    this.setupPing()
 
-		if (this.socket) {
-			throw new Error('The socket already connected')
-		}
+    await new Promise((resolve, reject) => {
+      this.on(WSTransportEvents.Error, reject)
+      this.on(WSTransportEvents.Connected, () => {
+        this.off(WSTransportEvents.Error, reject)
+        resolve('')
+      })
+    })
+  }
 
-		this.socket = new WebSocket(this.url + `/${uid}/${chatId}/${token}`)
-		this.subscribe(this.socket)
-		this.setupPing()
+  public send (data: ChatMessageType) {
+    if (!this.socket) {
+      throw new Error('Socket is not connected')
+    }
+    if (data.content?.length) this.socket.send(JSON.stringify(data))
+  }
 
+  public close () {
+    this.socket?.close()
+    this.socket = undefined
+  }
 
-		return new Promise((resolve, reject) => {
-			this.on(WSTransportEvents.Error, reject)
-			this.on(WSTransportEvents.Connected, () => {
-				this.off(WSTransportEvents.Error, reject)
-				resolve()
-			})
-		})
-	}
-	public send(data: ChatMessageType) {
-		if (!this.socket) {
-			throw new Error('Socket is not connected')
-		}
-		if (data.content?.length) this.socket.send(JSON.stringify(data))
-	}
+  private subscribe (socket: WebSocket) {
+    socket.addEventListener('open', () => {
+      console.log('Соединение установлено')
+      this.emit(WSTransportEvents.Connected)
+    })
+    socket.addEventListener('close', (event) => {
+      if (event.wasClean) {
+        console.log('Соединение закрыто чисто')
+      } else {
+        console.log('Обрыв соединения')
+      }
 
-	public close() {
-		this.socket?.close()
-		this.socket = undefined
-	}
+      console.log(`Код: ${event.code} | Причина: ${event.reason}`)
+      this.emit(WSTransportEvents.Close)
+    })
+    socket.addEventListener('error', (e) => {
+      console.log('Ошибка', e)
+      this.emit(WSTransportEvents.Error, e)
+    })
+    socket.addEventListener('message', (message) => {
+      try {
+        const data = JSON.parse(message.data as string)
+        // console.log('Получены данные', data);
+        if (['pong', 'user connected'].includes(data?.type as string)) {
+          return
+        }
+        this.emit(WSTransportEvents.Message, data)
+      } catch (e) {
+        console.error(e)
+      }
+    })
+  }
 
-	private subscribe(socket: WebSocket) {
-		socket.addEventListener('open', () => {
-			console.log('Соединение установлено')
-			this.emit(WSTransportEvents.Connected)
-		})
-		socket.addEventListener('close', (event) => {
-			if (event.wasClean) {
-				console.log('Соединение закрыто чисто');
-			} else {
-				console.log('Обрыв соединения');
-			}
+  private setupPing () {
+    this.pingInterval = setInterval(() => {
+      this.send({ type: 'ping' })
+    }, this.pingIntervalTime)
 
-			console.log(`Код: ${event.code} | Причина: ${event.reason}`);
-			this.emit(WSTransportEvents.Close)
-		})
-		socket.addEventListener('error', (e) => {
-			console.log('Ошибка', e)
-			this.emit(WSTransportEvents.Error, e)
-		})
-		socket.addEventListener('message', (message) => {
-			try {
-				const data = JSON.parse(message.data)
-				// console.log('Получены данные', data);
-				if (['pong', 'user connected'].includes(data?.type)) {
-					return
-				}
-				this.emit(WSTransportEvents.Message, data)
-			} catch (e) {
-				console.error(e);
-			}
-		})
-	}
-
-	private setupPing() {
-		this.pingInterval = setInterval(() => {
-			this.send({ type: 'ping' })
-		}, this.pingIntervalTime)
-
-		this.on(WSTransportEvents.Close, () => {
-			clearInterval(this.pingInterval)
-			this.pingInterval = undefined
-		})
-	}
+    this.on(WSTransportEvents.Close, () => {
+      clearInterval(this.pingInterval)
+      this.pingInterval = undefined
+    })
+  }
 }

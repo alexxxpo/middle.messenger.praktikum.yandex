@@ -8,13 +8,13 @@ interface PImageType {
 }
 
 export default class PImage extends Block<PImageType> {
-  constructor(props: PImageType) {
+  constructor (props: PImageType) {
     super({
       ...props
     })
   }
 
-  render(): string {
+  render (): string {
     return `
         <div class="pImage {{className}}">
             <img src="{{avatar}}" alt="avatar"/>

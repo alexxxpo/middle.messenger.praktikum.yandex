@@ -1,3 +1,3 @@
-import './MessageInput.scss';
+import './MessageInput.scss'
 
-export {default as MessageInput} from './MessageInput.ts';
+export { default as MessageInput } from './MessageInput.ts'

@@ -8,4 +8,10 @@
 [build]
   publish = "dist"
   command = "npm run build"
+
+[[redirects]]
+from = "/*"
+to = "/"
+status = 200
+
   

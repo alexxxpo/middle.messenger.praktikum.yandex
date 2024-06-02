@@ -15,6 +15,13 @@ export default [
   ...compat.extends("standard-with-typescript"),
   {
     files: ["src/**/*.ts"],
-    ignores: ["**/*.d.ts"]
-  },
+    ignores: ["**/*.d.ts"],
+    rules: {
+      "no-tabs": "off",
+      "@typescript-eslint/strict-boolean-expressions": "off",
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-this-alias": "off"
+   }
+  }
 ];

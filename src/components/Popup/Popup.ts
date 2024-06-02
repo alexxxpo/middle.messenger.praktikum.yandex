@@ -1,23 +1,23 @@
 import { Block } from '../../core/index.ts'
 import { Button } from '../../components/index.ts'
-import { EventsType } from '../../types/types.ts';
+import { type EventsType } from '../../types/types.ts'
 
 interface PopupType {
-  buttonChange?: Button;
+  buttonChange?: Button
 }
 
 export interface PopupProps {
   title?: string
   errorLoad?: boolean
   notSelected?: boolean
-  clickButton?: EventListenerOrEventListenerObject
-  name: string,
+  clickButton?: EventListenerOrEventListenerObject | (() => Promise<void>)
+  name: string
   events?: EventsType
 }
 
 export default class Popup extends Block<PopupType> {
-  constructor(props: PopupProps) {
-    const clickEvent = props.clickButton || (() => {})
+  constructor (props: PopupProps) {
+    const clickEvent = props.clickButton ?? (() => {})
     super({
       ...props,
       buttonChange: new Button({
@@ -28,7 +28,7 @@ export default class Popup extends Block<PopupType> {
     })
   }
 
-  render(): string {
+  render (): string {
     return `
         <div class="popup">
             <form class="popup__form">

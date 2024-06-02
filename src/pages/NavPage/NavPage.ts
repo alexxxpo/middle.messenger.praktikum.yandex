@@ -1,14 +1,12 @@
-import { Block } from "../../core/index.ts";
-
-
+import { Block } from '../../core/index.ts'
 
 export default class NavPage extends Block<Record<string, unknown>> {
-    constructor(props: Record<string, unknown>) {
-        super({ ...props })
-    }
+  constructor (props: Record<string, unknown>) {
+    super({ ...props })
+  }
 
-    render(): string {
-        return `
+  render (): string {
+    return `
         <nav class="page navPage">
             <ul class="navList">
                 <li class="navList__item"><a page="login">Логин</a></li>
@@ -20,5 +18,5 @@ export default class NavPage extends Block<Record<string, unknown>> {
             </ul>
         </nav>
         `
-    }
+  }
 }
